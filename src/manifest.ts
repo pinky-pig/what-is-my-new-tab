@@ -22,6 +22,9 @@ export async function getManifest() {
       open_in_tab: true,
       chrome_style: false,
     },
+    chrome_url_overrides: {
+      newtab: './dist/newtab/index.html',
+    },
     background: {
       page: './dist/background/index.html',
       persistent: false,
@@ -37,6 +40,7 @@ export async function getManifest() {
       'activeTab',
       'http://*/',
       'https://*/',
+      'chrome://newtab',
     ],
     content_scripts: [{
       matches: ['http://*/*', 'https://*/*'],
