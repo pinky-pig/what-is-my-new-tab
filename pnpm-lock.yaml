@@ -16,6 +16,7 @@ specifiers:
   chokidar: ^3.5.3
   cross-env: ^7.0.3
   crx: ^5.0.1
+  css-doodle: ^0.32.2
   eslint: ^8.31.0
   esno: ^0.16.3
   fs-extra: ^11.1.0
@@ -35,6 +36,9 @@ specifiers:
   web-ext: ^7.4.0
   webext-bridge: ^5.0.5
   webextension-polyfill: ^0.10.0
+
+dependencies:
+  css-doodle: registry.npmmirror.com/css-doodle/0.32.2
 
 devDependencies:
   '@antfu/eslint-config': registry.npmmirror.com/@antfu/eslint-config/0.34.0_iukboom6ndih5an6iafl45j2fe
@@ -2522,6 +2526,12 @@ packages:
     dependencies:
       type-fest: registry.npmmirror.com/type-fest/1.4.0
     dev: true
+
+  registry.npmmirror.com/css-doodle/0.32.2:
+    resolution: {integrity: sha512-UpAbH0A3thsbhBcAZDx+L+DQ1sIyQsi42OAWXL5DKgSiv86e1px4HPOw/BOI6QVR5Qis5ADfYRCMBGi/8VCZGA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/css-doodle/-/css-doodle-0.32.2.tgz}
+    name: css-doodle
+    version: 0.32.2
+    dev: false
 
   registry.npmmirror.com/css-select/5.1.0:
     resolution: {integrity: sha512-nwoRF1rvRRnnCqqY7updORDsuqKzqYJ28+oSMaJMMgOauh3fvwHqMS7EZpIPqK8GL+g9mKxF1vP/ZjSeNjEVHg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/css-select/-/css-select-5.1.0.tgz}
