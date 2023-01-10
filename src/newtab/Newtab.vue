@@ -47,7 +47,7 @@ function calculateMainScale() {
 <template>
   <main ref="mainRef" :style="{ transform: mainRefTransform }" class="main w-full h-full text-center text-gray-700 duration-300 ease-in-out">
     <Header />
-    <Main class="w-full h-full" />
+    <Main />
     <!-- <StickyNote>
       年{{ yearProgress }}
       月{{ monthProgress }}
