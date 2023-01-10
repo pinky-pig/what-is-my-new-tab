@@ -12,7 +12,7 @@ import Main from './layout/Main.vue'
 </script>
 
 <template>
-  <main class="main w-full h-screen px-4 py-5 text-center text-gray-700">
+  <main class="main w-full h-full text-center text-gray-700">
     <!-- <Header /> -->
     <Main />
     <!-- <StickyNote>
