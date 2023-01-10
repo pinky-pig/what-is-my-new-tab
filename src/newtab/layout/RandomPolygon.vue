@@ -76,5 +76,6 @@ randomGeneratePolygon()
   right: 0;
   backdrop-filter: blur(150px);
   z-index: 1;
+  background-image: url(/assets/noise.png);
 }
 </style>
