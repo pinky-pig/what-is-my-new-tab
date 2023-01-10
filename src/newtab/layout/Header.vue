@@ -40,7 +40,7 @@ const openDrawer = () => {
 
 <style scoped>
 .header-container {
-  backdrop-filter: saturate(50%) blur(8px);
-  -webkit-backdrop-filter: saturate(50%) blur(8px);
+  /* backdrop-filter: saturate(50%) blur(8px);
+  -webkit-backdrop-filter: saturate(50%) blur(8px); */
 }
 </style>
