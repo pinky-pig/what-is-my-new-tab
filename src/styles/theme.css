@@ -1,0 +1,13 @@
+html.dark{
+  background: #302f34;
+
+  --primary-bg-color                      :#302f34;
+  --primary-text-color                    :rgba(229, 231, 235, 0.8);
+}
+
+html{
+  background: #ffffffa0;
+
+  --primary-bg-color                      :#f7f7f7;
+  --primary-text-color                    :rgba(55, 65, 81, 0.8);
+}

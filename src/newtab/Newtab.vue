@@ -7,13 +7,13 @@
 
 // import { dayProgress, hourProgress, minProgress, monthProgress, yearProgress } from './helps'
 
-// import Header from './layout/Header.vue'
+import Header from './layout/Header.vue'
 import Main from './layout/Main.vue'
 </script>
 
 <template>
   <main class="main w-full h-full text-center text-gray-700">
-    <!-- <Header /> -->
+    <Header />
     <Main />
     <!-- <StickyNote>
       年{{ yearProgress }}

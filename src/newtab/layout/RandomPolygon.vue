@@ -53,13 +53,22 @@ function randomGeneratePolygon() {
 }
 
 randomGeneratePolygon()
+
+/**
+ * 监听鼠标双击切换背景
+ */
+onMounted(() => {
+  const dom = document.getElementById('polygonPathCanvas')
+  dom && dom.addEventListener('dblclick', randomGeneratePolygon, false)
+})
+onUnmounted(() => {
+  const dom = document.getElementById('polygonPathCanvas')
+  dom && dom.removeEventListener('dblclick', randomGeneratePolygon)
+})
 </script>
 
 <template>
-  <button class="absolute z-10 btn" @click="randomGeneratePolygon()">
-    Random
-  </button>
-  <div class="polygonPath w-full h-full relative">
+  <div id="polygonPathCanvas" ref="polygonPathCanvas" class="polygonPathCanvas w-full h-full relative">
     <div v-for="item, index in polygonPathList" :key="index" class="w-full h-full absolute top-0 left-0">
       <div class="w-full h-full " :style="{ clipPath: item.path, background: item.color }" />
     </div>
@@ -67,7 +76,7 @@ randomGeneratePolygon()
 </template>
 
 <style scoped>
-.polygonPath::before {
+.polygonPathCanvas::before {
   content: "";
   position: fixed;
   top: 0;
