@@ -31,7 +31,7 @@ const openDrawer = () => {
 
       <div class="cursor-pointer bg-gray-700 dark:bg-gray-200" i="carbon-sun dark:carbon-moon" title="切换黑暗模式" @click="toggleDark()" />
 
-      <div class="cursor-pointer bg-gray-700 dark:bg-gray-200" i="carbon-settings dark:carbon-moon" title="打开抽屉" @click="openDrawer()" />
+      <div class="cursor-pointer bg-gray-700 dark:bg-gray-200" i="carbon-settings " title="打开抽屉" @click="openDrawer()" />
     </div>
   </header>
   <!-- 抽屉 -->

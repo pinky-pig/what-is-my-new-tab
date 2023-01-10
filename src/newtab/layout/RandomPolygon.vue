@@ -62,7 +62,7 @@ onMounted(() => {
   polygonPathCanvas.value.addEventListener('dblclick', randomGeneratePolygon, false)
 })
 onUnmounted(() => {
-  polygonPathCanvas.value.removeEventListener('dblclick', randomGeneratePolygon)
+  polygonPathCanvas.value?.removeEventListener('dblclick', randomGeneratePolygon)
 })
 </script>
 
