@@ -4,8 +4,7 @@ import RandomPolygon from './RandomPolygon.vue'
 </script>
 
 <template>
-  <div class=" w-full h-full pt-[100px]">
-    main
+  <div class=" w-full h-full">
     <RandomPolygon />
   </div>
 
