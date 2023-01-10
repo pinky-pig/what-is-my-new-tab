@@ -7,12 +7,29 @@
 
 // import { dayProgress, hourProgress, minProgress, monthProgress, yearProgress } from './helps'
 
+import { storeToRefs } from 'pinia'
 import Header from './layout/Header.vue'
 import Main from './layout/Main.vue'
+import { useNewtabStore } from '~/store'
+
+const store = useNewtabStore()
+const { isOpenDrawer } = storeToRefs(store)
+const mainRef = ref()
+const mainRefTransform = ref('')
+watch(isOpenDrawer, () => {
+  if (isOpenDrawer.value) {
+    mainRef.value.className += ' settingsActive'
+    mainRefTransform.value = 'scale(0.545126)'
+  }
+  else {
+    mainRef.value.className = mainRef.value.className.replace(/ settingsActive/, '')
+    mainRefTransform.value = ''
+  }
+})
 </script>
 
 <template>
-  <main class="main w-full h-full text-center text-gray-700">
+  <main ref="mainRef" :style="{ transform: mainRefTransform }" class="main w-full h-full text-center text-gray-700 duration-300 ease-in-out">
     <Header />
     <Main />
     <!-- <StickyNote>

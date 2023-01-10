@@ -18,3 +18,11 @@ body,
     hover:opacity-100 hover:text-teal-600;
   font-size: 0.9em;
 }
+
+.settingsActive{
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  aspect-ratio: 16 / 10;
+  transform-origin: left center;
+}
