@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useNewtabStore } from '~/store'
-
+import { DrawerSetting } from '~/types'
 const store = useNewtabStore()
 const { isOpenDrawer } = storeToRefs(store)
 const openDrawer = () => {
@@ -14,7 +14,10 @@ defineExpose({
 </script>
 
 <template>
-  <n-drawer v-model:show="isOpenDrawer" :width="480">
+  <n-drawer
+    v-model:show="isOpenDrawer"
+    :width="DrawerSetting.Width"
+  >
     <n-drawer-content title="Stoner" :native-scrollbar="false">
       抽屉
     </n-drawer-content>

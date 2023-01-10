@@ -1,12 +1,12 @@
 html.dark{
-  background: #202124;
+  background: black;
 
   --primary-bg-color                      :#202124;
   --primary-text-color                    :rgba(229, 231, 235, 0.8);
 }
 
 html{
-  background: #ffffffa0;
+  background: white;
 
   --primary-bg-color                      :#f7f7f7;
   --primary-text-color                    :rgba(55, 65, 81, 0.8);

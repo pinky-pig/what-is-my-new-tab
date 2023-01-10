@@ -33,3 +33,7 @@ export enum SizeStyle {
   Medium = 'medium',
   Large = 'large',
 }
+
+export enum DrawerSetting {
+  Width = 480,
+}
