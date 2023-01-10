@@ -34,6 +34,9 @@ export const sharedConfig: UserConfig = {
         },
       ],
       dts: r('src/auto-imports.d.ts'),
+      dirs: [
+        'src/store/modules',
+      ],
     }),
 
     // https://github.com/antfu/unplugin-vue-components
