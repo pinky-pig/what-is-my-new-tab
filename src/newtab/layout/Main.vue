@@ -10,7 +10,7 @@ const mode = ref(0)
 
 const isDark = useDark()
 watchEffect(() => {
-  mode.value = isDark ? 2 : 0
+  mode.value = isDark.value ? 2 : 0
 })
 </script>
 
