@@ -57,13 +57,12 @@ randomGeneratePolygon()
 /**
  * 监听鼠标双击切换背景
  */
+const polygonPathCanvas = ref()
 onMounted(() => {
-  const dom = document.getElementById('polygonPathCanvas')
-  dom && dom.addEventListener('dblclick', randomGeneratePolygon, false)
+  polygonPathCanvas.value.addEventListener('dblclick', randomGeneratePolygon, false)
 })
 onUnmounted(() => {
-  const dom = document.getElementById('polygonPathCanvas')
-  dom && dom.removeEventListener('dblclick', randomGeneratePolygon)
+  polygonPathCanvas.value.removeEventListener('dblclick', randomGeneratePolygon)
 })
 </script>
 

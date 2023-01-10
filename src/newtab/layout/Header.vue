@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { useDark, useToggle } from '@vueuse/core'
+import Drawer from './Drawer.vue'
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
+
+const drawerRef = ref()
+const openDrawer = () => {
+  const { openDrawer } = drawerRef.value
+  openDrawer()
+}
 </script>
 
 <template>
@@ -23,8 +30,12 @@ const toggleDark = useToggle(isDark)
       </a>
 
       <div class="cursor-pointer bg-gray-700 dark:bg-gray-200" i="carbon-sun dark:carbon-moon" title="切换黑暗模式" @click="toggleDark()" />
+
+      <div class="cursor-pointer bg-gray-700 dark:bg-gray-200" i="carbon-settings dark:carbon-moon" title="打开抽屉" @click="openDrawer()" />
     </div>
   </header>
+  <!-- 抽屉 -->
+  <Drawer ref="drawerRef" />
 </template>
 
 <style scoped>
