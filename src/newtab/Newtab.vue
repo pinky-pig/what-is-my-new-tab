@@ -23,6 +23,7 @@ import Main from './layout/Main.vue'
       分{{ minProgress }}
     </StickyNote> -->
   </main>
+  <NaiveProvider />
 </template>
 
 <style>
