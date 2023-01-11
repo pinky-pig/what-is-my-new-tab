@@ -2,6 +2,7 @@
 import { useDark } from '@vueuse/core'
 import RandomPolygon from './RandomPolygon.vue'
 import Gradient from './Gradient.vue'
+import SearchBox from './SearchBox/index.vue'
 
 // 0 彩色模糊背景
 // 1 自定义图片背景
@@ -28,4 +29,7 @@ watchEffect(() => {
   <div v-else-if="mode === 2" class=" w-full h-full overflow-hidden bg-[var(--primary-bg-color)]" />
 
   <Gradient v-else />
+
+  <!-- 搜索框 -->
+  <SearchBox class="absolute top-40 left-0 z-2" />
 </template>
