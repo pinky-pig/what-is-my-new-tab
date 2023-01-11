@@ -8,6 +8,6 @@ html.dark{
 html{
   background: white;
 
-  --primary-bg-color                      :#f7f7f7;
+  --primary-bg-color                      :#EDEDED;
   --primary-text-color                    :rgba(55, 65, 81, 0.8);
 }

@@ -61,7 +61,7 @@ function calculateMainScale() {
 
 <style>
 .main {
-  background: #EDEDED;
+  background: var(--primary-bg-color);
   background-image: url(/assets/noise.png);
   background-attachment: fixed;
 }
