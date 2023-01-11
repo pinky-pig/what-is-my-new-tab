@@ -25,4 +25,7 @@ body,
   top: 10px;
   aspect-ratio: 16 / 10;
   transform-origin: left center;
+  border: 30px solid rgba(162, 155, 155,0.3);
+  background-clip: padding-box;
+  border-radius: 40px;
 }
