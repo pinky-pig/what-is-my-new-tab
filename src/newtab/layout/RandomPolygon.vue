@@ -67,23 +67,23 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div id="polygonPathCanvas" ref="polygonPathCanvas" class="polygonPathCanvas w-full h-full relative">
+  <div id="polygonPathCanvas" ref="polygonPathCanvas" class="polygonPathCanvas w-full h-full relative ">
     <div v-for="item, index in polygonPathList" :key="index" class="w-full h-full absolute top-0 left-0">
       <div class="w-full h-full " :style="{ clipPath: item.path, background: item.color }" />
     </div>
   </div>
+
+  <svg>
+    <defs>
+      <filter id="blur">
+        <feGaussianBlur stdDeviation="150" edgeMode="duplicate" in="SourceGraphic" />
+      </filter>
+    </defs>
+  </svg>
 </template>
 
 <style scoped>
-.polygonPathCanvas::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  backdrop-filter: blur(150px);
-  z-index: 1;
-  background-image: url(/assets/noise.png);
+.polygonPathCanvas{
+  filter: url(#blur);
 }
 </style>

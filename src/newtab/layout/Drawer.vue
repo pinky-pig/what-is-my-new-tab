@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useNewtabStore } from '~/store'
-// import { DrawerSetting } from '~/types'
+import { DrawerSetting } from '~/types'
 const store = useNewtabStore()
 const { isOpenDrawer } = storeToRefs(store)
 const openDrawer = () => {
@@ -14,32 +14,12 @@ defineExpose({
 </script>
 
 <template>
-  <!-- <n-drawer
+  <n-drawer
     v-model:show="isOpenDrawer"
     :width="DrawerSetting.Width"
   >
     <n-drawer-content title="Stoner" :native-scrollbar="false">
       抽屉
     </n-drawer-content>
-  </n-drawer> -->
-
-  <Teleport to="body">
-    <div v-if="isOpenDrawer" class="modal">
-      <p>Hello from the modal!</p>
-      <button @click="isOpenDrawer = false">
-        Close
-      </button>
-    </div>
-  </Teleport>
+  </n-drawer>
 </template>
-
-<style scoped>
-.modal {
-  position: fixed;
-  z-index: 999;
-  top: 20%;
-  left: 50%;
-  width: 300px;
-  margin-left: -150px;
-}
-</style>
