@@ -50,7 +50,8 @@ function calculateMainScale() {
     <main
       ref="mainRef"
       :style="{ transform: mainRefTransform }"
-      class=" w-full h-full text-center text-gray-700 duration-300 ease-in-out"
+      class=" w-full h-full text-center text-gray-700 "
+      style="transition: ALl .3s cubic-bezier(0.4, 0, 0.2, 1)"
     >
       <Background />
 
