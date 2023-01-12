@@ -68,7 +68,7 @@ onUnmounted(() => {
 
 <template>
   <div id="polygonPathCanvas" ref="polygonPathCanvas" class="polygonPathCanvas w-full h-full relative ">
-    <div v-for="item, index in polygonPathList" :key="index" class="w-full h-full absolute top-0 left-0">
+    <div v-for="item, index in polygonPathList" :key="index" class="w-full h-full ">
       <div class="w-full h-full " :style="{ clipPath: item.path, background: item.color }" />
     </div>
   </div>

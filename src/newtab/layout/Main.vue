@@ -17,7 +17,7 @@ watchEffect(() => {
 
 <template>
   <!-- 彩色模糊背景 -->
-  <div v-if="mode === 0" class=" w-full h-full overflow-hidden bg-[var(--primary-bg-color)]">
+  <div v-if="mode === 0" class="fixed top-0 left-0 w-full h-full overflow-hidden bg-[var(--primary-bg-color)]">
     <RandomPolygon />
   </div>
   <!-- 自定义图片背景 -->
@@ -26,7 +26,7 @@ watchEffect(() => {
   </div>
 
   <!-- 黑暗模式背景 -->
-  <div v-else-if="mode === 2" class=" w-full h-full overflow-hidden bg-[var(--primary-bg-color)]" />
+  <div v-else-if="mode === 2" class="fixed top-0 left-0 w-full h-full overflow-hidden bg-[var(--primary-bg-color)]" />
 
   <Gradient v-else />
 
