@@ -1,4 +1,17 @@
 <script setup lang="ts">
+import { useDark } from '@vueuse/core'
+import type { BuiltInGlobalTheme } from 'naive-ui/es/themes/interface'
+
+import { storeToRefs } from 'pinia'
+import type { ComputedRef } from 'vue'
+import { darkTheme } from 'naive-ui'
+import Header from './layout/Header.vue'
+import Main from './layout/Main.vue'
+import Background from './layout/background/index.vue'
+import { darkThemeOverrides, lightThemeOverrides } from '~/styles/naive-ui.theme'
+import { useNewtabStore } from '~/store'
+import { DrawerSetting } from '~/types'
+
 // import { storageDemo } from '~/logic/storage'
 
 // function openOptionsPage() {
@@ -7,12 +20,10 @@
 
 // import { dayProgress, hourProgress, minProgress, monthProgress, yearProgress } from './helps'
 
-import { storeToRefs } from 'pinia'
-import Header from './layout/Header.vue'
-import Main from './layout/Main.vue'
-import Background from './layout/background/index.vue'
-import { useNewtabStore } from '~/store'
-import { DrawerSetting } from '~/types'
+// naive-ui 暗色模式
+const isDark = useDark()
+const naiveUIDarkTheme: ComputedRef<BuiltInGlobalTheme | undefined> = computed(() => isDark.value ? darkTheme : undefined)
+const naiveUIThemeOverrides = computed(() => isDark.value ? darkThemeOverrides : lightThemeOverrides)
 
 const store = useNewtabStore()
 const { isOpenDrawer } = storeToRefs(store)
@@ -46,26 +57,28 @@ function calculateMainScale() {
 </script>
 
 <template>
-  <div class="main-container w-screen h-screen">
-    <main
-      ref="mainRef"
-      :style="{ transform: mainRefTransform }"
-      class=" w-full h-full text-center text-gray-700 "
-      style="transition: ALl .3s cubic-bezier(0.4, 0, 0.2, 1)"
-    >
-      <Background />
+  <n-config-provider :theme="naiveUIDarkTheme" :theme-overrides="naiveUIThemeOverrides">
+    <div class="main-container w-screen h-screen">
+      <main
+        ref="mainRef"
+        :style="{ transform: mainRefTransform }"
+        class=" w-full h-full text-center text-gray-700 "
+        style="transition: ALl .3s cubic-bezier(0.4, 0, 0.2, 1)"
+      >
+        <Background />
 
-      <Header />
-      <Main />
-    <!-- <StickyNote>
+        <Header />
+        <Main />
+        <!-- <StickyNote>
       年{{ yearProgress }}
       月{{ monthProgress }}
       日{{ dayProgress }}
       时{{ hourProgress }}
       分{{ minProgress }}
     </StickyNote> -->
-    </main>
-  </div>
+      </main>
+    </div>
+  </n-config-provider>
 
   <NaiveProvider />
 </template>
