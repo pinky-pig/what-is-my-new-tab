@@ -13,7 +13,7 @@
   border-bottom: 0px !important;
 }
 .n-drawer .n-drawer-content .n-drawer-body-content-wrapper{
-  padding:10px !important;
+  padding:0 10px !important;
 }
 .n-drawer-mask{
   background-color: rgba(0,0,0,.01) !important;
