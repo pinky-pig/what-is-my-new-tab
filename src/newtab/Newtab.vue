@@ -10,7 +10,7 @@
 import { storeToRefs } from 'pinia'
 import Header from './layout/Header.vue'
 import Main from './layout/Main.vue'
-import Background from './layout/Background.vue'
+import Background from './layout/background/index.vue'
 import { useNewtabStore } from '~/store'
 import { DrawerSetting } from '~/types'
 

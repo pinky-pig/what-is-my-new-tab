@@ -18,7 +18,7 @@ defineExpose({
     v-model:show="isOpenDrawer"
     :width="DrawerSetting.Width"
   >
-    <n-drawer-content title="Stoner" :native-scrollbar="false">
+    <n-drawer-content title="设置" :native-scrollbar="false">
       抽屉
     </n-drawer-content>
   </n-drawer>

@@ -1,0 +1,11 @@
+.n-drawer{
+  border-radius: 20px !important;
+}
+.n-drawer.n-drawer--right-placement{
+  top: 10px !important;
+  bottom: 10px !important;
+  right: 10px !important;
+}
+.n-drawer-mask{
+  background-color: rgba(0,0,0,.01) !important;
+}

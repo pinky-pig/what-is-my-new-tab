@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import SearchBox from './SearchBox/index.vue'
+import SearchBox from './search-box/index.vue'
 </script>
 
 <template>

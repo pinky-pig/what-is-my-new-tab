@@ -32,7 +32,7 @@ function clearSearchText() {
 <template>
   <div class=" w-full flex justify-center items-center pointer-events-none top-[12vh]">
     <section
-      class="home-search w-[568px] max-w-[86vw] pointer-events-auto"
+      class="w-[568px] max-w-[86vw] pointer-events-auto"
       style="transition-property: top; transition-duration: 200ms; top: 50px;"
     >
       <div class="search-box flex h-[48px] items-center rounded-[12px] bg-color-m1 bg-opacity-60 transition-colors duration-100 focus-within:bg-opacity-80 dark:focus-within:bg-opacity-70 w-full">
