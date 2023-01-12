@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { SETTINGS } from './settings'
 const props = defineProps({
-  currentDrawerSettingsItem: {
+  modelValue: {
     default: 1,
   },
 })
 
-const emit = defineEmits(['handleDrawerBodyScrollByAnchor'])
+const emit = defineEmits(['handleDrawerBodyScrollByAnchor', 'update:modelValue'])
 
 // 设置侧边栏弹出动画，
 const sidebarAnimation = ref('translateX(-80px) translateY(-50%)')
@@ -16,6 +16,7 @@ onMounted(() => {
 
 function handleSwitchItem(key: number) {
   emit('handleDrawerBodyScrollByAnchor', key)
+  emit('update:modelValue', key)
 }
 </script>
 
@@ -28,7 +29,7 @@ function handleSwitchItem(key: number) {
       v-for="item in SETTINGS"
       :key="item.key"
       class="settingTabItem "
-      :style="{ opacity: props.currentDrawerSettingsItem === item.key ? '1' : '0.5' }"
+      :style="{ opacity: props.modelValue === item.key ? '1' : '0.5' }"
       @click="handleSwitchItem(item.key)"
     >
       <div v-html="item.icon" />

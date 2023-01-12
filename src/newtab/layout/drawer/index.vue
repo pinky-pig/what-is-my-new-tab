@@ -17,7 +17,6 @@ defineExpose({
 
 const currentDrawerSettingsItem = ref(0)
 function handleDrawerBodyScrollByAnchor(v: number) {
-  currentDrawerSettingsItem.value = v
   const drawerBody = document.getElementsByClassName('n-scrollbar-container')
   drawerBody[0].scrollTo({ top: (document.getElementById(`card-${v}`) as any).offsetTop, behavior: 'smooth' })
 }
@@ -28,7 +27,6 @@ function handleDrawerBodyScrollByAnchor(v: number) {
     <n-drawer-content title="设置" :native-scrollbar="false">
       <Sidebar
         v-model="currentDrawerSettingsItem"
-        :current-drawer-settings-item="currentDrawerSettingsItem"
         @handleDrawerBodyScrollByAnchor="handleDrawerBodyScrollByAnchor"
       />
 
