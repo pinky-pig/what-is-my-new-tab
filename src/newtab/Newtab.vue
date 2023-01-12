@@ -10,6 +10,7 @@
 import { storeToRefs } from 'pinia'
 import Header from './layout/Header.vue'
 import Main from './layout/Main.vue'
+import Background from './layout/Background.vue'
 import { useNewtabStore } from '~/store'
 import { DrawerSetting } from '~/types'
 
@@ -45,9 +46,16 @@ function calculateMainScale() {
 </script>
 
 <template>
-  <main ref="mainRef" :style="{ transform: mainRefTransform }" class="main w-full h-full text-center text-gray-700 duration-300 ease-in-out">
-    <Header />
-    <Main />
+  <div class="main-container w-screen h-screen">
+    <main
+      ref="mainRef"
+      :style="{ transform: mainRefTransform }"
+      class=" w-full h-full text-center text-gray-700 duration-300 ease-in-out"
+    >
+      <Background />
+
+      <Header />
+      <Main />
     <!-- <StickyNote>
       年{{ yearProgress }}
       月{{ monthProgress }}
@@ -55,14 +63,16 @@ function calculateMainScale() {
       时{{ hourProgress }}
       分{{ minProgress }}
     </StickyNote> -->
-  </main>
+    </main>
+  </div>
+
   <NaiveProvider />
 </template>
 
-<style>
-.main {
+<style scoped>
+.main-container {
   background: var(--primary-bg-color);
-  background-image: url(/assets/noise.png);
-  background-attachment: fixed;
+  /* background-image: url(/assets/noise.png);
+  background-attachment: fixed; */
 }
 </style>
