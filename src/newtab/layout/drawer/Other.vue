@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <n-card class="card" title="🤡 小卡片bg" size="small">
+  <n-card class="card" title="🤡 小卡片Other" size="small">
     <div class="h-500px">
       内容
     </div>

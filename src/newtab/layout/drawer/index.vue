@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import Sidebar from './Sidebar.vue'
+import { SETTINGS } from './settings'
 import { useNewtabStore } from '~/store'
 import { DrawerSetting } from '~/types'
+
 const store = useNewtabStore()
 const { isOpenDrawer } = storeToRefs(store)
 const openDrawer = () => {
@@ -12,15 +14,30 @@ const openDrawer = () => {
 defineExpose({
   openDrawer,
 })
+
+const currentDrawerSettingsItem = ref(0)
+function handleDrawerBodyScrollByAnchor(v: number) {
+  currentDrawerSettingsItem.value = v
+  const drawerBody = document.getElementsByClassName('n-scrollbar-container')
+  drawerBody[0].scrollTo({ top: (document.getElementById(`card-${v}`) as any).offsetTop, behavior: 'smooth' })
+}
 </script>
 
 <template>
-  <n-drawer
-    v-model:show="isOpenDrawer"
-    :width="DrawerSetting.Width"
-  >
+  <n-drawer v-model:show="isOpenDrawer" :width="DrawerSetting.Width">
     <n-drawer-content title="设置" :native-scrollbar="false">
-      <Sidebar />
+      <Sidebar
+        v-model="currentDrawerSettingsItem"
+        :current-drawer-settings-item="currentDrawerSettingsItem"
+        @handleDrawerBodyScrollByAnchor="handleDrawerBodyScrollByAnchor"
+      />
+
+      <component
+        :is="item.component"
+        v-for="item in SETTINGS"
+        :id="`card-${item.key}`"
+        :key="item.key"
+      />
     </n-drawer-content>
   </n-drawer>
 </template>

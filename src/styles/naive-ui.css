@@ -1,5 +1,8 @@
 .n-drawer{
   border-radius: 20px !important;
+  border: 10px solid rgba(162, 155, 155,0.3) !important;
+  background-clip: padding-box !important;
+  background: var(--primary-bg-color) !important;
 }
 .n-drawer.n-drawer--right-placement{
   top: 10px !important;
@@ -8,6 +11,9 @@
 }
 .n-drawer .n-drawer-content .n-drawer-header{
   border-bottom: 0px !important;
+}
+.n-drawer .n-drawer-content .n-drawer-body-content-wrapper{
+  padding:10px !important;
 }
 .n-drawer-mask{
   background-color: rgba(0,0,0,.01) !important;

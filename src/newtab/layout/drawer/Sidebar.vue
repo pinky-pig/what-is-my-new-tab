@@ -1,10 +1,22 @@
 <script setup lang="ts">
 import { SETTINGS } from './settings'
+const props = defineProps({
+  currentDrawerSettingsItem: {
+    default: 1,
+  },
+})
+
+const emit = defineEmits(['handleDrawerBodyScrollByAnchor'])
+
 // 设置侧边栏弹出动画，
 const sidebarAnimation = ref('translateX(-80px) translateY(-50%)')
 onMounted(() => {
   sidebarAnimation.value = 'translateX(-80px) translateY(-50%)'
 })
+
+function handleSwitchItem(key: number) {
+  emit('handleDrawerBodyScrollByAnchor', key)
+}
 </script>
 
 <template>
@@ -12,7 +24,13 @@ onMounted(() => {
     class="drawer-setting-sidebar"
     style=""
   >
-    <div v-for="item in SETTINGS" :key="item.key" class="settingTabItem">
+    <div
+      v-for="item in SETTINGS"
+      :key="item.key"
+      class="settingTabItem "
+      :style="{ opacity: props.currentDrawerSettingsItem === item.key ? '1' : '0.5' }"
+      @click="handleSwitchItem(item.key)"
+    >
       <div v-html="item.icon" />
     </div>
   </div>
