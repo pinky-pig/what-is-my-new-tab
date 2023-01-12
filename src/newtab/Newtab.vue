@@ -43,7 +43,7 @@ watch(isOpenDrawer, () => {
 // 计算缩放比例
 function calculateMainScale() {
   // 距离间隔
-  const g = 50
+  const g = 80
   // 获取初始页面的宽度
   const ow = document.body.offsetWidth
   // 获取抽屉的宽度

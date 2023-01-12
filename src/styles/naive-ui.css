@@ -6,6 +6,9 @@
   bottom: 10px !important;
   right: 10px !important;
 }
+.n-drawer .n-drawer-content .n-drawer-header{
+  border-bottom: 0px !important;
+}
 .n-drawer-mask{
   background-color: rgba(0,0,0,.01) !important;
 }
