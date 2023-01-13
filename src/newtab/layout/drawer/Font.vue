@@ -16,7 +16,19 @@ const config = SETTINGS.filter(i => i.name === 'Font')[0]
     </div>
     <n-divider />
     <!-- body -->
-    <div class="h-500px rounded" />
+    <div class="h-500px rounded">
+      <n-tabs type="line" animated>
+        <n-tab-pane name="oasis" tab="Oasis">
+          Wonderwall
+        </n-tab-pane>
+        <n-tab-pane name="the beatles" tab="the Beatles">
+          Hey Jude
+        </n-tab-pane>
+        <n-tab-pane name="jay chou" tab="周杰伦">
+          七里香
+        </n-tab-pane>
+      </n-tabs>
+    </div>
   </n-card>
 </template>
 
