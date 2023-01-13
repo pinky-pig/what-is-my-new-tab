@@ -3,6 +3,8 @@ html.dark{
 
   --primary-bg-color                      :#202124;
   --primary-text-color                    :rgba(229, 231, 235, 0.8);
+
+  --second-bg-color                       :#2c2c32;
 }
 
 html{
@@ -10,4 +12,7 @@ html{
 
   --primary-bg-color                      :#EDEDED;
   --primary-text-color                    :rgba(55, 65, 81, 0.8);
+
+  --second-bg-color                       :#EDEDED;
+
 }
