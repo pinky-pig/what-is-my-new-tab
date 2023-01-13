@@ -1,12 +1,22 @@
 <script setup lang="ts">
+import { SETTINGS } from './settings'
 
+const config = SETTINGS.filter(i => i.name === 'Other')[0]
 </script>
 
 <template>
-  <n-card class="card" title="🤡 小卡片Other" size="small">
-    <div class="h-500px">
-      内容
+  <n-card
+    class="card"
+    size="small"
+  >
+    <!-- title -->
+    <div class="text-[var(--primary-text-color)] flex flex-row h-40px w-full text-xl font-normal justify-start items-center gap-2">
+      <div v-html="config.icon" />
+      {{ config.name }}
     </div>
+    <n-divider />
+    <!-- body -->
+    <div class="h-500px rounded" />
   </n-card>
 </template>
 

@@ -18,3 +18,10 @@
 .n-drawer-mask{
   background-color: rgba(0,0,0,.01) !important;
 }
+
+.n-card > .n-card__content, .n-card > .n-card__footer{
+  padding: 0 !important;
+}
+.n-divider:not(.n-divider--vertical){
+  margin-top: 0px !important;
+}
