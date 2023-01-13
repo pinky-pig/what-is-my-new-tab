@@ -2,7 +2,7 @@
 import { SETTINGS } from './settings'
 const props = defineProps({
   modelValue: {
-    default: 1,
+    default: [0] as number[],
   },
 })
 
@@ -16,7 +16,7 @@ onMounted(() => {
 
 function handleSwitchItem(key: number) {
   emit('handleDrawerBodyScrollByAnchor', key)
-  emit('update:modelValue', key)
+  emit('update:modelValue', [key])
 }
 </script>
 
@@ -29,7 +29,7 @@ function handleSwitchItem(key: number) {
       v-for="item in SETTINGS"
       :key="item.key"
       class="settingTabItem "
-      :style="{ opacity: props.modelValue === item.key ? '1' : '0.5' }"
+      :style="{ opacity: props.modelValue.includes(item.key) ? 1 : 0.5 }"
       @click="handleSwitchItem(item.key)"
     >
       <div v-html="item.icon" />
