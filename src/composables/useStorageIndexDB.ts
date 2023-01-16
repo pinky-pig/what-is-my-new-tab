@@ -4,7 +4,8 @@ import Dexie from 'dexie'
 
 export interface WallPaperType {
   id: string
-  data: string
+  blob: string
+  type: number // 0 随机 1 自定义 2 渐变色
 }
 
 export const useStorageIndexDB = (dataName: string) => {
@@ -13,7 +14,7 @@ export const useStorageIndexDB = (dataName: string) => {
     constructor() {
       super(dataName)
       this.version(1).stores({
-        common: '++id, data',
+        common: '++id, blob, type',
       })
     }
   }
@@ -38,7 +39,7 @@ export const useStorageIndexDB = (dataName: string) => {
 
     async getItemBySQL(...args: object[]) {
       console.log(args)
-      return await db.common.where('age').below(25).toArray()
+      return await db.common.where('type').equals(1).toArray()
     },
 
     deleteStorageIndexDB() {

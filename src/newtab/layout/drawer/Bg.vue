@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { SETTINGS } from './settings'
+import { storageWallpaperDB } from '~/logic/storage'
+import { generateUuid } from '~/utils/uuid'
 
 const config = SETTINGS.filter(i => i.name === 'Background')[0]
 
@@ -32,6 +34,54 @@ const currentMode = ref<BgType>('random-colors')
 
 function handleSwitchBgMode(item: BackgroundMode) {
   currentMode.value = item.type
+}
+
+// 自定义壁纸
+const customWallPaper = ref('')
+const uploadInputRef = ref()
+
+storageWallpaperDB.addItem({
+  id: '1',
+  type: 1,
+  blob: '',
+})
+
+storageWallpaperDB.addItem({
+  id: '2',
+  type: 1,
+  blob: '',
+})
+// const customWallPaperArr = await storageWallpaperDB.getItemBySQL([
+//   {
+//     key: 'where',
+//     vale: 'type',
+//   },
+//   {
+//     key: 'equals',
+//     vale: '1',
+//   },
+// ])
+
+const handleUploadInput = (e: Event) => {
+  // 这里其实只选择了一个文件
+  const files = []
+  for (let i = 0; i < uploadInputRef.value.files.length; i++)
+    files.push(uploadInputRef.value.files[i])
+
+  files.forEach(async (item, index) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(item)
+    reader.onload = await function () {
+      // 存储到indexDB
+      storageWallpaperDB.addItem({
+        id: generateUuid(),
+        blob: item,
+        type: 1,
+      })
+      // 预览
+      customWallPaper.value = URL.createObjectURL(item)
+    }
+  })
 }
 </script>
 
@@ -71,13 +121,17 @@ function handleSwitchBgMode(item: BackgroundMode) {
       </div>
       <div v-show="currentMode === 'image'">
         <n-card class="card" size="small">
-          <img class="w-full h-180px rounded" src="https://images.unsplash.com/photo-1673810499402-3bcd8857df5d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60" alt="">
+          <img class="w-full h-180px rounded object-cover" :src="customWallPaper" alt="自定义壁纸缩略图">
 
           <div class=" my-10px flex justify-around">
             <n-button class="w-1/3">
               网络壁纸
             </n-button>
-            <n-button class="w-1/3">
+            <n-button class="w-1/3" @click="uploadInputRef.click()">
+              <input
+                v-show="false" ref="uploadInputRef" accept="image/*" type="file" name="file"
+                @change="handleUploadInput"
+              >
               自定义壁纸
             </n-button>
           </div>

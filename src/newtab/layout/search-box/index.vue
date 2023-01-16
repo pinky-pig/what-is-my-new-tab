@@ -35,7 +35,7 @@ function clearSearchText() {
       class="w-[568px] max-w-[86vw] pointer-events-auto"
       style="transition-property: top; transition-duration: 200ms; top: 50px;"
     >
-      <div class="search-box flex h-[48px] items-center rounded-[12px] bg-color-m1 bg-opacity-60 transition-colors duration-100 focus-within:bg-opacity-80 dark:focus-within:bg-opacity-70 w-full">
+      <div class="search-box w-full h-[48px] flex items-center rounded-[12px] text-[var(--primary-text-color)] bg-opacity-60 transition-colors duration-100 focus-within:bg-opacity-80 dark:focus-within:bg-opacity-70 ">
         <!-- icon -->
         <div class="current flex h-full w-[48px] items-center justify-center">
           <div
@@ -52,14 +52,14 @@ function clearSearchText() {
         <!-- 输入框 -->
         <input
           v-model="searchText"
-          class="outline-none h-full grow bg-[transparent] py-[12px] pl-[4px] pr-[42px] text-color-t1 placeholder:text-color-t1 placeholder:text-opacity-40"
+          class=" outline-none h-full grow bg-[transparent] py-[12px] pl-[4px] pr-[42px] placeholder:text-color-t1 placeholder:text-opacity-40"
           placeholder="输入搜索内容"
           autocomplete="off"
           @keydown.enter="handleSearch"
         >
 
         <!-- 清除 icon -->
-        <div class="absolute top-0 right-0 flex h-full w-[48px] items-center justify-center hi-demand">
+        <div class="absolute top-0 right-0 flex h-full w-[48px] items-center justify-center">
           <button v-show="searchText" tabindex="-1" type="button" class="h-[32px] w-[32px]" @click="clearSearchText">
             <div i-ooui:clear />
           </button>
