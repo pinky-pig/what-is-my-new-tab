@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { SETTINGS } from './settings'
 import { storageWallpaperDB } from '~/logic/storage'
-import { generateUuid } from '~/utils/uuid'
 
 const config = SETTINGS.filter(i => i.name === 'Background')[0]
 
@@ -41,16 +40,15 @@ const customWallPaper = ref('')
 const uploadInputRef = ref()
 
 storageWallpaperDB.addItem({
-  id: '1',
   type: 1,
   blob: '',
 })
 
 storageWallpaperDB.addItem({
-  id: '2',
   type: 1,
   blob: '',
 })
+storageWallpaperDB.getItemBySQL()
 // const customWallPaperArr = await storageWallpaperDB.getItemBySQL([
 //   {
 //     key: 'where',
@@ -74,7 +72,6 @@ const handleUploadInput = (e: Event) => {
     reader.onload = await function () {
       // 存储到indexDB
       storageWallpaperDB.addItem({
-        id: generateUuid(),
         blob: item,
         type: 1,
       })

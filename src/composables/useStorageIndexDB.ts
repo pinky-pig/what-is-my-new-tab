@@ -3,7 +3,7 @@ import type { Table } from 'dexie'
 import Dexie from 'dexie'
 
 export interface WallPaperType {
-  id: string
+  id?: string
   blob: string
   type: number // 0 随机 1 自定义 2 渐变色
 }
@@ -38,6 +38,9 @@ export const useStorageIndexDB = (dataName: string) => {
     },
 
     async getItemBySQL(...args: object[]) {
+      // const youngFriends = await db.common.where('id').above(5).toArray()
+      // alert (`My young friends: ${JSON.stringify(youngFriends)}`)
+
       console.log(args)
       return await db.common.where('type').equals(1).toArray()
     },
