@@ -35,6 +35,7 @@ import {
   NPopover,
   NScrollbar,
   NSelect,
+  NSlider,
   NSpace,
   NSpin,
   NStatistic,
@@ -99,6 +100,7 @@ export default function setupNaiveUI(app: App) {
       NTimelineItem,
       NTooltip,
       NCarousel,
+      NSlider,
     ],
   })
   app.use(naive)
