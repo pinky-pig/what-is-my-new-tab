@@ -16,6 +16,7 @@ specifiers:
   chokidar: ^3.5.3
   cross-env: ^7.0.3
   crx: ^5.0.1
+  dexie: ^3.2.2
   eslint: ^8.31.0
   esno: ^0.16.3
   fs-extra: ^11.1.0
@@ -55,6 +56,7 @@ devDependencies:
   chokidar: registry.npmmirror.com/chokidar/3.5.3
   cross-env: registry.npmmirror.com/cross-env/7.0.3
   crx: registry.npmmirror.com/crx/5.0.1
+  dexie: registry.npmmirror.com/dexie/3.2.2
   eslint: registry.npmmirror.com/eslint/8.31.0
   esno: registry.npmmirror.com/esno/0.16.3
   fs-extra: registry.npmmirror.com/fs-extra/11.1.0
@@ -2873,6 +2875,13 @@ packages:
     resolution: {integrity: sha512-lrbCJwD9saUQrqUfXvl6qoM+QN3W7tLV5pAOs+OqOmopCCz/JkE05MHedJR1xfk4IAnZuJXPVuN5+7jNA2ZCiA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/destr/-/destr-1.2.2.tgz}
     name: destr
     version: 1.2.2
+    dev: true
+
+  registry.npmmirror.com/dexie/3.2.2:
+    resolution: {integrity: sha512-q5dC3HPmir2DERlX+toCBbHQXW5MsyrFqPFcovkH9N2S/UW/H3H5AWAB6iEOExeraAu+j+zRDG+zg/D7YhH0qg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dexie/-/dexie-3.2.2.tgz}
+    name: dexie
+    version: 3.2.2
+    engines: {node: '>=6.0'}
     dev: true
 
   registry.npmmirror.com/dir-glob/3.0.1:

@@ -12,6 +12,17 @@ import { darkThemeOverrides, lightThemeOverrides } from '~/styles/naive-ui.theme
 import { useNewtabStore } from '~/store'
 import { DrawerSetting } from '~/types'
 
+// import { storageWallpaperDB } from '~/logic/storage'
+// import { generateUuid } from '~/utils/uuid'
+
+// storageWallpaperDB.addItem({
+//   id: generateUuid(),
+//   data: '1',
+// })
+// storageWallpaperDB.addItem({
+//   id: generateUuid(),
+//   data: '1',
+// })
 // import { storageDemo } from '~/logic/storage'
 
 // function openOptionsPage() {
