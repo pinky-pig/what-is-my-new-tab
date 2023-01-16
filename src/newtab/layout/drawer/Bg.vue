@@ -39,7 +39,20 @@ function handleSwitchBgMode(item: BackgroundMode) {
 const customWallPaper = ref('')
 const uploadInputRef = ref()
 
-storageWallpaperDB.getItemBySQL()
+storageWallpaperDB.getItemBySQL(
+  {
+    key: 'where',
+    value: 'type',
+  },
+  {
+    key: 'equals',
+    value: 1,
+  },
+  {
+    key: 'toArray',
+    value: null,
+  },
+)
 
 const handleUploadInput = (e: Event) => {
   // 这里其实只选择了一个文件

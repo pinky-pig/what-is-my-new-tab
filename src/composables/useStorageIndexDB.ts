@@ -37,10 +37,13 @@ export const useStorageIndexDB = (dataName: string) => {
       return await db.common.get(key)
     },
 
-    async getItemBySQL(...args: object[]) {
+    async getItemBySQL(...args: { key: string; value: string | number | null }[]) {
       // const youngFriends = await db.common.where('type').equals(1).toArray()
       // alert (`My young friends: ${JSON.stringify(youngFriends)}`)
       console.log(args)
+
+      const youngFriends = await (db.common as any)[args[0].key](args[0].value)[args[1].key](args[1].value)[args[2].key](args[2].value)
+      alert (`My young friends: ${JSON.stringify(youngFriends)}`)
       return await db.common.where('type').equals(1).toArray()
     },
 
