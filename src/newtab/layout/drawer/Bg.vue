@@ -39,26 +39,7 @@ function handleSwitchBgMode(item: BackgroundMode) {
 const customWallPaper = ref('')
 const uploadInputRef = ref()
 
-storageWallpaperDB.addItem({
-  type: 1,
-  blob: '',
-})
-
-storageWallpaperDB.addItem({
-  type: 1,
-  blob: '',
-})
 storageWallpaperDB.getItemBySQL()
-// const customWallPaperArr = await storageWallpaperDB.getItemBySQL([
-//   {
-//     key: 'where',
-//     vale: 'type',
-//   },
-//   {
-//     key: 'equals',
-//     vale: '1',
-//   },
-// ])
 
 const handleUploadInput = (e: Event) => {
   // 这里其实只选择了一个文件

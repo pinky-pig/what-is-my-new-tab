@@ -38,9 +38,8 @@ export const useStorageIndexDB = (dataName: string) => {
     },
 
     async getItemBySQL(...args: object[]) {
-      // const youngFriends = await db.common.where('id').above(5).toArray()
+      // const youngFriends = await db.common.where('type').equals(1).toArray()
       // alert (`My young friends: ${JSON.stringify(youngFriends)}`)
-
       console.log(args)
       return await db.common.where('type').equals(1).toArray()
     },
