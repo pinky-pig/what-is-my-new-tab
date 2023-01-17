@@ -132,11 +132,13 @@ const handleUploadInput = (e: Event) => {
       </div>
       <div v-show="currentMode === 'image' ">
         <n-card class="card" size="small">
-          <img
-            class=" custom-wallpaper-preview-img w-full h-180px rounded object-cover"
-            :src="customWallPaper"
-            alt="未上传自定义壁纸"
-          >
+          <div class="overflow-hidden">
+            <img
+              class=" custom-wallpaper-preview-img w-full h-180px rounded object-cover"
+              :src="customWallPaper"
+              alt="未上传自定义壁纸"
+            >
+          </div>
 
           <div class=" my-10px flex justify-around">
             <n-button class="w-1/3">
@@ -160,20 +162,20 @@ const handleUploadInput = (e: Event) => {
             <div class=" flex flex-row gap-4 items-center">
               <div>模糊</div>
               <div class="flex-1">
-                <n-slider :tooltip="false" />
+                <n-slider v-model:value="store.customImageStatus.blur" :min="0" :max="100" :step="1" :tooltip="false" />
               </div>
-              <div>
-                60
+              <div class="w-30px">
+                {{ store.customImageStatus.blur || 0 }}
               </div>
             </div>
 
             <div class=" flex flex-row gap-4 items-center">
               <div>遮罩</div>
               <div class="flex-1">
-                <n-slider :tooltip="false" />
+                <n-slider v-model:value="store.customImageStatus.mask" :min="0" :max="1" :step="0.01" :tooltip="false" />
               </div>
-              <div>
-                30
+              <div class="w-30px">
+                {{ store.customImageStatus.mask || 0 }}
               </div>
             </div>
           </div>
@@ -183,6 +185,14 @@ const handleUploadInput = (e: Event) => {
         linear-colors
       </div>
     </div>
+
+    <svg>
+      <defs>
+        <filter id="customWallpaperPreviewContainer">
+          <feGaussianBlur :stdDeviation="store.customImageStatus.blur" edgeMode="duplicate" in="SourceGraphic" />
+        </filter>
+      </defs>
+    </svg>
   </n-card>
 </template>
 
@@ -227,5 +237,9 @@ const handleUploadInput = (e: Event) => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.custom-wallpaper-preview-img{
+  filter: url(#customWallpaperPreviewContainer);
 }
 </style>

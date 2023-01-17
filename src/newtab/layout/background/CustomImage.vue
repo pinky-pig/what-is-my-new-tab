@@ -14,8 +14,18 @@ const { currentWallpaper } = storeToRefs(store)
       alt="未上传自定义壁纸"
     >
   </div>
+
+  <svg>
+    <defs>
+      <filter id="customWallpaperContainer">
+        <feGaussianBlur :stdDeviation="store.customImageStatus.blur" edgeMode="duplicate" in="SourceGraphic" />
+      </filter>
+    </defs>
+  </svg>
 </template>
 
 <style scoped>
-
+.custom-image-canvas{
+  filter: url(#customWallpaperContainer);
+}
 </style>
