@@ -6,7 +6,7 @@ import { useNewtabStore } from '~/store'
 
 const config = SETTINGS.filter(i => i.name === 'Background')[0]
 
-type BgType = 'random-colors' | 'linear-colors' | 'internet-image' | 'custom-image'
+type BgType = 'random-colors' | 'linear-colors' | 'image'
 interface BackgroundMode {
   type: BgType
   value: string
@@ -19,7 +19,7 @@ const mode = ref<BackgroundMode[]>([
     name: '随机颜色',
   },
   {
-    type: 'internet-image',
+    type: 'image',
     value: 'https://',
     name: '图片',
   },
@@ -32,16 +32,16 @@ const mode = ref<BackgroundMode[]>([
 
 const store = useNewtabStore()
 const { currentWallpaper } = storeToRefs(store)
+// 自定义壁纸
+const customWallPaper = ref('')
+const uploadInputRef = ref()
 
 const currentMode = ref<BgType>(currentWallpaper.value.type)
 function handleSwitchBgMode(item: BackgroundMode) {
   currentMode.value = item.type
-  currentWallpaper.value = item
-}
 
-// 自定义壁纸
-const customWallPaper = ref('')
-const uploadInputRef = ref()
+  currentWallpaper.value = { ...item, value: customWallPaper.value }
+}
 
 // 从DB中查询数据，只能查出一个 type === 1
 onMounted(async () => {
@@ -89,6 +89,8 @@ const handleUploadInput = (e: Event) => {
       }
       // 预览
       customWallPaper.value = URL.createObjectURL(item)
+      // 存储到store中
+      currentWallpaper.value = { ...currentWallpaper.value, value: customWallPaper.value }
     }
   })
 }
@@ -119,7 +121,7 @@ const handleUploadInput = (e: Event) => {
         >
           <div v-if="item.type === 'random-colors'" class="text-20px" i-material-symbols:brush />
           <div v-if="item.type === 'linear-colors'" class="text-20px" i-material-symbols:broken-image />
-          <div v-if="item.type === 'internet-image' || item.type === 'custom-image'" class="text-20px" i-ic:baseline-blur-linear />
+          <div v-if="item.type === 'image' " class="text-20px" i-ic:baseline-blur-linear />
 
           {{ item.name }}
         </div>
@@ -128,7 +130,7 @@ const handleUploadInput = (e: Event) => {
       <div v-show="currentMode === 'random-colors'">
         random-colors
       </div>
-      <div v-show="currentMode === 'internet-image' || currentMode === 'custom-image'">
+      <div v-show="currentMode === 'image' ">
         <n-card class="card" size="small">
           <img
             class=" custom-wallpaper-preview-img w-full h-180px rounded object-cover"
