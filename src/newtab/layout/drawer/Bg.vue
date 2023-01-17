@@ -35,6 +35,7 @@ const { currentWallpaper } = storeToRefs(store)
 // 自定义壁纸
 const customWallPaper = ref('')
 const uploadInputRef = ref()
+const imgMask = computed(() => `rgba(0, 0, 0, ${store.customImageStatus.mask || 0}`)
 
 const currentMode = ref<BgType>(currentWallpaper.value.type)
 function handleSwitchBgMode(item: BackgroundMode) {
@@ -132,9 +133,9 @@ const handleUploadInput = (e: Event) => {
       </div>
       <div v-show="currentMode === 'image' ">
         <n-card class="card" size="small">
-          <div class="overflow-hidden">
+          <div class="custom-image-canvas-container w-full h-180px relative overflow-hidden">
             <img
-              class=" custom-wallpaper-preview-img w-full h-180px rounded object-cover"
+              class=" custom-wallpaper-preview-img w-full h-full rounded object-cover"
               :src="customWallPaper"
               alt="未上传自定义壁纸"
             >
@@ -241,5 +242,14 @@ const handleUploadInput = (e: Event) => {
 
 .custom-wallpaper-preview-img{
   filter: url(#customWallpaperPreviewContainer);
+}
+.custom-image-canvas-container::after{
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: v-bind(imgMask);
 }
 </style>

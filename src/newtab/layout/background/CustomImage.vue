@@ -4,6 +4,7 @@ import { useNewtabStore } from '~/store'
 
 const store = useNewtabStore()
 const { currentWallpaper } = storeToRefs(store)
+const imgMask = computed(() => `rgba(0, 0, 0, ${store.customImageStatus.mask || 0}`)
 </script>
 
 <template>
@@ -27,5 +28,15 @@ const { currentWallpaper } = storeToRefs(store)
 <style scoped>
 .custom-image-canvas{
   filter: url(#customWallpaperContainer);
+}
+
+.custom-image-canvas::after{
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: v-bind(imgMask);
 }
 </style>
