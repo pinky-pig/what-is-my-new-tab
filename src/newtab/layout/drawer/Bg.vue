@@ -128,9 +128,7 @@ const handleUploadInput = (e: Event) => {
         </div>
       </div>
       <!-- panel -->
-      <div v-show="currentMode === 'random-colors'">
-        random-colors
-      </div>
+      <div v-show="currentMode === 'random-colors'" />
       <div v-show="currentMode === 'image' ">
         <n-card class="card" size="small">
           <div class="custom-image-canvas-container w-full h-180px relative overflow-hidden">
@@ -187,7 +185,7 @@ const handleUploadInput = (e: Event) => {
       </div>
     </div>
 
-    <svg>
+    <svg style="display: none;">
       <defs>
         <filter id="customWallpaperPreviewContainer">
           <feGaussianBlur :stdDeviation="store.customImageStatus.blur" edgeMode="duplicate" in="SourceGraphic" />

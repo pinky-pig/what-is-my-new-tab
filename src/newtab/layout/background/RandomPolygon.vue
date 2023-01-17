@@ -73,7 +73,7 @@ onUnmounted(() => {
     </div>
   </div>
 
-  <svg>
+  <svg style="display: none;">
     <defs>
       <filter id="blur">
         <feGaussianBlur stdDeviation="150" edgeMode="duplicate" in="SourceGraphic" />
