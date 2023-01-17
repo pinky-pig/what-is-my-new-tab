@@ -6,9 +6,8 @@ const store = useNewtabStore()
 const { currentWallpaper } = storeToRefs(store)
 const imgMask = computed(() => `rgba(0, 0, 0, ${store.customImageStatus.mask || 0}`)
 
-const customWallPaper = ref('')
-onMounted(() => {
-  customWallPaper.value = currentWallpaper.value.value
+const customWallPaper = computed(() => {
+  return currentWallpaper.value.value
 })
 </script>
 
