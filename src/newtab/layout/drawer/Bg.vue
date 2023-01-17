@@ -144,7 +144,12 @@ const handleUploadInput = (e: Event) => {
             </n-button>
             <n-button class="w-1/3" @click="uploadInputRef.click()">
               <input
-                v-show="false" ref="uploadInputRef" accept="image/*" type="file" name="file"
+                v-show="false"
+                ref="uploadInputRef"
+                accept="image/jpg,image/png,image/jpeg,image/webp"
+                type="file"
+                name="file"
+                single
                 @change="handleUploadInput"
               >
               自定义壁纸
