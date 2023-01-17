@@ -2,7 +2,7 @@ import type { Table } from 'dexie'
 import Dexie from 'dexie'
 
 export interface WallPaperType {
-  id?: string
+  id?: number
   blob: string
   type: number // 0 随机 1 自定义 2 渐变色
 }
@@ -23,19 +23,8 @@ export const useStorageIndexDB = (dataName: string) => {
     async addItem(value: WallPaperType) {
       await db.common.add(value)
     },
-    async addOrEditItem(key: string, value: WallPaperType) {
-      const result = await this.getItem(key)
-      if (result) {
-        // 编辑
-        this.editItem(value)
-      }
-      else {
-        // 新增
-        this.addItem(value)
-      }
-    },
 
-    async removeItem(key: string) {
+    async removeItem(key: number) {
       return await db.common.delete(key)
     },
 
@@ -43,7 +32,7 @@ export const useStorageIndexDB = (dataName: string) => {
       return await db.common.put(value)
     },
 
-    async getItem(key: string) {
+    async getItem(key: number) {
       return await db.common.get(key)
     },
     /**

@@ -60,12 +60,27 @@ const handleUploadInput = (e: Event) => {
   files.forEach(async (item, index) => {
     const reader = new FileReader()
     reader.readAsDataURL(item)
-    reader.onload = await function () {
-      // 存储到indexDB
-      storageWallpaperDB.addItem({
-        blob: item,
-        type: 1,
-      })
+    reader.onload = async function () {
+      const result = await storageWallpaperDB.getItemBySQL(
+        { key: 'where', value: 'type' },
+        { key: 'equals', value: 1 },
+        { key: 'toArray', value: null },
+      )
+      // 如果已经查到了
+      if (result.length !== 0) {
+        storageWallpaperDB.editItem({
+          id: result[0].id,
+          blob: item,
+          type: 1,
+        })
+      }
+      else {
+        // 存储到indexDB
+        storageWallpaperDB.addItem({
+          blob: item,
+          type: 1,
+        })
+      }
       // 预览
       customWallPaper.value = URL.createObjectURL(item)
     }
