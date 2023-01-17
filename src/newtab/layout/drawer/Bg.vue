@@ -250,6 +250,7 @@ const handleUploadInput = (e: Event) => {
   top: 0;
   right: 0;
   bottom: 0;
+  /* backdrop-filter: blur(50px); */
   background-color: v-bind(imgMask);
 }
 </style>

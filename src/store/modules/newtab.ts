@@ -37,7 +37,7 @@ export const useNewtabStore = defineStore({
       {
         key: 'newtab',
         storage: localStorage,
-        paths: ['currentWallpaper'],
+        paths: ['currentWallpaper', 'customImageStatus'],
       },
     ],
   },

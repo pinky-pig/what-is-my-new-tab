@@ -5,13 +5,18 @@ import { useNewtabStore } from '~/store'
 const store = useNewtabStore()
 const { currentWallpaper } = storeToRefs(store)
 const imgMask = computed(() => `rgba(0, 0, 0, ${store.customImageStatus.mask || 0}`)
+
+const customWallPaper = ref('')
+onMounted(() => {
+  customWallPaper.value = currentWallpaper.value.value
+})
 </script>
 
 <template>
   <div id="custom-image-canvas" ref="customImageCanvasRef" class="custom-image-canvas w-full h-full relative ">
     <img
       class=" custom-wallpaper-preview-img w-full h-full absolute object-cover"
-      :src="currentWallpaper.value"
+      :src="customWallPaper"
       alt="未上传自定义壁纸"
     >
   </div>
@@ -37,6 +42,7 @@ const imgMask = computed(() => `rgba(0, 0, 0, ${store.customImageStatus.mask || 
   top: 0;
   right: 0;
   bottom: 0;
+  /* backdrop-filter: blur(50px); */
   background-color: v-bind(imgMask);
 }
 </style>
