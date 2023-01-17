@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { SETTINGS } from './settings'
 import { storageWallpaperDB } from '~/logic/storage'
+import { useNewtabStore } from '~/store'
 
 const config = SETTINGS.filter(i => i.name === 'Background')[0]
 
-type BgType = 'random-colors' | 'linear-colors' | 'image'
+type BgType = 'random-colors' | 'linear-colors' | 'internet-image' | 'custom-image'
 interface BackgroundMode {
   type: BgType
   value: string
@@ -17,7 +19,7 @@ const mode = ref<BackgroundMode[]>([
     name: '随机颜色',
   },
   {
-    type: 'image',
+    type: 'internet-image',
     value: 'https://',
     name: '图片',
   },
@@ -25,13 +27,16 @@ const mode = ref<BackgroundMode[]>([
     type: 'linear-colors',
     value: 'rgba(0,0,0,)',
     name: '线性渐变',
-
   },
 ])
 
-const currentMode = ref<BgType>('random-colors')
+const store = useNewtabStore()
+const { currentWallpaper } = storeToRefs(store)
+
+const currentMode = ref<BgType>(currentWallpaper.value.type)
 function handleSwitchBgMode(item: BackgroundMode) {
   currentMode.value = item.type
+  currentWallpaper.value = item
 }
 
 // 自定义壁纸
@@ -114,7 +119,7 @@ const handleUploadInput = (e: Event) => {
         >
           <div v-if="item.type === 'random-colors'" class="text-20px" i-material-symbols:brush />
           <div v-if="item.type === 'linear-colors'" class="text-20px" i-material-symbols:broken-image />
-          <div v-if="item.type === 'image'" class="text-20px" i-ic:baseline-blur-linear />
+          <div v-if="item.type === 'internet-image' || item.type === 'custom-image'" class="text-20px" i-ic:baseline-blur-linear />
 
           {{ item.name }}
         </div>
@@ -123,7 +128,7 @@ const handleUploadInput = (e: Event) => {
       <div v-show="currentMode === 'random-colors'">
         random-colors
       </div>
-      <div v-show="currentMode === 'image'">
+      <div v-show="currentMode === 'internet-image' || currentMode === 'custom-image'">
         <n-card class="card" size="small">
           <img
             class=" custom-wallpaper-preview-img w-full h-180px rounded object-cover"
