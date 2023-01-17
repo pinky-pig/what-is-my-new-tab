@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import type { Table } from 'dexie'
 import Dexie from 'dexie'
 
@@ -24,6 +23,17 @@ export const useStorageIndexDB = (dataName: string) => {
     async addItem(value: WallPaperType) {
       await db.common.add(value)
     },
+    async addOrEditItem(key: string, value: WallPaperType) {
+      const result = await this.getItem(key)
+      if (result) {
+        // 编辑
+        this.editItem(value)
+      }
+      else {
+        // 新增
+        this.addItem(value)
+      }
+    },
 
     async removeItem(key: string) {
       return await db.common.delete(key)
@@ -36,15 +46,25 @@ export const useStorageIndexDB = (dataName: string) => {
     async getItem(key: string) {
       return await db.common.get(key)
     },
-
+    /**
+     * 查询一条语句
+     * storageWallpaperDB.getItemBySQL(
+     *  { key: 'where', value: 'type' },
+     *  { key: 'equals', value: 1 },
+     *  { key: 'toArray', value: null },
+     * )
+     * @param args 命令参数
+     * @returns 查询结果
+     */
     async getItemBySQL(...args: { key: string; value: string | number | null }[]) {
-      // const youngFriends = await db.common.where('type').equals(1).toArray()
-      // alert (`My young friends: ${JSON.stringify(youngFriends)}`)
-      console.log(args)
-
-      const youngFriends = await (db.common as any)[args[0].key](args[0].value)[args[1].key](args[1].value)[args[2].key](args[2].value)
-      alert (`My young friends: ${JSON.stringify(youngFriends)}`)
-      return await db.common.where('type').equals(1).toArray()
+      let i = 0
+      let m = args[0]
+      let result = await (db.common as any)[m.key](m.value)
+      while (i++ < (args.length - 1)) {
+        m = args[i]
+        result = await result[m.key](m.value)
+      }
+      return result
     },
 
     deleteStorageIndexDB() {

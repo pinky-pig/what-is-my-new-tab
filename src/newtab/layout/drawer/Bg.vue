@@ -39,21 +39,18 @@ function handleSwitchBgMode(item: BackgroundMode) {
 const customWallPaper = ref('')
 const uploadInputRef = ref()
 
-storageWallpaperDB.getItemBySQL(
-  {
-    key: 'where',
-    value: 'type',
-  },
-  {
-    key: 'equals',
-    value: 1,
-  },
-  {
-    key: 'toArray',
-    value: null,
-  },
+// 从DB中查询数据，只能查出一个 type === 1
+const queryResult = await storageWallpaperDB.getItemBySQL(
+  { key: 'where', value: 'type' },
+  { key: 'equals', value: 1 },
+  { key: 'toArray', value: null },
 )
 
+// 如果未查到数据，说明是第一次，DB中wallpaper为空
+if (queryResult.length !== 0)
+  customWallPaper.value = URL.createObjectURL(queryResult[0].blob)
+
+// 上传自定义图片壁纸
 const handleUploadInput = (e: Event) => {
   // 这里其实只选择了一个文件
   const files = []
