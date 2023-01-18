@@ -128,8 +128,9 @@ const handleUploadInput = (e: Event) => {
         </div>
       </div>
       <!-- panel -->
-      <div v-show="currentMode === 'random-colors'" />
-      <div v-show="currentMode === 'image' ">
+      <n-collapse-transition v-show="currentMode === 'random-colors'" />
+
+      <n-collapse-transition v-show="currentMode === 'image' ">
         <n-card class="card" size="small">
           <div class="custom-image-canvas-container w-full h-180px relative overflow-hidden">
             <img
@@ -179,10 +180,10 @@ const handleUploadInput = (e: Event) => {
             </div>
           </div>
         </n-card>
-      </div>
-      <div v-show="currentMode === 'linear-colors'">
+      </n-collapse-transition>
+      <n-collapse-transition v-show="currentMode === 'linear-colors'">
         linear-colors
-      </div>
+      </n-collapse-transition>
     </div>
 
     <svg style="display: none;">

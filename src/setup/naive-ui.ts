@@ -6,6 +6,7 @@ import {
   NCard,
   NCarousel,
   NCheckbox,
+  NCollapseTransition,
   NColorPicker,
   NConfigProvider,
   NDataTable,
@@ -101,6 +102,7 @@ export default function setupNaiveUI(app: App) {
       NTooltip,
       NCarousel,
       NSlider,
+      NCollapseTransition,
     ],
   })
   app.use(naive)
