@@ -37,3 +37,9 @@ export enum SizeStyle {
 export enum DrawerSetting {
   Width = 480,
 }
+
+export enum UnsplashSetting {
+  ApplicationName = 'what-is-my-new-tab',
+  AccessKey = 'KM1kMtcaYX2SZQR1m_o-pwg4RJZUVivPZgfJsbw5h2o',
+  SecretKey = 'ma572d0k1fKQIBlLm49h9k3A7np9X_ezS1hfu4Upaeo',
+}

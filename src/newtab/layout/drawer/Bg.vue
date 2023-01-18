@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { SETTINGS } from './settings'
 import { storageWallpaperDB } from '~/logic/storage'
 import { useNewtabStore } from '~/store'
+import UnsplashImages from '~/newtab/layout/modal/UnsplashImages.vue'
 
 const config = SETTINGS.filter(i => i.name === 'Background')[0]
 
@@ -95,6 +96,8 @@ const handleUploadInput = (e: Event) => {
     }
   })
 }
+
+const showNetImageModal = ref(false)
 </script>
 
 <template>
@@ -141,7 +144,7 @@ const handleUploadInput = (e: Event) => {
           </div>
 
           <div class=" my-10px flex justify-around">
-            <n-button class="w-1/3">
+            <n-button class="w-1/3" @click="showNetImageModal = true">
               网络壁纸
             </n-button>
             <n-button class="w-1/3" @click="uploadInputRef.click()">
@@ -186,6 +189,7 @@ const handleUploadInput = (e: Event) => {
       </n-collapse-transition>
     </div>
 
+    <!-- 遮罩的模糊滤镜 -->
     <svg style="display: none;">
       <defs>
         <filter id="customWallpaperPreviewContainer">
@@ -193,6 +197,11 @@ const handleUploadInput = (e: Event) => {
         </filter>
       </defs>
     </svg>
+
+    <!-- 网络图片的 modal 弹窗 -->
+    <n-modal v-model:show="showNetImageModal">
+      <UnsplashImages />
+    </n-modal>
   </n-card>
 </template>
 
