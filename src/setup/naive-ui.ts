@@ -33,6 +33,7 @@ import {
   NMessageProvider,
   NModal,
   NNotificationProvider,
+  NPagination,
   NPopover,
   NScrollbar,
   NSelect,
@@ -103,6 +104,7 @@ export default function setupNaiveUI(app: App) {
       NCarousel,
       NSlider,
       NCollapseTransition,
+      NPagination,
     ],
   })
   app.use(naive)
