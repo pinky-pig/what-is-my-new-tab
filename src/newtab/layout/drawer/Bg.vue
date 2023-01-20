@@ -24,11 +24,11 @@ const mode = ref<BackgroundMode[]>([
     value: 'https://',
     name: '图片',
   },
-  {
-    type: 'linear-colors',
-    value: 'rgba(0,0,0,)',
-    name: '线性渐变',
-  },
+  // {
+  //   type: 'linear-colors',
+  //   value: 'rgba(0,0,0,)',
+  //   name: '线性渐变',
+  // },
 ])
 
 const store = useNewtabStore()
@@ -148,7 +148,7 @@ async function handleSetInternetImage(imageUrl: string) {
         <div
           v-for="item in mode" :key="item.type"
           :style="{ background: currentMode === item.type ? 'var(--second-bg-color )' : 'var(--primary-bg-color)' }"
-          class=" mode-item cursor-pointer w-1/3 h-full rounded box-border p-6px flex justify-between flex-col"
+          class=" mode-item cursor-pointer flex-1 h-full rounded box-border p-6px flex justify-between flex-col"
           @click="handleSwitchBgMode(item)"
         >
           <div v-if="item.type === 'random-colors'" class="text-20px" i-material-symbols:brush />
@@ -213,7 +213,7 @@ async function handleSetInternetImage(imageUrl: string) {
         </n-card>
       </n-collapse-transition>
       <n-collapse-transition v-show="currentMode === 'linear-colors'" appear>
-        linear-colors
+        <div class="w-full h-300px bg-gray-100" />
       </n-collapse-transition>
     </div>
 
