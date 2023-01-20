@@ -55,11 +55,11 @@ onMounted(async () => {
 
   // 如果未查到数据，说明是第一次，DB中wallpaper为空
   if (queryResult.length !== 0)
-    customWallPaper.value = URL.createObjectURL(queryResult[0].blob)
+    customWallPaper.value = queryResult[0].blob.startsWith('http') ? queryResult[0].blob : URL.createObjectURL(queryResult[0].blob)
 })
 
 // 上传自定义图片壁纸
-const handleUploadInput = (e: Event) => {
+const handleUploadImage = (e: Event) => {
   // 这里其实只选择了一个文件
   const files = []
   for (let i = 0; i < uploadInputRef.value.files.length; i++)
@@ -98,6 +98,34 @@ const handleUploadInput = (e: Event) => {
 }
 
 const showNetImageModal = ref(false)
+
+async function handleSetInternetImage(imageUrl: string) {
+  customWallPaper.value = imageUrl
+
+  const result = await storageWallpaperDB.getItemBySQL(
+    { key: 'where', value: 'type' },
+    { key: 'equals', value: 1 },
+    { key: 'toArray', value: null },
+  )
+  // 如果已经查到了
+  if (result.length !== 0) {
+    storageWallpaperDB.editItem({
+      id: result[0].id,
+      blob: imageUrl,
+      type: 1,
+    })
+  }
+  else {
+    // 存储到indexDB
+    storageWallpaperDB.addItem({
+      blob: imageUrl,
+      type: 1,
+    })
+  }
+  currentWallpaper.value = { ...currentWallpaper.value, value: customWallPaper.value }
+
+  showNetImageModal.value = false
+}
 </script>
 
 <template>
@@ -155,7 +183,7 @@ const showNetImageModal = ref(false)
                 type="file"
                 name="file"
                 single
-                @change="handleUploadInput"
+                @change="handleUploadImage"
               >
               自定义壁纸
             </n-button>
@@ -200,7 +228,7 @@ const showNetImageModal = ref(false)
 
     <!-- 网络图片的 modal 弹窗 -->
     <n-modal v-model:show="showNetImageModal">
-      <UnsplashImages />
+      <UnsplashImages :custom-wall-paper="customWallPaper" @handleSetInternetImage="handleSetInternetImage" />
     </n-modal>
   </n-card>
 </template>
