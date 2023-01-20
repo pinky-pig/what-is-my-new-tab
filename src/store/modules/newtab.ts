@@ -22,13 +22,19 @@ export const useNewtabStore = defineStore({
         blur: 0,
         mask: 0,
       },
+
+      // 系统字体
+      currentFontFamily: 'default',
     }
   },
   getters: {
 
   },
   actions: {
-
+    setSystemFontFamily(font: string) {
+      this.currentFontFamily = font
+      document.body.setAttribute('style', `font-family:${font} !important`)
+    },
   },
   persist: {
     // 开启数据缓存。默认session
@@ -37,7 +43,7 @@ export const useNewtabStore = defineStore({
       {
         key: 'newtab',
         storage: localStorage,
-        paths: ['currentWallpaper', 'customImageStatus'],
+        paths: ['currentWallpaper', 'customImageStatus', 'currentFontFamily'],
       },
     ],
   },

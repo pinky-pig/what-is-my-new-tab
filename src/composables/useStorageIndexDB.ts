@@ -4,7 +4,7 @@ import Dexie from 'dexie'
 export interface WallPaperType {
   id?: number
   blob: string
-  type: number // 0 随机 1 自定义 2 渐变色
+  type: number // 0 随机 1 自定义
 }
 
 export const useStorageIndexDB = (dataName: string) => {
