@@ -65,6 +65,11 @@ function calculateMainScale() {
   const percentage = (d / ow).toFixed(6)
   return percentage
 }
+
+// 设置全局fonts
+onMounted(() => {
+  store.setSystemFontFamily(store.currentFontFamily)
+})
 </script>
 
 <template>

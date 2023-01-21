@@ -20,7 +20,7 @@ const config = SETTINGS.filter(i => i.name === 'Font')[0]
     <n-divider />
     <!-- body -->
     <div class="rounded">
-      <div class=" flex flex-row flex-wrap gap-10px justify-center">
+      <div class=" flex flex-row flex-wrap gap-10px justify-start">
         <div
           v-for="item in FontFamily"
           :key="item"
