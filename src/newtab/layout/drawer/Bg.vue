@@ -195,7 +195,7 @@ async function handleSetInternetImage(imageUrl: string) {
               <div class="flex-1">
                 <n-slider v-model:value="store.customImageStatus.blur" :min="0" :max="100" :step="1" :tooltip="false" />
               </div>
-              <div class="w-30px">
+              <div class="w-35px">
                 {{ store.customImageStatus.blur || 0 }}
               </div>
             </div>
@@ -205,7 +205,7 @@ async function handleSetInternetImage(imageUrl: string) {
               <div class="flex-1">
                 <n-slider v-model:value="store.customImageStatus.mask" :min="0" :max="1" :step="0.01" :tooltip="false" />
               </div>
-              <div class="w-30px">
+              <div class="w-35px">
                 {{ store.customImageStatus.mask || 0 }}
               </div>
             </div>

@@ -49,7 +49,7 @@ function getList() {
 }
 
 function selectInternetImage(item: IBasic) {
-  emit('handleSetInternetImage', item.urls.regular)
+  emit('handleSetInternetImage', item.urls.full)
 }
 
 const pageCount = computed(() => {
