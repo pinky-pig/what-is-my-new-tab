@@ -34,6 +34,7 @@ import {
   NModal,
   NNotificationProvider,
   NPagination,
+  NPopconfirm,
   NPopover,
   NScrollbar,
   NSelect,
@@ -105,6 +106,7 @@ export default function setupNaiveUI(app: App) {
       NSlider,
       NCollapseTransition,
       NPagination,
+      NPopconfirm,
     ],
   })
   app.use(naive)

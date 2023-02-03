@@ -7,20 +7,26 @@ export interface WallPaperType {
   type: number // 0 随机 1 自定义
 }
 
-export const useStorageIndexDB = (dataName: string) => {
+export interface WebsiteType {
+  id?: number
+  url: string
+  type: number // 0 随机 1 自定义
+}
+
+export const useStorageIndexDB = (dataName: string, storeDetails: string) => {
   class MySubClassedDexie extends Dexie {
-    common!: Table<WallPaperType>
+    common!: Table<any>
     constructor() {
       super(dataName)
       this.version(1).stores({
-        common: '++id, blob, type',
+        common: storeDetails,
       })
     }
   }
   const db = new MySubClassedDexie()
 
   const storageIndexDB = {
-    async addItem(value: WallPaperType) {
+    async addItem(value: any) {
       await db.common.add(value)
     },
 
@@ -28,7 +34,7 @@ export const useStorageIndexDB = (dataName: string) => {
       return await db.common.delete(key)
     },
 
-    async editItem(value: WallPaperType) {
+    async editItem(value: any) {
       return await db.common.put(value)
     },
 
