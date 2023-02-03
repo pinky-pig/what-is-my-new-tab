@@ -38,8 +38,10 @@ export async function getManifest() {
       'tabs',
       'storage',
       'activeTab',
+      'favicon',
       'http://*/',
       'https://*/',
+      'chrome://favicon/',
       'chrome://newtab',
     ],
     content_scripts: [{

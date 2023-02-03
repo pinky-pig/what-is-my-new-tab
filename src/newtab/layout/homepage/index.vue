@@ -1,10 +1,21 @@
 <script setup lang="ts">
 import { addPinedWebsite, getPinedWebsite } from './websiteData'
-
-const pinedWebsiteList = ref([])
+const pinedWebsiteList = ref<{ webName: string; type: number; url: string; property: { color: string } }[]>([])
 onMounted(async () => {
   pinedWebsiteList.value = await getPinedWebsite()
 })
+
+const themes = [
+  '64a6bd-90a8c3-ada7c9-d7b9d5-f4cae0'.split('-').map(a => `#${a}`),
+  '4059ad-6b9ac4-97d8c4-eff2f1-f4b942'.split('-').map(a => `#${a}`),
+  'd1f0b1-b6cb9e-92b4a7-8c8a93-81667a'.split('-').map(a => `#${a}`),
+  '7776bc-cdc7e5-fffbdb-ffec51-ff674d'.split('-').map(a => `#${a}`),
+  '628395-96897b-dbad6a-cf995f-d0ce7c'.split('-').map(a => `#${a}`),
+  '28536b-c2948a-7ea8be-f6f0ed-bbb193'.split('-').map(a => `#${a}`),
+  'dcc48e-eaefd3-b3c0a4-505168-27233a'.split('-').map(a => `#${a}`),
+  'dab6c4-7b886f-b4dc7f-feffa5-ffa0ac'.split('-').map(a => `#${a}`),
+]
+const palettes = themes
 
 const addPinedWebsiteUrl = ref('')
 const addPinedWebsiteName = ref('')
@@ -14,6 +25,9 @@ const handleAddPinedWebsite = () => {
   addPinedWebsite({
     url: addPinedWebsiteUrl.value,
     webName: addPinedWebsiteName.value,
+    property: {
+      color: palettes.flat()[Math.ceil(Math.random() * 10)],
+    },
     type: 0,
   }).then(async () => {
     pinedWebsiteList.value = await getPinedWebsite()
@@ -32,7 +46,14 @@ const handleAddPinedWebsite = () => {
         Pined app
       </p>
       <div class=" flex flex-row gap-25px ">
-        <div v-for="(item,) in pinedWebsiteList" :key="item" class="website-item pointer-events-auto w-45px h-45px rounded-xl cursor-pointer hover:text-#967575" />
+        <div
+          v-for="(item) in pinedWebsiteList"
+          :key="item?.url || Math.random() * 100"
+          :style="{ background: `${item?.property?.color}DD` }"
+          class="pointer-events-auto w-45px h-45px rounded-xl cursor-pointer text-30px flex justify-center items-center hover:text-#967575"
+        >
+          {{ item.webName.slice(0, 1) }}
+        </div>
 
         <n-popover v-if="pinedWebsiteList.length < 10" ref="pinedPopoverRef" :overlap="false" placement="right-start" trigger="click">
           <template #trigger>
@@ -58,7 +79,7 @@ const handleAddPinedWebsite = () => {
         Most used app
       </p>
       <div class=" flex flex-row gap-25px">
-        <div v-for="(item,) in 10" :key="item" class="website-item pointer-events-auto w-45px h-45px rounded-xl cursor-pointer hover:text-#967575" />
+        <div v-for="(item,) in 10" :key="item" :style="{ background: palettes.flat()[Math.ceil(Math.random() * 10)] }" class=" pointer-events-auto w-45px h-45px rounded-xl cursor-pointer hover:text-#967575" />
       </div>
     </div>
 
@@ -78,7 +99,5 @@ const handleAddPinedWebsite = () => {
 </template>
 
 <style scoped>
-.website-item{
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='45' height='45' viewBox='0 0 256 256'%3E%3Cpath fill='%235A46FF' d='M128 256 C24.766 256 0 231.234 0 128 C0 24.766 24.766 0 128 0c103.234 0 128 24.766 128 128c0 103.234-24.766 128-128 128Z'/%3E%3C/svg%3E");
-}
+
 </style>

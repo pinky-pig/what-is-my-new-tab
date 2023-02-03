@@ -9,4 +9,4 @@ export const getPinedWebsite = async () => {
 
   return queryResult
 }
-export const addPinedWebsite = async (params: { url: string; type: number; webName: string }) => await storageWebsiteDB.addItem(params)
+export const addPinedWebsite = async (params: { url: string; type: number; webName: string; property: { color: string } }) => await storageWebsiteDB.addItem(params)
