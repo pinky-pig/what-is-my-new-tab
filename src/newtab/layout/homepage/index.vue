@@ -34,7 +34,7 @@ const handleAddPinedWebsite = () => {
       <div class=" flex flex-row gap-20px">
         <div v-for="(item,) in pinedWebsiteList" :key="item" class="w-50px h-50px cursor-pointer hover:text-#967575" i-carbon:logo-facebook />
 
-        <n-popover ref="pinedPopoverRef" :overlap="false" placement="right-start" trigger="click">
+        <n-popover v-if="pinedWebsiteList.length < 10" ref="pinedPopoverRef" :overlap="false" placement="right-start" trigger="click">
           <template #trigger>
             <div class="w-50px h-50px cursor-pointer hover:text-#967575" i-carbon:add-alt />
           </template>
