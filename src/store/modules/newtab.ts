@@ -33,7 +33,10 @@ export const useNewtabStore = defineStore({
   actions: {
     setSystemFontFamily(font: string) {
       this.currentFontFamily = font
-      document.body.setAttribute('style', `font-family:${font} !important`)
+      if (font === 'DEFAULT')
+        document.body.setAttribute('style', 'font-family:v-sans, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" ')
+      else
+        document.body.setAttribute('style', `font-family:${font} !important`)
     },
   },
   persist: {

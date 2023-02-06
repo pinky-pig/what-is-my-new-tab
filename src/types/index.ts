@@ -45,6 +45,7 @@ export enum UnsplashSetting {
 }
 
 export enum FontFamily {
+  DEFAULT = 'DEFAULT',
   LXGW = 'LXGW WenKai',
   KuaiLe = 'ZCOOL KuaiLe',
   XiaoWei = 'ZCOOL XiaoWei',
