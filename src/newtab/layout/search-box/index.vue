@@ -20,10 +20,12 @@
 // })
 
 const searchText = ref('')
-function handleSearch() {
-  setTimeout(() => {
-    window.open(`https://www.baidu.com/s?wd=${searchText.value}`)
-  })
+function handleSearch(e: KeyboardEvent) {
+  if (!e.isComposing) {
+    setTimeout(() => {
+      window.open(`https://www.baidu.com/s?wd=${searchText.value}`)
+    })
+  }
 }
 
 function clearSearchText() {
