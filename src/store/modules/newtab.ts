@@ -24,7 +24,7 @@ export const useNewtabStore = defineStore({
       },
 
       // 系统字体
-      currentFontFamily: 'default',
+      currentFontFamily: 'LXGW WenKai',
     }
   },
   getters: {
