@@ -110,6 +110,9 @@ function handleOpenAddPinedModal() {
   pinedWebsiteUrlInput.value = ''
   pinedWebsiteNameInput.value = ''
 }
+function jumpToWebsite(item: any) {
+  window.open(item.url)
+}
 </script>
 
 <template>
@@ -119,12 +122,13 @@ function handleOpenAddPinedModal() {
       <p class="text-14px text-#767575 leading-4">
         Pined app
       </p>
-      <div class=" flex flex-row gap-25px ">
+      <div class=" flex flex-row gap-25px select-none">
         <div
           v-for="(item, index) in pinedWebsiteList"
           :key="item?.url || Math.random() * 100"
           :style="{ background: `${item?.property?.color}DD` }"
           class="pointer-events-auto w-45px h-45px rounded-xl cursor-pointer text-30px flex justify-center items-center hover:text-#967575"
+          @click="jumpToWebsite(item)"
           @contextmenu="v => handlePinedContextMenu(v, item, index)"
         >
           {{ item.webName.slice(0, 1) }}
