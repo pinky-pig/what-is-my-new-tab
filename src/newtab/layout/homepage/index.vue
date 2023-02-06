@@ -47,9 +47,10 @@ const handleAddPinedWebsite = () => {
       </p>
       <div class=" flex flex-row gap-25px ">
         <div
-          v-for="(item) in pinedWebsiteList"
+          v-for="(item, index) in pinedWebsiteList"
           :key="item?.url || Math.random() * 100"
           :style="{ background: `${item?.property?.color}DD` }"
+          :class="index === (pinedWebsiteList.length - 1) ? 'scale-up-left' : ''"
           class="pointer-events-auto w-45px h-45px rounded-xl cursor-pointer text-30px flex justify-center items-center hover:text-#967575"
         >
           {{ item.webName.slice(0, 1) }}
@@ -99,5 +100,5 @@ const handleAddPinedWebsite = () => {
 </template>
 
 <style scoped>
-
+/* .scale-up-left{animation:scale-up-left 0.4s; } @keyframes scale-up-left{0%{transform:scale(.5);transform-origin:left center}100%{transform:scale(1);transform-origin:left center}} */
 </style>
