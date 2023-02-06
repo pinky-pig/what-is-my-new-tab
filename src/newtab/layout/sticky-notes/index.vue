@@ -3,7 +3,9 @@ import { ref } from 'vue'
 import { useDraggable } from '@vueuse/core'
 
 const noteDragBarRef = ref<HTMLElement | null>(null)
-const { x, y } = useDraggable(noteDragBarRef)
+const { x, y } = useDraggable(noteDragBarRef, {
+  initialValue: { x: 40, y: 400 },
+})
 const notesStyleOption = ref({
   // width: '300px',
   // height: '200px',
@@ -31,10 +33,15 @@ function handleEditContent() {
 // onClickOutside(textareaRef, (e) => {
 //   isReadonly.value = true
 // })
+const isShowNote = ref(true)
+function handleCloseNotes() {
+  isShowNote.value = false
+}
 </script>
 
 <template>
   <div
+    v-show="isShowNote"
     :style="{ ...notesStyleOption, left: `${x}px`, top: `${y}px` }"
     class="p-2 bg-blue-300 cursor-pointer z-10 fixed"
   >
@@ -55,7 +62,7 @@ function handleEditContent() {
           </div>
           <div v-show="!isReadonly" i-carbon:checkmark-filled />
         </div>
-        <div class="text-26px text-#A56B0E" i-carbon:close />
+        <div class="text-26px text-#A56B0E" i-carbon:close @click="handleCloseNotes" />
       </div>
     </div>
 
@@ -72,9 +79,9 @@ textarea {
   line-height:1.5;
   border:0;
   border-radius:3px;
-  background: linear-gradient(#F9EFAF, #F7E98D);
-  /* background: transparent; */
-  box-shadow:0 4px 6px rgba(0,0,0,0.1);
+  background: transparent;
+  /* background: linear-gradient(#F9EFAF, #F7E98D); */
+  /* box-shadow:0 4px 6px rgba(0,0,0,0.1); */
   overflow:hidden;
   transition:box-shadow 0.5s ease;
   font-smooth:subpixel-antialiased;
