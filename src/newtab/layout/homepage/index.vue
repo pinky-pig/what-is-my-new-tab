@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { addPinedWebsite, getPinedWebsite } from './websiteData'
+import ContentDropMenu from './ContentDropMenu.vue'
+import { addPinedWebsite, deletePinedWebsite, editPinedWebsite, getPinedWebsite } from './websiteData'
 const pinedWebsiteList = ref<{ webName: string; type: number; url: string; property: { color: string } }[]>([])
 onMounted(async () => {
   pinedWebsiteList.value = await getPinedWebsite()
@@ -17,25 +18,98 @@ const themes = [
 ]
 const palettes = themes
 
-const addPinedWebsiteUrl = ref('')
-const addPinedWebsiteName = ref('')
-const pinedPopoverRef = ref()
+const pinedWebsiteUrlInput = ref('')
+const pinedWebsiteNameInput = ref('')
+const pinedPopoverModal = ref(false)
+const currentClickedItem = ref<{
+  id: number
+  property: { color: string }
+  type: number
+  url: string
+  webName: string
+}>()
 
+// 添加新pined网址
 const handleAddPinedWebsite = () => {
-  addPinedWebsite({
-    url: addPinedWebsiteUrl.value,
-    webName: addPinedWebsiteName.value,
-    property: {
-      color: palettes.flat()[Math.ceil(Math.random() * 10)],
-    },
-    type: 0,
-  }).then(async () => {
-    pinedWebsiteList.value = await getPinedWebsite()
-    pinedPopoverRef.value.setShow(false)
-  })
+  if (pinedWebsiteUrlInput.value === '') {
+    window.$message.warning('请先输入网站地址')
+    return
+  }
+
+  if (currentClickedItem.value) {
+    editPinedWebsite({
+      id: currentClickedItem.value.id,
+      url: pinedWebsiteUrlInput.value,
+      webName: pinedWebsiteNameInput.value,
+      property: {
+        color: palettes.flat()[Math.ceil(Math.random() * 10)],
+      },
+      type: 0,
+    }).then(async () => {
+      pinedWebsiteList.value = await getPinedWebsite()
+      pinedPopoverModal.value = false
+    })
+  }
+  else {
+    addPinedWebsite({
+      url: pinedWebsiteUrlInput.value,
+      webName: pinedWebsiteNameInput.value,
+      property: {
+        color: palettes.flat()[Math.ceil(Math.random() * 10)],
+      },
+      type: 0,
+    }).then(async () => {
+      pinedWebsiteList.value = await getPinedWebsite()
+      pinedPopoverModal.value = false
+    })
+  }
 }
 
-// 总共700，小的50，间距20
+// 右键菜单
+const pinedItemContextMenuOption = [
+  { label: 'edit', key: 'edit' },
+  { label: 'delete', key: 'delete' },
+]
+
+const showDropdownRef = ref(false)
+const xRef = ref(0)
+const yRef = ref(0)
+
+// 打开右键菜单
+const handlePinedContextMenu = (e: MouseEvent, item: any, index: number) => {
+  e.preventDefault()
+  showDropdownRef.value = false
+  nextTick().then(() => {
+    showDropdownRef.value = true
+    xRef.value = e.clientX
+    yRef.value = e.clientY
+    currentClickedItem.value = item
+  })
+}
+// 右键菜单选项
+function handleSelectedWebsite(e: string) {
+  showDropdownRef.value = false
+  if (e === 'edit') {
+    pinedPopoverModal.value = true
+    pinedWebsiteUrlInput.value = currentClickedItem?.value?.url || ''
+    pinedWebsiteNameInput.value = currentClickedItem?.value?.webName || ''
+  }
+  else if (e === 'delete') {
+    if (currentClickedItem?.value) {
+      deletePinedWebsite(currentClickedItem?.value?.id)
+        .then(async () => {
+          pinedWebsiteList.value = await getPinedWebsite()
+        })
+    }
+  }
+}
+// 新增网址modal
+function handleOpenAddPinedModal() {
+  pinedPopoverModal.value = true
+  currentClickedItem.value = undefined
+  pinedWebsiteUrlInput.value = ''
+  pinedWebsiteNameInput.value = ''
+}
 </script>
 
 <template>
@@ -50,27 +124,16 @@ const handleAddPinedWebsite = () => {
           v-for="(item, index) in pinedWebsiteList"
           :key="item?.url || Math.random() * 100"
           :style="{ background: `${item?.property?.color}DD` }"
-          :class="index === (pinedWebsiteList.length - 1) ? 'scale-up-left' : ''"
           class="pointer-events-auto w-45px h-45px rounded-xl cursor-pointer text-30px flex justify-center items-center hover:text-#967575"
+          @contextmenu="v => handlePinedContextMenu(v, item, index)"
         >
           {{ item.webName.slice(0, 1) }}
         </div>
 
-        <n-popover v-if="pinedWebsiteList.length < 10" ref="pinedPopoverRef" :overlap="false" placement="right-start" trigger="click">
-          <template #trigger>
-            <svg class=" w-45px h-45px cursor-pointer hover:text-#967575 pointer-events-auto outline-none" width="32" height="32" viewBox="0 0 256 256">
-              <path fill="#5A46FF" d="M 128 256 C 24.766 256 0 231.234 0 128 C 0 24.766 24.766 0 128 0 c 103.234 0 128 24.766 128 128 c 0 103.234 -24.766 128 -128 128 Z M 128 0 L 128 256 M 0 128 L 256 128" />
-              <path d=" M 128 60 L 129 197 M 63 126 L 195 126" stroke="#fff" stroke-width="10" />
-            </svg>
-          </template>
-          <div class=" w-200px flex flex-col gap-2">
-            <n-input v-model:value="addPinedWebsiteUrl" type="text" placeholder="URL" />
-            <n-input v-model:value="addPinedWebsiteName" type="text" placeholder="Name" />
-            <n-button @click="handleAddPinedWebsite">
-              保存
-            </n-button>
-          </div>
-        </n-popover>
+        <svg v-if="pinedWebsiteList.length < 10" class=" w-45px h-45px cursor-pointer hover:text-#967575 pointer-events-auto outline-none" width="32" height="32" viewBox="0 0 256 256" @click="handleOpenAddPinedModal">
+          <path fill="#5A46FF" d="M 128 256 C 24.766 256 0 231.234 0 128 C 0 24.766 24.766 0 128 0 c 103.234 0 128 24.766 128 128 c 0 103.234 -24.766 128 -128 128 Z M 128 0 L 128 256 M 0 128 L 256 128" />
+          <path d=" M 128 60 L 129 197 M 63 126 L 195 126" stroke="#fff" stroke-width="10" />
+        </svg>
       </div>
     </div>
 
@@ -96,9 +159,44 @@ const handleAddPinedWebsite = () => {
         </n-card>
       </div>
     </div> -->
+
+    <ContentDropMenu
+      v-model:showDropdownRef="showDropdownRef"
+      :x="xRef"
+      :y="yRef"
+      :options="pinedItemContextMenuOption"
+      @d="handleSelectedWebsite"
+    />
+
+    <n-modal v-model:show="pinedPopoverModal">
+      <n-card
+        style="width: 600px"
+        role="dialog"
+        class="card "
+        size="small"
+      >
+        <div class="flex flex-col gap-10px">
+          <n-input v-model:value="pinedWebsiteUrlInput" type="text" placeholder="URL" />
+          <n-input v-model:value="pinedWebsiteNameInput" type="text" placeholder="Name" />
+          <div class=" my-10px flex justify-around">
+            <n-button class="w-1/3" @click="handleAddPinedWebsite">
+              保存
+            </n-button>
+            <n-button class="w-1/3" @click="pinedPopoverModal = false">
+              取消
+            </n-button>
+          </div>
+        </div>
+      </n-card>
+    </n-modal>
   </div>
 </template>
 
 <style scoped>
-/* .scale-up-left{animation:scale-up-left 0.4s; } @keyframes scale-up-left{0%{transform:scale(.5);transform-origin:left center}100%{transform:scale(1);transform-origin:left center}} */
+.card {
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 </style>
