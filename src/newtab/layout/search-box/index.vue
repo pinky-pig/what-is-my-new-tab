@@ -21,7 +21,9 @@
 
 const searchText = ref('')
 function handleSearch() {
-  window.open(`https://www.baidu.com/s?wd=${searchText.value}`)
+  setTimeout(() => {
+    window.open(`https://www.baidu.com/s?wd=${searchText.value}`)
+  })
 }
 
 function clearSearchText() {
