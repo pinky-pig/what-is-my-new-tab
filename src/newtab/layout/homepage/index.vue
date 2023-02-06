@@ -116,7 +116,7 @@ function jumpToWebsite(item: any) {
 </script>
 
 <template>
-  <div class=" w-700px h-full z-1 text-white py-20px pointer-events-none">
+  <div class=" w-676px h-full z-1 text-white py-20px pointer-events-none">
     <!-- Pined app -->
     <div class="flex flex-col items-start py-20px gap-10px ">
       <p class="text-14px text-#767575 leading-4">
@@ -147,7 +147,18 @@ function jumpToWebsite(item: any) {
         Most used app
       </p>
       <div class=" flex flex-row gap-25px">
-        <div v-for="(item,) in 10" :key="item" :style="{ background: palettes.flat()[Math.ceil(Math.random() * 10)] }" class=" pointer-events-auto w-45px h-45px rounded-xl cursor-pointer hover:text-#967575" />
+        <div
+          v-for="(item,) in 3"
+          :key="item"
+          :style="{ 'background': palettes.flat()[Math.ceil(Math.random() * 10)], 'flex-direction': Math.random() > 0.5 ? 'row' : 'row-reverse' }"
+          class="flex gap-15px p-1 pointer-events-auto w-185px h-115px rounded-xl cursor-pointer hover:text-#967575"
+        >
+          <div
+            :style="{ background: palettes.flat()[Math.ceil(Math.random() * 10)] }"
+            class="h-full w-2/3 rounded-lg"
+          />
+          <div>name</div>
+        </div>
       </div>
     </div>
 
