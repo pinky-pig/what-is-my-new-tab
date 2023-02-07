@@ -39,6 +39,7 @@ export async function getManifest() {
       'storage',
       'activeTab',
       'topSites', // https://developer.chrome.com/docs/extensions/reference/topSites/
+      'contextMenus', // https://developer.chrome.com/docs/extensions/reference/contextMenus/
       'http://*/',
       'https://*/',
       'favicon',

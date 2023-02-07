@@ -132,6 +132,8 @@ function jumpMostUsedAppWebsite(item: topSite) {
 function openAnotherWindow() {
   browser.windows.create({
     url: browser.runtime.getURL('./dist/popup/index.html'),
+    width: 400,
+    height: 800,
     type: 'popup',
   })
 }

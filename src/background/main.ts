@@ -1,5 +1,6 @@
 import { onMessage, sendMessage } from 'webext-bridge'
 import type { Tabs } from 'webextension-polyfill'
+import { contextMenu } from './context-menu'
 
 // only on dev mode
 if (import.meta.hot) {
@@ -14,12 +15,19 @@ browser.runtime.onInstalled.addListener((): void => {
   console.log('Extension installed')
 })
 
+// 1. popup弹出页面
 browser.browserAction.onClicked.addListener((_tab) => {
   browser.windows.create({
     url: browser.runtime.getURL('./dist/popup/index.html'),
+    width: 400,
+    height: 800,
+    left: 600,
     type: 'popup',
   })
 })
+
+// 2. 右键菜单
+contextMenu()
 
 let previousTabId = 0
 
