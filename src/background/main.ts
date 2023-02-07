@@ -14,6 +14,13 @@ browser.runtime.onInstalled.addListener((): void => {
   console.log('Extension installed')
 })
 
+browser.browserAction.onClicked.addListener((_tab) => {
+  browser.windows.create({
+    url: browser.runtime.getURL('./dist/popup/index.html'),
+    type: 'popup',
+  })
+})
+
 let previousTabId = 0
 
 // communication example: send previous tab title from background page

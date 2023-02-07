@@ -127,6 +127,15 @@ getChromeTopSites().then((res: any) => {
 function jumpMostUsedAppWebsite(item: topSite) {
   window.open(item.url)
 }
+
+// 打开独立窗口
+function openAnotherWindow() {
+  // debugger
+  // chrome.window.create(
+  //   'www.baidu.com',
+
+  // )
+}
 </script>
 
 <template>
@@ -188,6 +197,25 @@ function jumpMostUsedAppWebsite(item: topSite) {
           <div class=" text-black">
             {{ item.title }}
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-start py-20px gap-10px">
+      <p class="text-14px text-#767575 leading-4">
+        Widget
+      </p>
+      <div class=" flex flex-row gap-25px">
+        <div
+          :style="{ 'background': palettes.flat()[Math.ceil(Math.random() * 10)], 'flex-direction': Math.random() > 0.5 ? 'row' : 'row-reverse' }"
+          class="flex gap-15px p-1 pointer-events-auto w-185px h-115px rounded-xl cursor-pointer hover:text-#967575"
+          @click="openAnotherWindow"
+        >
+          <div
+            :style="{ background: palettes.flat()[Math.ceil(Math.random() * 10)] }"
+            class="h-full w-2/3 rounded-lg"
+          />
+          <div>open another window</div>
         </div>
       </div>
     </div>

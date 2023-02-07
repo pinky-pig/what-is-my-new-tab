@@ -51,7 +51,7 @@ function handleCloseNotes() {
         Note
       </div>
       <div class="flex flex-row ">
-        <div class="w-90px h-25px rounded-2xl px-15px flex flex-row justify-between items-center bg-#EEC780 text-#A56B0E" @click="handleEditContent">
+        <div class="w-90px h-25px rounded-2xl px-15px flex flex-row justify-between items-center bg-#EEC780 text-#A56B0E" @click.stop="handleEditContent">
           <div v-show="isReadonly">
             编辑
           </div>

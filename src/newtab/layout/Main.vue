@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import SearchBox from './search-box/index.vue'
 import Homepage from './homepage/index.vue'
-import StickyNotes from './sticky-notes/index.vue'
+// import StickyNotes from './sticky-notes/index.vue'
 </script>
 
 <template>
@@ -10,6 +10,6 @@ import StickyNotes from './sticky-notes/index.vue'
 
     <Homepage class="flex-1" />
 
-    <StickyNotes />
+    <!-- <StickyNotes /> -->
   </div>
 </template>
