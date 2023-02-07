@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ContentDropMenu from './ContentDropMenu.vue'
 import { addPinedWebsite, deletePinedWebsite, editPinedWebsite, getPinedWebsite } from './websiteData'
-import { getChromeTopSites } from '~/chrome-api'
+import { getBrowserTopSites } from '~/chrome-api'
 const pinedWebsiteList = ref<{ webName: string; type: number; url: string; property: { color: string } }[]>([])
 onMounted(async () => {
   pinedWebsiteList.value = await getPinedWebsite()
@@ -121,7 +121,7 @@ interface topSite {
   url: string
 }
 const mostUsedAppsList = ref<topSite[] | []>([])
-getChromeTopSites().then((res: any) => {
+getBrowserTopSites().then((res: any) => {
   mostUsedAppsList.value = res
 })
 function jumpMostUsedAppWebsite(item: topSite) {
@@ -130,11 +130,10 @@ function jumpMostUsedAppWebsite(item: topSite) {
 
 // 打开独立窗口
 function openAnotherWindow() {
-  // debugger
-  // chrome.window.create(
-  //   'www.baidu.com',
-
-  // )
+  browser.windows.create({
+    url: browser.runtime.getURL('./dist/popup/index.html'),
+    type: 'popup',
+  })
 }
 </script>
 
