@@ -96,9 +96,8 @@ onMounted(() => {
         </main>
       </div>
 
-      <div class="bg-Illustration">
+      <!-- <div class="bg-Illustration">
         <svg width="240px" height="324px" viewBox="0 0 240 324" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <!-- Generator: Sketch 62 (91390) - https://sketch.com -->
           <title>peep-12</title>
           <desc>Created with Sketch.</desc>
           <g id="Introduction" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -125,7 +124,7 @@ onMounted(() => {
             </g>
           </g>
         </svg>
-      </div>
+      </div> -->
     </n-config-provider>
   </Suspense>
   <NaiveProvider />

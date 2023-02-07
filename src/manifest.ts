@@ -38,9 +38,10 @@ export async function getManifest() {
       'tabs',
       'storage',
       'activeTab',
-      'favicon',
+      'topSites', // https://developer.chrome.com/docs/extensions/reference/topSites/
       'http://*/',
       'https://*/',
+      'favicon',
       'chrome://favicon/',
       'chrome://newtab',
     ],

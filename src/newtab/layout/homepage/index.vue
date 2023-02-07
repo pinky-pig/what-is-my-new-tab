@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ContentDropMenu from './ContentDropMenu.vue'
 import { addPinedWebsite, deletePinedWebsite, editPinedWebsite, getPinedWebsite } from './websiteData'
+import { getChromeTopSites } from '~/chrome-api'
 const pinedWebsiteList = ref<{ webName: string; type: number; url: string; property: { color: string } }[]>([])
 onMounted(async () => {
   pinedWebsiteList.value = await getPinedWebsite()
@@ -113,6 +114,19 @@ function handleOpenAddPinedModal() {
 function jumpToWebsite(item: any) {
   window.open(item.url)
 }
+
+// 最常使用网址
+interface topSite {
+  title: string
+  url: string
+}
+const mostUsedAppsList = ref<topSite[] | []>([])
+getChromeTopSites().then((res: any) => {
+  mostUsedAppsList.value = res
+})
+function jumpMostUsedAppWebsite(item: topSite) {
+  window.open(item.url)
+}
 </script>
 
 <template>
@@ -142,14 +156,14 @@ function jumpToWebsite(item: any) {
     </div>
 
     <!-- Most used app -->
-    <div class="flex flex-col items-start py-20px gap-10px">
+    <div class="flex flex-col items-start py-20px gap-10px overflow-x-auto overflow-y-hidden pointer-events-auto">
       <p class="text-14px text-#767575 leading-4">
         Most used app
       </p>
       <div class=" flex flex-row gap-25px">
-        <div
-          v-for="(item,) in 3"
-          :key="item"
+        <!-- <div
+          v-for="(item,) in mostUsedAppsList"
+          :key="item.url"
           :style="{ 'background': palettes.flat()[Math.ceil(Math.random() * 10)], 'flex-direction': Math.random() > 0.5 ? 'row' : 'row-reverse' }"
           class="flex gap-15px p-1 pointer-events-auto w-185px h-115px rounded-xl cursor-pointer hover:text-#967575"
         >
@@ -158,17 +172,22 @@ function jumpToWebsite(item: any) {
             class="h-full w-2/3 rounded-lg"
           />
           <div>name</div>
-        </div>
+        </div> -->
 
         <div
+          v-for="(item,) in mostUsedAppsList"
+          :key="item.url"
           :style="{ 'background': palettes.flat()[Math.ceil(Math.random() * 10)], 'flex-direction': Math.random() > 0.5 ? 'column' : 'column-reverse' }"
-          class="flex flex-col gap-10px p-1 pointer-events-auto w-115px h-115px rounded-xl cursor-pointer hover:text-#967575"
+          class="dash-outline flex flex-col gap-10px p-1 pointer-events-auto w-115px h-115px rounded-xl cursor-pointer hover:text-#967575"
+          @click="jumpMostUsedAppWebsite(item)"
         >
           <div
             :style="{ background: palettes.flat()[Math.ceil(Math.random() * 10)] }"
             class="w-full h-2/3 rounded-lg"
           />
-          <div>name</div>
+          <div class=" text-black">
+            {{ item.title }}
+          </div>
         </div>
       </div>
     </div>
@@ -224,5 +243,18 @@ function jumpToWebsite(item: any) {
   padding: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.dash-outline{
+  outline: 2px dotted transparent;
+  outline-offset: -2px;
+  transition: outline 0.12s ease, outline-offset 0.12s ease;
+}
+.dash-outline:hover{
+  outline: 2.5px dashed rgb(128, 136, 184) !important;
+  stroke-dashoffset: 12px;
+  outline-offset: 2px;
+  transition: outline 0.12s ease, outline-offset 0.12s ease;
+  transform: scaleX(1.05) scaleY(1.05);
 }
 </style>

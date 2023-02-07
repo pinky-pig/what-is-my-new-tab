@@ -36,6 +36,7 @@ export const sharedConfig: UserConfig = {
       dts: r('src/auto-imports.d.ts'),
       dirs: [
         'src/store/modules',
+        'src/chrome-api',
       ],
     }),
 
