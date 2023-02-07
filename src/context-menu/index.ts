@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 export const contextMenu = () => {
   browser.contextMenus.create({
     type: 'normal',
@@ -40,10 +39,12 @@ export const contextMenu = () => {
       "windowId": 1768720354
     }
    */
-  browser.contextMenus.onClicked.addListener((_info, _tab) => {
-    if (_info.menuItemId === '小窗口展示') {
-      console.log(_info)
-      console.log(_tab)
+  browser.contextMenus.onClicked.addListener((_info, tab) => {
+    if (_info.menuItemId === 'littleWindow') {
+      // console.log(_info)
+      // console.log(tab)
+      browser.tabs.sendMessage(tab?.id || 0, { cmd: 'start' })
+      // window.open('https://www.baidu.com/')
     }
     else if (_info.menuItemId === 'test') {
       window.open('https://www.baidu.com/')
@@ -53,7 +54,7 @@ export const contextMenu = () => {
   browser.contextMenus.create({
     parentId: 'menuDemo',
     type: 'normal',
-    title: '小窗口展示',
+    title: '小窗口展示start',
     id: 'littleWindow',
     contexts: ['all'],
   })

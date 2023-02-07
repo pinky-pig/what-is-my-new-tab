@@ -2,6 +2,7 @@
 import ContentDropMenu from './ContentDropMenu.vue'
 import { addPinedWebsite, deletePinedWebsite, editPinedWebsite, getPinedWebsite } from './websiteData'
 import { getBrowserTopSites } from '~/chrome-api'
+import { watchContextMenuEvent } from '~/context-menu/littleWindow'
 const pinedWebsiteList = ref<{ webName: string; type: number; url: string; property: { color: string } }[]>([])
 onMounted(async () => {
   pinedWebsiteList.value = await getPinedWebsite()
@@ -137,6 +138,7 @@ function openAnotherWindow() {
     type: 'popup',
   })
 }
+watchContextMenuEvent()
 </script>
 
 <template>
