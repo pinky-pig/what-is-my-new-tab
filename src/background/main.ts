@@ -1,6 +1,6 @@
 import { onMessage, sendMessage } from 'webext-bridge'
 import type { Tabs } from 'webextension-polyfill'
-import { contextMenu } from './context-menu'
+import { contextMenu } from '~/context-menu'
 
 // only on dev mode
 if (import.meta.hot) {
@@ -25,7 +25,6 @@ browser.browserAction.onClicked.addListener((_tab) => {
     type: 'popup',
   })
 })
-
 // 2. 右键菜单
 contextMenu()
 
