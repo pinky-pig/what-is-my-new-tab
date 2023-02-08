@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useMagicKeys } from '@vueuse/core'
 import type { StyleValue } from 'vue'
 import { defineCustomElement, h } from 'vue'
@@ -25,18 +24,25 @@ export const watchContextMenuEvent = () => {
 }
 
 // 1. 定义选择框，框子尺寸位置，根据bounds控制
-const selectBoxBounds = ref([0, 0, 0, 0]) // x,y,width,height
+const selectBoxBounds = ref({
+  x: 0,
+  y: 0,
+  width: 0,
+  height: 0,
+}) // x,y,width,height
 const SelectBoxElement = defineCustomElement({
   setup() {
     const getStyle = computed(() => {
       return {
         position: 'fixed',
-        left: `${selectBoxBounds.value[0]}px`,
-        top: `${selectBoxBounds.value[1]}px`,
-        width: `${selectBoxBounds.value[2]}px`,
-        height: `${selectBoxBounds.value[3]}px`,
-        background: '#ffffff',
-        outline: '1px solid #000000',
+        left: `${selectBoxBounds.value.x}px`,
+        top: `${selectBoxBounds.value.y}px`,
+        width: `${selectBoxBounds.value.width}px`,
+        height: `${selectBoxBounds.value.height}px`,
+        background: 'rgba(59, 130, 246, 0.3)',
+        outline: '1px solid rgba(59, 130, 246, 0.6)',
+        borderRadius: '3px',
+        pointerEvents: 'none',
         zIndex: 99999,
       } as StyleValue
     })
@@ -60,6 +66,7 @@ function createBoxComponent() {
   )
   return boxElement
 }
+
 function addMouseEvent() {
   const boxElement = createBoxComponent()
 
@@ -68,17 +75,8 @@ function addMouseEvent() {
   function mouseup(_e: MouseEvent) {
   }
   function mousemove(e: MouseEvent) {
-    // const point = { x: e.clientX, y: e.clientY }
-    // const initElement = document.elementFromPoint(point.x, point.y)
-
-    // const { x, y, width, height } = (initElement as HTMLElement).getBoundingClientRect()
-    // selectBoxBounds.value = [x, y, width, height]
-    // console.log(selectBoxBounds.value)
-
-    // if (e.target) {
-    //   const { x, y, width, height } = (e.target as HTMLElement).getBoundingClientRect()
-    //   selectBoxBounds.value = [x, y, width, height]
-    // }
+    if (e.target)
+      selectBoxBounds.value = (e.target as HTMLElement).getBoundingClientRect()
   }
   function mouseover(_e: MouseEvent) {
   }

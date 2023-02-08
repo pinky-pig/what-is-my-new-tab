@@ -120,14 +120,28 @@ function jumpToWebsite(item: any) {
 interface topSite {
   title: string
   url: string
+  property: {
+    color: string
+    direction: any
+  }
 }
 const mostUsedAppsList = ref<topSite[] | []>([])
+
 getBrowserTopSites().then((res: any) => {
-  mostUsedAppsList.value = res
+  mostUsedAppsList.value
+    = {
+      ...res,
+      property: {
+        color: palettes.flat()[Math.ceil(Math.random() * 10)],
+        direction: Math.random() > 0.5 ? 'column' : 'column-reverse',
+      },
+    }
 })
 function jumpMostUsedAppWebsite(item: topSite) {
   window.open(item.url)
 }
+
+watchContextMenuEvent()
 
 // 打开独立窗口
 function openAnotherWindow() {
@@ -138,19 +152,18 @@ function openAnotherWindow() {
   //   type: 'popup',
   // })
 
-  browser.windows.getCurrent().then((tab: any) => {
-    // browser.tabs.duplicate(tab?.id)
-    browser.windows.create({
-      width: 400,
-      height: 800,
-      tabId: tab?.id,
-      type: 'popup',
-      focused: true,
-      incognito: false,
-    })
-  })
+  // browser.windows.getCurrent().then((tab: any) => {
+  //   // browser.tabs.duplicate(tab?.id)
+  //   browser.windows.create({
+  //     width: 400,
+  //     height: 800,
+  //     tabId: tab?.id,
+  //     type: 'popup',
+  //     focused: true,
+  //     incognito: false,
+  //   })
+  // })
 }
-watchContextMenuEvent()
 </script>
 
 <template>
@@ -200,13 +213,13 @@ watchContextMenuEvent()
 
         <div
           v-for="(item,) in mostUsedAppsList"
-          :key="item.url"
-          :style="{ 'background': palettes.flat()[Math.ceil(Math.random() * 10)], 'flex-direction': Math.random() > 0.5 ? 'column' : 'column-reverse' }"
+          :key="item?.url || Math.random() * 100"
+          :style="{ background: '#00000030' }"
           class="dash-outline flex flex-col gap-10px p-1 pointer-events-auto w-115px h-115px rounded-xl cursor-pointer hover:text-#967575"
           @click="jumpMostUsedAppWebsite(item)"
         >
           <div
-            :style="{ background: palettes.flat()[Math.ceil(Math.random() * 10)] }"
+            :style="{ background: '#00000030' }"
             class="w-full h-2/3 rounded-lg"
           />
           <div class=" text-black">
@@ -222,12 +235,12 @@ watchContextMenuEvent()
       </p>
       <div class=" flex flex-row gap-25px">
         <div
-          :style="{ 'background': palettes.flat()[Math.ceil(Math.random() * 10)], 'flex-direction': Math.random() > 0.5 ? 'row' : 'row-reverse' }"
+          :style="{ background: '#00000030' }"
           class="flex gap-15px p-1 pointer-events-auto w-185px h-115px rounded-xl cursor-pointer hover:text-#967575"
           @click="openAnotherWindow"
         >
           <div
-            :style="{ background: palettes.flat()[Math.ceil(Math.random() * 10)] }"
+            :style="{ background: '#00000030' }"
             class="h-full w-2/3 rounded-lg"
           />
           <div>open another window</div>
