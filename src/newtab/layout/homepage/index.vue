@@ -222,7 +222,7 @@ function openAnotherWindow() {
             :style="{ background: '#00000030' }"
             class="w-full h-2/3 rounded-lg"
           />
-          <div class=" text-black">
+          <div class=" text-gray-500">
             {{ item.title }}
           </div>
         </div>
