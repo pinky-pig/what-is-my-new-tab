@@ -131,11 +131,15 @@ function jumpMostUsedAppWebsite(item: topSite) {
 
 // 打开独立窗口
 function openAnotherWindow() {
-  browser.windows.create({
-    url: browser.runtime.getURL('./dist/popup/index.html'),
-    width: 400,
-    height: 800,
-    type: 'popup',
+  // browser.windows.create({
+  //   url: browser.runtime.getURL('./dist/popup/index.html'),
+  //   width: 400,
+  //   height: 800,
+  //   type: 'popup',
+  // })
+
+  browser.windows.getCurrent().then((tab: any) => {
+    browser.tabs.duplicate(tab?.id)
   })
 }
 watchContextMenuEvent()

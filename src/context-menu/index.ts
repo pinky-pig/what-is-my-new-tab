@@ -7,10 +7,10 @@ export const contextMenu = () => {
   })
 
   /**
-   * _info: {
+   * info: {
         "editable": false,
         "frameId": 0,
-        "menuItemId": "littleWindow",
+        "menuItemId": "startSelectBox",
         "pageUrl": "chrome-extension://ickhngjdmohhngnbganehfhhliebfmgd/dist/newtab/index.html",
         "parentMenuItemId": "menuDemo"
       }
@@ -39,29 +39,84 @@ export const contextMenu = () => {
       "windowId": 1768720354
     }
    */
-  browser.contextMenus.onClicked.addListener((_info, tab) => {
-    if (_info.menuItemId === 'littleWindow') {
-      // console.log(_info)
-      // console.log(tab)
+  browser.contextMenus.onClicked.addListener((info, tab) => {
+    if (tab === undefined)
+      return
+    // 1.选择
+    if (info.menuItemId === 'startSelectBox') {
       browser.tabs.sendMessage(tab?.id || 0, { cmd: 'start' })
-      // window.open('https://www.baidu.com/')
     }
-    else if (_info.menuItemId === 'test') {
-      window.open('https://www.baidu.com/')
+    // 2.复制
+    else if (info.menuItemId === 'openDuplicateWindow') {
+      tab.id && browser.tabs.duplicate(tab.id)
+    }
+    // 3.弹出
+    else if (info.menuItemId === 'openPopupWindow') {
+      browser.windows.create({
+        width: 400,
+        height: 800,
+        tabId: tab?.id,
+        type: 'popup',
+        focused: true,
+        incognito: false,
+      })
+    }
+    // 4.复制并弹出
+    else if (info.menuItemId === 'openPopupAndDuplicateWindow') {
+      tab.id && browser.tabs.duplicate(tab.id)
+      browser.windows.create({
+        width: 400,
+        height: 800,
+        tabId: tab?.id,
+        type: 'popup',
+        focused: true,
+        incognito: false,
+      })
+    }
+    // 测试用
+    else if (info.menuItemId === 'test') {
+      // browser.windows.getCurrent().then((tab: any) => {
+      //   console.log(tab)
+      //   // browser.tabs.duplicate(tab.id).then((res) => {
+      //   //   console.log(res)
+      //   // })
+      // })
     }
   })
 
   browser.contextMenus.create({
     parentId: 'menuDemo',
     type: 'normal',
-    title: '小窗口展示start',
-    id: 'littleWindow',
+    title: '选择框 Esc退出',
+    id: 'startSelectBox',
     contexts: ['all'],
   })
   browser.contextMenus.create({
     parentId: 'menuDemo',
     type: 'normal',
-    title: '测试',
+    title: '复制当前Tab窗口',
+    id: 'openDuplicateWindow',
+    contexts: ['all'],
+  })
+  browser.contextMenus.create({
+    parentId: 'menuDemo',
+    type: 'normal',
+    title: '弹出当前Tab窗口',
+    id: 'openPopupWindow',
+    contexts: ['all'],
+  })
+  browser.contextMenus.create({
+    parentId: 'menuDemo',
+    type: 'normal',
+    title: '弹出并复制当前Tab窗口',
+    id: 'openPopupAndDuplicateWindow',
+    contexts: ['all'],
+  })
+
+  browser.contextMenus.create({
+    parentId: 'menuDemo',
+    type: 'normal',
+    title: 'test',
     id: 'test',
     contexts: ['all'],
   })

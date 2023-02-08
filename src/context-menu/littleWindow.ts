@@ -41,6 +41,7 @@ const SelectBoxElement = defineCustomElement({
     })
     return () => {
       return h('div', {
+        key: 'selectBoxElement',
         style: getStyle.value,
         id: 'selectBoxElement',
       })
