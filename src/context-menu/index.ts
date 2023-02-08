@@ -61,7 +61,7 @@ export const contextMenu = () => {
         incognito: false,
       })
     }
-    // 4.复制并弹出
+    // 4.复制并弹出。接下来就是将弹窗里面的要素盖上一个蒙版，然后将点击选择的要素置顶
     else if (info.menuItemId === 'openPopupAndDuplicateWindow') {
       tab.id && browser.tabs.duplicate(tab.id)
       browser.windows.create({

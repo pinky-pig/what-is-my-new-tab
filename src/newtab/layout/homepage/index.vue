@@ -139,7 +139,15 @@ function openAnotherWindow() {
   // })
 
   browser.windows.getCurrent().then((tab: any) => {
-    browser.tabs.duplicate(tab?.id)
+    // browser.tabs.duplicate(tab?.id)
+    browser.windows.create({
+      width: 400,
+      height: 800,
+      tabId: tab?.id,
+      type: 'popup',
+      focused: true,
+      incognito: false,
+    })
   })
 }
 watchContextMenuEvent()

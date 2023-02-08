@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useMagicKeys } from '@vueuse/core'
 import type { StyleValue } from 'vue'
 import { defineCustomElement, h } from 'vue'
@@ -67,10 +68,17 @@ function addMouseEvent() {
   function mouseup(_e: MouseEvent) {
   }
   function mousemove(e: MouseEvent) {
-    if (e.target) {
-      const { x, y, width, height } = (e.target as HTMLElement).getBoundingClientRect()
-      selectBoxBounds.value = [x, y, width, height]
-    }
+    // const point = { x: e.clientX, y: e.clientY }
+    // const initElement = document.elementFromPoint(point.x, point.y)
+
+    // const { x, y, width, height } = (initElement as HTMLElement).getBoundingClientRect()
+    // selectBoxBounds.value = [x, y, width, height]
+    // console.log(selectBoxBounds.value)
+
+    // if (e.target) {
+    //   const { x, y, width, height } = (e.target as HTMLElement).getBoundingClientRect()
+    //   selectBoxBounds.value = [x, y, width, height]
+    // }
   }
   function mouseover(_e: MouseEvent) {
   }
