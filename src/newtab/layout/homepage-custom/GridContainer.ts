@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useLayoutStore } from '~/store'
-let draggedEvt: MouseEvent | TouchEvent | null = null
-
+let draggedEvt: MouseEvent | null = null
+let currentClickedElement: any
 export function initGridContainer() {
   const store = useLayoutStore()
 
@@ -32,14 +32,37 @@ export function initGridContainer() {
 
   function mousedown(e: MouseEvent) {
     store.mouseFrom = { x: e.clientX, y: e.clientY }
+    currentClickedElement = getCellObjectInStoreFromPosition(store.mouseFrom)
+    draggedEvt = e
   }
 
   function mousemove(e: MouseEvent) {
-    // console.log(e, 'mousemove')
+    const pt = e
+    if (draggedEvt && currentClickedElement) {
+      const oriPt = draggedEvt
+      currentClickedElement.cfg.x = currentClickedElement.cfg.x + (pt.clientX - oriPt.clientX)
+      currentClickedElement.cfg.y = currentClickedElement.cfg.y + (pt.clientY - oriPt.clientY)
+      draggedEvt = e
+    }
   }
 
   function mouseup(e: MouseEvent) {
     draggedEvt = null
+    currentClickedElement = null
+  }
+  /**
+   * 通过坐标位置获取当前对象
+   * @param position 坐标
+   * @returns 点击的对象
+   */
+  function getCellObjectInStoreFromPosition(position: { x: number; y: number }) {
+    let result = null
+    const point = { x: position.x, y: position.y }
+    const initElement = document.elementFromPoint(point.x, point.y)
+    if (initElement)
+      result = store.gridCells.filter(ele => ele.cfg.id === initElement.id)
+
+    return result ? result[0] : null
   }
 
   return GridContainer

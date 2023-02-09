@@ -1,26 +1,27 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import type { Ref, StyleValue } from 'vue'
 import { generateUuid } from '~/utils/uuid'
+
+export interface GridCellType {
+  id: string
+  x: number
+  y: number
+  width: number
+  height: number
+  rotate: number
+  scale: number
+  isLocked: boolean // 是否锁定
+  showMode: number
+  children?: any
+}
 export class GridCell {
   // configuration
-  cfg: Ref<{
-    id: string
-    x: number
-    y: number
-    width: number
-    height: number
-    rotate: number
-    scale: number
-    isLocked: boolean // 是否锁定
-    showMode: number
-    children?: any
-  }>
-
+  cfg: Ref<GridCellType>
   cellRef: Ref<HTMLElement | undefined>
 
-  constructor() {
-    this.cfg = ref({
-      id: generateUuid(),
+  constructor(configuration: GridCellType) {
+    this.cfg = ref(Object.assign({
+      id: generateUuid(), // add 使用这个， edit 使用传入的 configuration 的
       x: 0,
       y: 0,
       width: 200,
@@ -29,7 +30,7 @@ export class GridCell {
       scale: 1,
       isLocked: false, // 是否锁定
       showMode: 0, // 0 格子 1 列表
-    })
+    } as GridCellType, configuration))
 
     this.cellRef = ref<HTMLElement>()
 

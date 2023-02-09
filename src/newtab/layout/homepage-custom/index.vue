@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { GridCellType } from './GridCell'
 import { GridCell } from './GridCell'
 import { initGridContainer } from './GridContainer'
 import { getAllGridCell } from './gridCellData'
@@ -8,15 +9,17 @@ import { useLayoutStore } from '~/store'
 const GridContainer = initGridContainer()
 
 const store = useLayoutStore()
+
 // 1.indexDB中查询数据
-const gridCellList = ref<any[]>([])
+const gridCellList = ref<GridCellType[]>([])
 async function initGridCell() {
   gridCellList.value = await getAllGridCell()
 }
 await initGridCell()
 // 2.渲染组件
 const gridCellComponents = gridCellList.value.map((item) => {
-  const cell = new GridCell()
+  const cell = new GridCell(item)
+
   store.gridCells.push(cell)
   return {
     data: cell,
