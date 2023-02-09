@@ -41,6 +41,10 @@ export const useStorageIndexDB = (dataName: string, storeDetails: string) => {
     async getItem(key: number) {
       return await db.common.get(key)
     },
+
+    async getAllItem() {
+      return await db.common.toArray()
+    },
     /**
      * 查询一条语句
      * storageWallpaperDB.getItemBySQL(
