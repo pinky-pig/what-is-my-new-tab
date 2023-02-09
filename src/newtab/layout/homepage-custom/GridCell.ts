@@ -10,6 +10,7 @@ export interface GridCellType {
   height: number
   rotate: number
   scale: number
+  translate: number[]
   isLocked: boolean // 是否锁定
   showMode: number
   children?: any
@@ -28,6 +29,7 @@ export class GridCell {
       height: 200,
       rotate: 0,
       scale: 1,
+      translate: [0, 0],
       isLocked: false, // 是否锁定
       showMode: 0, // 0 格子 1 列表
     } as GridCellType, configuration))
@@ -56,7 +58,7 @@ export class GridCell {
             outline: '1px solid rgba(59, 130, 246, 0.6)',
             borderRadius: '3px',
             pointerEvents: 'auto',
-            transition: 'all 0.3s ease',
+            // transform: translate( calc(642.73px - var(--tl-padding)), calc(90.22px - var(--tl-padding)) )
             zIndex: 99999,
           } as StyleValue
         })

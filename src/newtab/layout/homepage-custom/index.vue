@@ -4,8 +4,8 @@ import { GridCell } from './GridCell'
 import { initGridContainer } from './GridContainer'
 import { getAllGridCell } from './gridCellData'
 import { useLayoutStore } from '~/store'
-// import { storageCustomLayoutDB } from '~/logic'
-// import { generateUuid } from '~/utils/uuid'
+import { storageCustomLayoutDB } from '~/logic'
+import { generateUuid } from '~/utils/uuid'
 const GridContainer = initGridContainer()
 
 const store = useLayoutStore()
@@ -34,17 +34,18 @@ const gridCellComponents = gridCellList.value.map((item) => {
 //   }, 3000)
 // })
 // 存储到indexDB
-// storageCustomLayoutDB.addItem({
-//   id: generateUuid(),
-//   x: 0,
-//   y: 0,
-//   width: 200,
-//   height: 200,
-//   rotate: 0,
-//   scale: 1,
-//   isLocked: false, // 是否锁定
-//   showMode: 0, // 0 格子 1 列表
-// })
+storageCustomLayoutDB.addItem({
+  id: generateUuid(),
+  x: 0,
+  y: 0,
+  width: 200,
+  height: 200,
+  rotate: 0,
+  scale: 1,
+  translate: [0, 0],
+  isLocked: false, // 是否锁定
+  showMode: 0, // 0 格子 1 列表
+})
 </script>
 
 <template>

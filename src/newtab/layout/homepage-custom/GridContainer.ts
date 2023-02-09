@@ -42,6 +42,11 @@ export function initGridContainer() {
       const oriPt = draggedEvt
       currentClickedElement.cfg.x = currentClickedElement.cfg.x + (pt.clientX - oriPt.clientX)
       currentClickedElement.cfg.y = currentClickedElement.cfg.y + (pt.clientY - oriPt.clientY)
+
+      // currentClickedElement.cfg.translate = [
+      //   currentClickedElement.cfg.translate[0] + (pt.clientX - oriPt.clientX),
+      //   currentClickedElement.cfg.translate[1] + (pt.clientY - oriPt.clientY),
+      // ]
       draggedEvt = e
     }
   }
