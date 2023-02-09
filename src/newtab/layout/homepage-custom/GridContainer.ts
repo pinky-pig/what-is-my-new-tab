@@ -1,37 +1,46 @@
-export const GridContainer = defineComponent({
-  setup(_props, { slots }) {
-    const gridContainerRef = ref<HTMLElement>()
-    function addMouseEvent() {
-      // 单个框的监听。在编辑模式下增加鼠标的监听，退出的时候移除
-      if (gridContainerRef.value instanceof HTMLElement) {
-        gridContainerRef.value.addEventListener('mousedown', mousedown, false)
-        gridContainerRef.value.addEventListener('mouseup', mouseup, false)
-        gridContainerRef.value.addEventListener('mousemove', mousemove, false)
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useLayoutStore } from '~/store'
+let draggedEvt: MouseEvent | TouchEvent | null = null
+
+export function initGridContainer() {
+  const store = useLayoutStore()
+
+  const GridContainer = defineComponent({
+    setup(_props, { slots }) {
+      const gridContainerRef = ref<HTMLElement>()
+      function addMouseEvent() {
+        window.addEventListener('mousedown', mousedown, false)
+        window.addEventListener('mouseup', mouseup, false)
+        window.addEventListener('mousemove', mousemove, false)
       }
-    }
-    // 1.添加监听事件
-    addMouseEvent()
+      // 1.添加监听事件
+      onMounted(() => {
+        addMouseEvent()
+      })
 
-    return () => h(
-      'div',
-      {
-        id: 'cellContainer',
-        ref: gridContainerRef,
-        class: 'w-screen h-screen fixed top-0 left-0',
-      },
-      slots,
-    )
-  },
-})
+      return () => h(
+        'div',
+        {
+          id: 'cellContainer',
+          ref: gridContainerRef,
+          class: 'w-screen h-screen fixed top-0 left-0',
+        },
+        slots,
+      )
+    },
+  })
 
-function mousedown(_e: MouseEvent) {
+  function mousedown(e: MouseEvent) {
+    store.mouseFrom = { x: e.clientX, y: e.clientY }
+  }
 
-}
+  function mousemove(e: MouseEvent) {
+    // console.log(e, 'mousemove')
+  }
 
-function mousemove(_e: MouseEvent) {
+  function mouseup(e: MouseEvent) {
+    draggedEvt = null
+  }
 
-}
-
-function mouseup(_e: MouseEvent) {
-
+  return GridContainer
 }

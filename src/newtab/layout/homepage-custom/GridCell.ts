@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import type { Ref, StyleValue } from 'vue'
+import { generateUuid } from '~/utils/uuid'
 export class GridCell {
   // configuration
   cfg: Ref<{
-    id: number
+    id: string
     x: number
     y: number
     width: number
@@ -12,13 +13,14 @@ export class GridCell {
     scale: number
     isLocked: boolean // 是否锁定
     showMode: number
+    children?: any
   }>
 
   cellRef: Ref<HTMLElement | undefined>
 
   constructor() {
     this.cfg = ref({
-      id: 0,
+      id: generateUuid(),
       x: 0,
       y: 0,
       width: 200,
@@ -35,28 +37,6 @@ export class GridCell {
   }
 
   initCell() {
-    onMounted(() => {
-      setTimeout(() => {
-        this.cfg.value.width = 500
-      }, 3000)
-    })
-    // 单个框的监听。在编辑模式下增加鼠标的监听，退出的时候移除
-    if (this.cellRef.value instanceof HTMLElement) {
-      this.cellRef.value.addEventListener('mousedown', this.mousedown, false)
-      this.cellRef.value.addEventListener('mouseup', this.mouseup, false)
-      this.cellRef.value.addEventListener('mousemove', this.mousemove, false)
-    }
-  }
-
-  mousedown(_e: MouseEvent) {
-
-  }
-
-  mousemove(_e: MouseEvent) {
-
-  }
-
-  mouseup(_e: MouseEvent) {
 
   }
 
@@ -81,10 +61,9 @@ export class GridCell {
         })
         return () => {
           return h('div', {
-            key: 'selectBoxElement',
             style: getStyle.value,
             ref: _this.cellRef,
-            id: 'selectBoxElement',
+            id: _this.cfg.value.id,
           })
         }
       },
