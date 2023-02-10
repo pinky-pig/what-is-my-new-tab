@@ -7,8 +7,9 @@ import { getAllGridCell } from './gridCellData'
 import BoundsSVGContainer from './BoundsSVGContainer.vue'
 import { useLayoutStore } from '~/store'
 
+const attachedLine: Ref<{ x: any[]; y: any[] } > = ref({ x: [], y: [] })
 const currentClickedElement: Ref<any> = ref()
-const GridContainer = initGridContainer(currentClickedElement)
+const GridContainer = initGridContainer(currentClickedElement, attachedLine)
 
 const store = useLayoutStore()
 
@@ -33,7 +34,7 @@ const gridCellComponents = gridCellList.value.map((item) => {
 <template>
   <GridContainer>
     <component :is="item.component" v-for="item in gridCellComponents" :key="item.data.cfg.value.id" />
-    <BoundsSVGContainer :current-clicked-element="currentClickedElement" />
+    <BoundsSVGContainer :current-clicked-element="currentClickedElement" :attached-line="attachedLine" />
   </GridContainer>
 </template>
 

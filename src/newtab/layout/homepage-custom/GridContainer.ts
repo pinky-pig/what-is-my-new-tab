@@ -18,7 +18,7 @@ let transformMode: ModeTypes | null = null
 let currentScaleType: ScaleType = null
 let previousEvent: MouseEvent | null = null
 
-export function initGridContainer(currentClickedElement: Ref<any>) {
+export function initGridContainer(currentClickedElement: Ref<any>, attachedLine: Ref<{ x: any[]; y: any[] }>) {
   const store = useLayoutStore()
 
   const GridContainer = defineComponent({
@@ -50,6 +50,50 @@ export function initGridContainer(currentClickedElement: Ref<any>) {
       editAGridCell({ ...cell.cfg })
     })
   }, 1000)
+
+  watch(currentClickedElement, (nVal) => {
+    // 设置吸附线误差为5px
+    const DEVIATION = 2
+    if (nVal) {
+      // 1.获取当前元素的偏移值
+      let clickedTX = 0
+      let clickedTY = 0
+      if (currentClickedElement.value.cfg.transform) {
+        const matrixVariable = currentClickedElement.value.cfg.transform.match(/matrix\((.*)\)/)[1]?.split(',')
+        clickedTX = Number(matrixVariable.at(-2))
+        clickedTY = Number(matrixVariable.at(-1))
+      }
+      else {
+        return
+      }
+
+      // 其实应该是更新。这里粗暴先置空
+      attachedLine.value.x = []
+      attachedLine.value.y = []
+      store.gridCells.forEach((cell) => {
+        // 首先将它自己排除
+        if (cell?.cfg?.id === currentClickedElement.value?.cfg?.id)
+          return
+
+        // 2.获取所有偏移的x和y值
+        let cellTX = 0
+        let cellTY = 0
+        if (cell?.cfg?.transform) {
+          const matrixVariable = cell?.cfg?.transform.match(/matrix\((.*)\)/)[1]?.split(',')
+          cellTX = Number(matrixVariable.at(-2))
+          cellTY = Number(matrixVariable.at(-1))
+        }
+
+        // 3.比较，如果有return出去
+        if ((Math.abs(cellTX) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX) + DEVIATION))
+          attachedLine.value.x.push(cell.cfg)
+        if ((Math.abs(cellTY) - DEVIATION) < clickedTY && clickedTY < (Math.abs(cellTY) + DEVIATION))
+          attachedLine.value.y.push(cell.cfg)
+      })
+    }
+  }, {
+    deep: true,
+  })
 
   function mousedown(e: MouseEvent) {
     store.mouseFrom = { x: e.clientX, y: e.clientY }

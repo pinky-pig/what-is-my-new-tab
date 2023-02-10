@@ -1,5 +1,13 @@
+<!-- eslint-disable no-console -->
 <script setup lang="ts">
-const props = defineProps(['currentClickedElement'])
+const props = defineProps(['currentClickedElement', 'attachedLine'])
+
+watch(props.attachedLine, (v) => {
+  if (v.x.length > 0)
+    console.log(v.x)
+  if (v.y.length > 0)
+    console.log(v.y)
+})
 
 const borderWidth = 10
 
@@ -59,6 +67,7 @@ const rectLineData = ref([
   },
 ])
 
+// 2.缩放四角
 const rectCornerScaleData = ref([
   {
     name: 'corner_top_left_scale',
@@ -113,6 +122,19 @@ const rectCornerScaleData = ref([
     },
   },
 ])
+
+// 3.旋转四角
+
+// 4.六条吸附线，左中右上中下
+const attachedLineData = ref([
+  {
+    name: 'top',
+    x1: 0,
+    x2: 0,
+    y1: 0,
+    y2: 0,
+  },
+])
 </script>
 
 <template>
@@ -162,10 +184,25 @@ const rectCornerScaleData = ref([
         :height="item.bounds.height"
         fill="white"
         stroke="#2f80ed"
-        stroke-width="2px"
+        stroke-width="2"
       />
     </g>
     <!-- 旋转四角 -->
+
+    <!-- 吸附线 -->
+    <g>
+      <line
+        v-for="(item) in attachedLineData"
+        :key="item.name"
+        :x1="item.x1"
+        :y1="item.y1"
+        :x2="item.x2 "
+        :y2="item.y2 "
+        stroke="#58815790"
+        fill="#58815790"
+        stroke-width="2"
+      />
+    </g>
 
   </svg>
 </template>
