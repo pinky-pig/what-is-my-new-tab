@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { useDark, useToggle } from '@vueuse/core'
 import Drawer from './drawer/index.vue'
+import { useLayoutStore } from '~/store'
+import { storageCustomLayoutDB } from '~/logic'
+import { generateUuid } from '~/utils/uuid'
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
@@ -9,6 +12,23 @@ const drawerRef = ref()
 const openDrawer = () => {
   const { openDrawer } = drawerRef.value
   openDrawer()
+}
+
+const store = useLayoutStore()
+
+function addLayoutBlock() {
+  storageCustomLayoutDB.addItem({
+    id: generateUuid(),
+    x: 0,
+    y: 0,
+    width: 200,
+    height: 200,
+    rotate: 0,
+    scale: 1,
+    translate: [0, 0],
+    isLocked: false, // 是否锁定
+    showMode: 0, // 0 格子 1 列表
+  })
 }
 </script>
 
@@ -21,6 +41,12 @@ const openDrawer = () => {
   <!-- button -->
   <header class="header-container h-50px fixed top-0 right-0 z-40 flex flex-row items-center justify-between px-8">
     <div class=" flex flex-row gap-2 text-2xl ">
+      <!-- 这个是编辑布局测试用的 -->
+      <div v-if="!store.isEditLayout" class="cursor-pointer bg-gray-700 dark:bg-gray-200" i-carbon:area @click="store.isEditLayout = true " />
+      <div v-else class="cursor-pointer bg-green-700 dark:bg-gray-200" i-carbon:checkmark-filled @click="store.isEditLayout = false " />
+
+      <div class="cursor-pointer bg-gray-700 dark:bg-gray-200" i-carbon:block-storage @click="addLayoutBlock" />
+
       <div class="cursor-pointer bg-gray-700 dark:bg-gray-200" i-carbon:workspace />
 
       <div class="cursor-pointer bg-gray-700 dark:bg-gray-200" i-carbon-blog />

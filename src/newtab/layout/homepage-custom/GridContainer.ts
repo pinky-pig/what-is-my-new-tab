@@ -1,8 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import type { Ref } from 'vue'
 import { useLayoutStore } from '~/store'
+
+enum IMode {
+  Drag = 'Drag',
+  Rotate = 'Rotate',
+  Scale = 'Scale',
+}
+ type ModeTypes = keyof typeof IMode
+
+const transformMode: ModeTypes | null = null
 let draggedEvt: MouseEvent | null = null
-let currentClickedElement: any
-export function initGridContainer() {
+
+export function initGridContainer(currentClickedElement: Ref<any>) {
   const store = useLayoutStore()
 
   const GridContainer = defineComponent({
@@ -32,16 +42,16 @@ export function initGridContainer() {
 
   function mousedown(e: MouseEvent) {
     store.mouseFrom = { x: e.clientX, y: e.clientY }
-    currentClickedElement = getCellObjectInStoreFromPosition(store.mouseFrom)
+    currentClickedElement.value = getCellObjectInStoreFromPosition(store.mouseFrom)
     draggedEvt = e
   }
 
   function mousemove(e: MouseEvent) {
     const pt = e
-    if (draggedEvt && currentClickedElement) {
+    if (draggedEvt && currentClickedElement.value) {
       const oriPt = draggedEvt
-      currentClickedElement.cfg.x = currentClickedElement.cfg.x + (pt.clientX - oriPt.clientX)
-      currentClickedElement.cfg.y = currentClickedElement.cfg.y + (pt.clientY - oriPt.clientY)
+      currentClickedElement.value.cfg.x = currentClickedElement.value.cfg.x + (pt.clientX - oriPt.clientX)
+      currentClickedElement.value.cfg.y = currentClickedElement.value.cfg.y + (pt.clientY - oriPt.clientY)
 
       // currentClickedElement.cfg.translate = [
       //   currentClickedElement.cfg.translate[0] + (pt.clientX - oriPt.clientX),
@@ -53,7 +63,7 @@ export function initGridContainer() {
 
   function mouseup(e: MouseEvent) {
     draggedEvt = null
-    currentClickedElement = null
+    // currentClickedElement.value = null
   }
   /**
    * 通过坐标位置获取当前对象

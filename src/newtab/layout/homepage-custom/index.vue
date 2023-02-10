@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import type { Ref } from 'vue'
 import type { GridCellType } from './GridCell'
 import { GridCell } from './GridCell'
 import { initGridContainer } from './GridContainer'
 import { getAllGridCell } from './gridCellData'
+import BoundsSVGContainer from './BoundsSVGContainer.vue'
 import { useLayoutStore } from '~/store'
-import { storageCustomLayoutDB } from '~/logic'
-import { generateUuid } from '~/utils/uuid'
-const GridContainer = initGridContainer()
+
+const currentClickedElement: Ref<any> = ref()
+const GridContainer = initGridContainer(currentClickedElement)
 
 const store = useLayoutStore()
 
@@ -26,31 +28,12 @@ const gridCellComponents = gridCellList.value.map((item) => {
     component: cell.render(),
   }
 })
-
-// onMounted(() => {
-//   setTimeout(() => {
-//     store.gridCells[0].cfg.width = 500
-//     // cellClass.cfg.value.width = 500
-//   }, 3000)
-// })
-// 存储到indexDB
-storageCustomLayoutDB.addItem({
-  id: generateUuid(),
-  x: 0,
-  y: 0,
-  width: 200,
-  height: 200,
-  rotate: 0,
-  scale: 1,
-  translate: [0, 0],
-  isLocked: false, // 是否锁定
-  showMode: 0, // 0 格子 1 列表
-})
 </script>
 
 <template>
   <GridContainer>
     <component :is="item.component" v-for="item in gridCellComponents" :key="item.data.cfg.value.id" />
+    <BoundsSVGContainer :current-clicked-element="currentClickedElement" />
   </GridContainer>
 </template>
 
