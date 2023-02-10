@@ -50,8 +50,7 @@ export class GridCell {
             top: `${_this.cfg.value.y}px`,
             width: `${_this.cfg.value.width}px`,
             height: `${_this.cfg.value.height}px`,
-            background: 'rgba(59, 130, 246, 0.3)',
-            outline: '1px solid rgba(59, 130, 246, 0.6)',
+            background: '#fca98690',
             borderRadius: '3px',
             pointerEvents: 'auto',
             // transform: translate( calc(642.73px - var(--tl-padding)), calc(90.22px - var(--tl-padding)) )

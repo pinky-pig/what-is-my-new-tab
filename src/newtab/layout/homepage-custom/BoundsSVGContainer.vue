@@ -117,6 +117,19 @@ const rectCornerScaleData = ref([
 
 <template>
   <svg v-show="props.currentClickedElement" id="boundsSVGContainer" class="w-screen h-screen fixed top-0 left-0">
+    <!-- bounds -->
+    <g>
+      <rect
+        :style="{ opacity: 1, transform: props.currentClickedElement?.cfg.transform }"
+        :x="props.currentClickedElement?.cfg.x"
+        :y="props.currentClickedElement?.cfg.y"
+        :width="props.currentClickedElement?.cfg.width"
+        :height="props.currentClickedElement?.cfg.height"
+        fill="#2f80ed40"
+        stroke="#2f80ed"
+        stroke-width="3px"
+      />
+    </g>
     <!-- 缩放四边 line -->
     <g>
       <rect
@@ -129,10 +142,11 @@ const rectCornerScaleData = ref([
         :width="item.bounds.width"
         :height="item.bounds.height"
         fill="transparent"
-        stroke="#2f80ed"
+        stroke="transparent"
         stroke-width="2px"
       />
     </g>
+
     <!-- 缩放四角 -->
     <g>
       <rect
@@ -140,6 +154,8 @@ const rectCornerScaleData = ref([
         :id="`bounds_${item.name}`"
         :key="item.name"
         :style="{ opacity: 1, cursor: item.style.cursor, transform: item.style.transform }"
+        :rx="3"
+        :ry="3"
         :x="item.bounds.x"
         :y="item.bounds.y"
         :width="item.bounds.width"
