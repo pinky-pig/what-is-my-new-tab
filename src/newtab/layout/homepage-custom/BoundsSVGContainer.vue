@@ -108,8 +108,7 @@ const rectCornerScaleData = ref([
 </script>
 
 <template>
-  <!-- v-show="props.currentClickedElement" -->
-  <svg id="boundsSVGContainer" class="w-screen h-screen fixed top-0 left-0">
+  <svg v-show="props.currentClickedElement" id="boundsSVGContainer" class="w-screen h-screen fixed top-0 left-0">
     <!-- 缩放四边 line -->
     <g>
       <rect
@@ -121,7 +120,7 @@ const rectCornerScaleData = ref([
         :y="item.bounds.y"
         :width="item.bounds.width"
         :height="item.bounds.height"
-        fill="white"
+        fill="transparent"
         stroke="#2f80ed"
         stroke-width="2px"
       />
@@ -138,7 +137,7 @@ const rectCornerScaleData = ref([
         :width="item.bounds.width"
         :height="item.bounds.height"
         fill="white"
-        stroke="#652138"
+        stroke="#2f80ed"
         stroke-width="2px"
       />
     </g>

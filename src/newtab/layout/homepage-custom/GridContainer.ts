@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Ref } from 'vue'
 import { useLayoutStore } from '~/store'
@@ -42,8 +43,17 @@ export function initGridContainer(currentClickedElement: Ref<any>) {
 
   function mousedown(e: MouseEvent) {
     store.mouseFrom = { x: e.clientX, y: e.clientY }
-    currentClickedElement.value = getCellObjectInStoreFromPosition(store.mouseFrom)
     draggedEvt = e
+
+    const initElement = document.elementFromPoint(e.clientX, e.clientY)
+    if (initElement && initElement?.id.startsWith('bounds_') && currentClickedElement.value) {
+      // 进行尺寸改变的点
+      console.log(initElement?.id)
+    }
+    else {
+      // 点击的是block
+      currentClickedElement.value = getCellObjectInStoreFromPosition(store.mouseFrom)
+    }
   }
 
   function mousemove(e: MouseEvent) {
