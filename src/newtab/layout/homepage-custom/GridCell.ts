@@ -8,9 +8,6 @@ export interface GridCellType {
   y: number
   width: number
   height: number
-  rotate: number
-  scale: number
-  translate: number[]
   isLocked: boolean // 是否锁定
   showMode: number
   transform: string
@@ -28,9 +25,6 @@ export class GridCell {
       y: 0,
       width: 200,
       height: 200,
-      rotate: 0,
-      scale: 1,
-      translate: [0, 0],
       isLocked: false, // 是否锁定
       showMode: 0, // 0 格子 1 列表
       transform: '',

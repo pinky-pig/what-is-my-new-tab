@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { useDebounceFn } from '@vueuse/core'
 import type { Ref } from 'vue'
+import { editAGridCell } from './gridCellData'
 import { useLayoutStore } from '~/store'
 
 enum IMode {
@@ -43,6 +45,11 @@ export function initGridContainer(currentClickedElement: Ref<any>) {
       )
     },
   })
+  const saveCanvasLayoutData = useDebounceFn(() => {
+    store.gridCells.forEach((cell) => {
+      editAGridCell({ ...cell.cfg })
+    })
+  }, 1000)
 
   function mousedown(e: MouseEvent) {
     store.mouseFrom = { x: e.clientX, y: e.clientY }
@@ -149,6 +156,7 @@ export function initGridContainer(currentClickedElement: Ref<any>) {
   function mouseup(e: MouseEvent) {
     previousEvent = null
     // currentClickedElement.value = null
+    saveCanvasLayoutData()
   }
   /**
    * 通过坐标位置获取当前对象
