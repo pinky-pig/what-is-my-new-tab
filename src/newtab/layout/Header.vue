@@ -28,6 +28,7 @@ function addLayoutBlock() {
     translate: [0, 0],
     isLocked: false, // 是否锁定
     showMode: 0, // 0 格子 1 列表
+    transform: '', // 变形
   })
 }
 </script>

@@ -15,6 +15,7 @@ const rectLineData = ref([
     },
     style: {
       cursor: 'ns-resize',
+      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
     },
   },
   {
@@ -27,6 +28,7 @@ const rectLineData = ref([
     },
     style: {
       cursor: 'ns-resize',
+      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
     },
   },
   {
@@ -39,6 +41,7 @@ const rectLineData = ref([
     },
     style: {
       cursor: 'ew-resize',
+      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
     },
   },
   {
@@ -51,13 +54,14 @@ const rectLineData = ref([
     },
     style: {
       cursor: 'ew-resize',
+      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
     },
   },
 ])
 
 const rectCornerScaleData = ref([
   {
-    name: 'corner_left_top_scale',
+    name: 'corner_top_left_scale',
     bounds: {
       x: computed(() => (props.currentClickedElement?.cfg?.x - borderWidth / 2) || 0),
       y: computed(() => (props.currentClickedElement?.cfg?.y - borderWidth / 2) || 0),
@@ -66,10 +70,11 @@ const rectCornerScaleData = ref([
     },
     style: {
       cursor: 'nwse-resize',
+      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
     },
   },
   {
-    name: 'corner_right_top_scale',
+    name: 'corner_top_right_scale',
     bounds: {
       x: computed(() => (props.currentClickedElement?.cfg?.x + props.currentClickedElement?.cfg?.width - borderWidth / 2) || 0),
       y: computed(() => (props.currentClickedElement?.cfg?.y - borderWidth / 2) || 0),
@@ -78,10 +83,11 @@ const rectCornerScaleData = ref([
     },
     style: {
       cursor: 'nesw-resize',
+      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
     },
   },
   {
-    name: 'corner_left_bottom_scale',
+    name: 'corner_bottom_left_scale',
     bounds: {
       x: computed(() => (props.currentClickedElement?.cfg?.x - borderWidth / 2) || 0),
       y: computed(() => (props.currentClickedElement?.cfg?.y + props.currentClickedElement?.cfg?.height - borderWidth / 2) || 0),
@@ -90,10 +96,11 @@ const rectCornerScaleData = ref([
     },
     style: {
       cursor: 'nesw-resize',
+      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
     },
   },
   {
-    name: 'corner_right_bottom_scale',
+    name: 'corner_bottom_right_scale',
     bounds: {
       x: computed(() => (props.currentClickedElement?.cfg?.x + props.currentClickedElement?.cfg?.width - borderWidth / 2) || 0),
       y: computed(() => (props.currentClickedElement?.cfg?.y + props.currentClickedElement?.cfg?.height - borderWidth / 2) || 0),
@@ -102,6 +109,7 @@ const rectCornerScaleData = ref([
     },
     style: {
       cursor: 'nwse-resize',
+      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
     },
   },
 ])
@@ -115,7 +123,7 @@ const rectCornerScaleData = ref([
         v-for="(item) in rectLineData"
         :id="`bounds_${item.name}`"
         :key="item.name"
-        :style="{ opacity: 1, cursor: item.style.cursor }"
+        :style="{ opacity: 1, cursor: item.style.cursor, transform: item.style.transform }"
         :x="item.bounds.x"
         :y="item.bounds.y"
         :width="item.bounds.width"
@@ -131,7 +139,7 @@ const rectCornerScaleData = ref([
         v-for="(item) in rectCornerScaleData"
         :id="`bounds_${item.name}`"
         :key="item.name"
-        :style="{ opacity: 1, cursor: item.style.cursor }"
+        :style="{ opacity: 1, cursor: item.style.cursor, transform: item.style.transform }"
         :x="item.bounds.x"
         :y="item.bounds.y"
         :width="item.bounds.width"

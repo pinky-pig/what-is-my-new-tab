@@ -8,10 +8,13 @@ enum IMode {
   Rotate = 'Rotate',
   Scale = 'Scale',
 }
- type ModeTypes = keyof typeof IMode
+type ModeTypes = keyof typeof IMode
 
-const transformMode: ModeTypes | null = null
-let draggedEvt: MouseEvent | null = null
+type ScaleType = 'top' | 'bottom' | 'left' | 'right' | 'top_left' | 'top_right' | 'bottom_left' | 'bottom_right' | null
+
+let transformMode: ModeTypes | null = null
+let currentScaleType: ScaleType = null
+let previousEvent: MouseEvent | null = null
 
 export function initGridContainer(currentClickedElement: Ref<any>) {
   const store = useLayoutStore()
@@ -43,36 +46,108 @@ export function initGridContainer(currentClickedElement: Ref<any>) {
 
   function mousedown(e: MouseEvent) {
     store.mouseFrom = { x: e.clientX, y: e.clientY }
-    draggedEvt = e
+    previousEvent = e
 
     const initElement = document.elementFromPoint(e.clientX, e.clientY)
     if (initElement && initElement?.id.startsWith('bounds_') && currentClickedElement.value) {
       // 进行尺寸改变的点
-      console.log(initElement?.id)
+      if (initElement?.id.endsWith('_scale')) {
+        transformMode = 'Scale'
+        const tp = initElement?.id?.slice(7).match(/_(.*)_/)
+        currentScaleType = tp && tp[1] as ScaleType
+      }
+      else if (initElement?.id.endsWith('_rotate')) {
+        transformMode = 'Rotate'
+      }
     }
     else {
       // 点击的是block
       currentClickedElement.value = getCellObjectInStoreFromPosition(store.mouseFrom)
+      transformMode = 'Drag'
     }
   }
 
   function mousemove(e: MouseEvent) {
     const pt = e
-    if (draggedEvt && currentClickedElement.value) {
-      const oriPt = draggedEvt
-      currentClickedElement.value.cfg.x = currentClickedElement.value.cfg.x + (pt.clientX - oriPt.clientX)
-      currentClickedElement.value.cfg.y = currentClickedElement.value.cfg.y + (pt.clientY - oriPt.clientY)
+    if (previousEvent && currentClickedElement.value) {
+      if (transformMode === 'Drag') {
+        const oriPt = previousEvent
 
-      // currentClickedElement.cfg.translate = [
-      //   currentClickedElement.cfg.translate[0] + (pt.clientX - oriPt.clientX),
-      //   currentClickedElement.cfg.translate[1] + (pt.clientY - oriPt.clientY),
-      // ]
-      draggedEvt = e
+        // 1.直接修改x和y比较简单的方式
+        // currentClickedElement.value.cfg.x = currentClickedElement.value.cfg.x + (pt.clientX - oriPt.clientX)
+        // currentClickedElement.value.cfg.y = currentClickedElement.value.cfg.y + (pt.clientY - oriPt.clientY)
+
+        // 2.使用css transform方式
+        let lastTranslateX = 0
+        let lastTranslateY = 0
+        if (currentClickedElement.value.cfg.transform) {
+          const matrixVariable = currentClickedElement.value.cfg.transform.match(/matrix\((.*)\)/)[1]?.split(',')
+          lastTranslateX = Number(matrixVariable.at(-2))
+          lastTranslateY = Number(matrixVariable.at(-1))
+        }
+        const offsetX = lastTranslateX + (pt.clientX - oriPt.clientX)
+        const offsetY = lastTranslateY + (pt.clientY - oriPt.clientY)
+        currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${offsetX}, ${offsetY})`
+      }
+      else if (transformMode === 'Scale') {
+        const oriPt = previousEvent
+        let lastTranslateX = 0
+        let lastTranslateY = 0
+        if (currentClickedElement.value.cfg.transform) {
+          const matrixVariable = currentClickedElement.value.cfg.transform.match(/matrix\((.*)\)/)[1]?.split(',')
+          lastTranslateX = Number(matrixVariable.at(-2))
+          lastTranslateY = Number(matrixVariable.at(-1))
+        }
+        // 😅 开始变形！~
+        if (currentScaleType === 'left') {
+          const disX = (pt.clientX - oriPt.clientX)
+          currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${lastTranslateX + disX}, ${lastTranslateY})`
+          currentClickedElement.value.cfg.width = currentClickedElement.value.cfg.width - disX
+        }
+        if (currentScaleType === 'right')
+          currentClickedElement.value.cfg.width = currentClickedElement.value.cfg.width + (pt.clientX - oriPt.clientX)
+        if (currentScaleType === 'top') {
+          const disY = (pt.clientY - oriPt.clientY)
+          currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${lastTranslateX}, ${lastTranslateY + disY})`
+          currentClickedElement.value.cfg.height = currentClickedElement.value.cfg.height - disY
+        }
+        if (currentScaleType === 'bottom')
+          currentClickedElement.value.cfg.height = currentClickedElement.value.cfg.height + (pt.clientY - oriPt.clientY)
+
+        // 😅 角落两个同时变形！~ （就是将上面单个的两个为一组组合一下）
+        if (currentScaleType === 'bottom_left') {
+          const disX = (pt.clientX - oriPt.clientX)
+          currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${lastTranslateX + disX}, ${lastTranslateY})`
+          currentClickedElement.value.cfg.width = currentClickedElement.value.cfg.width - disX
+          currentClickedElement.value.cfg.height = currentClickedElement.value.cfg.height + (pt.clientY - oriPt.clientY)
+        }
+        if (currentScaleType === 'bottom_right') {
+          currentClickedElement.value.cfg.width = currentClickedElement.value.cfg.width + (pt.clientX - oriPt.clientX)
+          currentClickedElement.value.cfg.height = currentClickedElement.value.cfg.height + (pt.clientY - oriPt.clientY)
+        }
+        if (currentScaleType === 'top_left') {
+          const disX = (pt.clientX - oriPt.clientX)
+          const disY = (pt.clientY - oriPt.clientY)
+          currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1,  ${lastTranslateX + disX}, ${lastTranslateY + disY})`
+          currentClickedElement.value.cfg.width = currentClickedElement.value.cfg.width - disX
+          currentClickedElement.value.cfg.height = currentClickedElement.value.cfg.height - disY
+        }
+        if (currentScaleType === 'top_right') {
+          const disY = (pt.clientY - oriPt.clientY)
+          currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${lastTranslateX}, ${lastTranslateY + disY})`
+          currentClickedElement.value.cfg.height = currentClickedElement.value.cfg.height - disY
+          currentClickedElement.value.cfg.width = currentClickedElement.value.cfg.width + (pt.clientX - oriPt.clientX)
+        }
+      }
+      else if (transformMode === 'Rotate') {
+        console.log('Rotate')
+      }
+      previousEvent = e
     }
   }
 
   function mouseup(e: MouseEvent) {
-    draggedEvt = null
+    previousEvent = null
     // currentClickedElement.value = null
   }
   /**

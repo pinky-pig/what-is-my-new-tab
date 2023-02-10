@@ -13,6 +13,7 @@ export interface GridCellType {
   translate: number[]
   isLocked: boolean // 是否锁定
   showMode: number
+  transform: string
   children?: any
 }
 export class GridCell {
@@ -32,6 +33,7 @@ export class GridCell {
       translate: [0, 0],
       isLocked: false, // 是否锁定
       showMode: 0, // 0 格子 1 列表
+      transform: '',
     } as GridCellType, configuration))
 
     this.cellRef = ref<HTMLElement>()
@@ -60,6 +62,7 @@ export class GridCell {
             pointerEvents: 'auto',
             // transform: translate( calc(642.73px - var(--tl-padding)), calc(90.22px - var(--tl-padding)) )
             zIndex: 99999,
+            transform: _this.cfg.value.transform,
           } as StyleValue
         })
         return () => {
