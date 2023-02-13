@@ -20,14 +20,34 @@ async function initGridCell() {
 }
 await initGridCell()
 // 2.渲染组件
-const gridCellComponents = gridCellList.value.map((item) => {
-  const cell = new GridCell(item)
+// const gridCellComponents = gridCellList.value.map((item) => {
+//   const cell = new GridCell(item)
 
+//   store.gridCells.push(cell)
+//   return {
+//     data: cell,
+//     component: cell.render(),
+//   }
+// })
+
+gridCellList.value.forEach((item) => {
+  const cell = new GridCell(item)
   store.gridCells.push(cell)
-  return {
-    data: cell,
-    component: cell.render(),
-  }
+})
+const gridCellComponents = computed(() => {
+  return store.gridCells.map((item) => {
+    const cell = new GridCell(item?.cfg)
+    return {
+      data: cell,
+      component: cell.render(),
+    }
+  })
+})
+
+onMounted(() => {
+  setTimeout(() => {
+    store.gridCells = store.gridCells.reverse()
+  }, 3000)
 })
 </script>
 

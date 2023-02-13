@@ -55,6 +55,13 @@ export function initGridContainer(currentClickedElement: Ref<any>, attachedLine:
     // 设置吸附线误差为5px
     const DEVIATION = 2
     if (nVal) {
+      // 0.设置将当前点击的要素为最顶层
+      const index = store.gridCells.findIndex(ele => ele.cfg.id === nVal.cfg?.id)
+      if (index !== -1) {
+        const ele = store.gridCells.splice(index, 1)
+        store.gridCells.push(ele[0])
+      }
+
       // 1.获取当前元素的偏移值
       let clickedTX = 0
       let clickedTY = 0
@@ -207,7 +214,26 @@ export function initGridContainer(currentClickedElement: Ref<any>, attachedLine:
    * @param position 坐标
    * @returns 点击的对象
    */
-  function getCellObjectInStoreFromPosition(position: { x: number; y: number }) {
+  function getCellObjectInStoreFromPosition(position: { x: number; y: number }): Object | null {
+    // let result = null
+    // // 1. 从坐标获取DOM
+    // const point = { x: position.x, y: position.y }
+    // const initElement = document.elementFromPoint(point.x, point.y)
+    // if (initElement) {
+    //   // 2.判断DOM是否是在当前Store中缓存
+    //   const index = store.gridCells.findIndex(ele => ele.cfg.id === initElement.id)
+    //   // 3.如果在，那么就筛选出来
+    //   if (index !== -1) {
+    //     const ele = store.gridCells.splice(index, 1)
+    //     store.gridCells.push(ele[0])
+    //     result = ele[0]
+    //   }
+    //   else {
+    //     // 4.不在就返回null
+    //     result = null
+    //   }
+    // }
+    // return result
     let result = null
     const point = { x: position.x, y: position.y }
     const initElement = document.elementFromPoint(point.x, point.y)

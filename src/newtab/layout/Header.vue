@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useDark, useToggle } from '@vueuse/core'
 import Drawer from './drawer/index.vue'
-import { editAGridCell } from './homepage-custom/gridCellData'
+import { addAGridCell } from './homepage-custom/gridCellData'
 import { useLayoutStore } from '~/store'
+import { generateUuid } from '~/utils/uuid'
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
@@ -16,17 +17,17 @@ const openDrawer = () => {
 const store = useLayoutStore()
 
 function addLayoutBlock() {
-  editAGridCell({ ...store.gridCells[0].cfg })
-  // addAGridCell({
-  //   id: generateUuid(),
-  //   x: 0,
-  //   y: 0,
-  //   width: 200,
-  //   height: 200,
-  //   isLocked: false, // 是否锁定
-  //   showMode: 0, // 0 格子 1 列表
-  //   transform: '', // 变形
-  // })
+  // editAGridCell({ ...store.gridCells[0]?.cfg })
+  addAGridCell({
+    id: generateUuid(),
+    x: 0,
+    y: 0,
+    width: 200,
+    height: 200,
+    isLocked: false, // 是否锁定
+    showMode: 0, // 0 格子 1 列表
+    transform: '', // 变形
+  })
 }
 </script>
 
