@@ -101,14 +101,17 @@ export function initGridContainer(
         }
 
         // 3.比较，如果有return出去。这里的左中右上中下都是对于当前点击的元素来说
+
+        /* -------------------------------------------------- */
+        /*                    竖向吸附线                       */
+        /* -------------------------------------------------- */
         // l - 都是左侧
         if ((Math.abs(cellTX) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX) + DEVIATION)) {
           currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${cellTX}, ${clickedTY})`
           attachedLine.value.l.push(cell.cfg)
         }
         // l - 点击的要素是左侧，跟其他的可能有边可以吸附
-        if ((Math.abs(cellTX + cellWidth) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX + cellWidth) + DEVIATION)
-        ) {
+        if ((Math.abs(cellTX + cellWidth) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX + cellWidth) + DEVIATION)) {
           currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${cellTX + cellWidth}, ${clickedTY})`
           attachedLine.value.l.push(cell.cfg)
         }
@@ -124,12 +127,21 @@ export function initGridContainer(
           currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${cellTX + cellWidth - clickedWidth}, ${clickedTY})`
           attachedLine.value.r.push(cell.cfg)
         }
-
         // mv
         if ((Math.abs(cellTX + (cellWidth) / 2) - DEVIATION) < (clickedTX + (clickedWidth) / 2) && (clickedTX + (clickedWidth) / 2) < (Math.abs(cellTX + (cellWidth) / 2) + DEVIATION)) {
           // 设置当前元素吸附
           currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${cellTX + (cellWidth) / 2 - (clickedWidth) / 2}, ${clickedTY})`
           attachedLine.value.mv.push(cell.cfg)
+        }
+
+        /* -------------------------------------------------- */
+        /*                    横向吸附线                       */
+        /* -------------------------------------------------- */
+        if ((Math.abs(cellTY) - DEVIATION) < clickedTY && clickedTY < (Math.abs(cellTY) + DEVIATION)) {
+          nextTick(() => {
+            currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${clickedTX}, ${cellTY})`
+            attachedLine.value.t.push(cell.cfg)
+          })
         }
       })
     }

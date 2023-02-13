@@ -134,8 +134,7 @@ watch(props.attachedLine, (v) => {
   handleAttachedLineLeft(v.l)
   handleAttachedLineRight(v.r)
   handleAttachedLineMiddleVertical(v.mv)
-  // if (v.r.length > 0)
-  //   console.log(v.r)
+  handleAttachedLineTop(v.t)
 })
 
 // 从单个cell获取其坐标位置大小
@@ -242,6 +241,37 @@ function handleAttachedLineMiddleVertical(middleVerticalArr: []) {
       attachedLineData.value.mv[key] = 0
   }
 }
+// 监听上吸附线的位置
+function handleAttachedLineTop(topArr: []) {
+  // 如果数组不为空，说明有左吸附线
+  if (topArr.length > 0) {
+    // 1.计算y值
+    const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
+    const yPosition = clickedElementRect.y
+
+    // 2.计算x值
+    let minX = clickedElementRect.x
+    let maxX = clickedElementRect.x + clickedElementRect.width
+    const lLineArr = [...topArr, props.currentClickedElement?.cfg]
+    if (lLineArr.length > 0) {
+      // 获取每个对象的matrix值
+      for (let i = 0; i < lLineArr.length; i++) {
+        const rect = getXYFromTransform(lLineArr[i])
+        minX = Math.min(minX, rect.x)
+        maxX = Math.max(maxX, rect.x + rect.width)
+      }
+    }
+    attachedLineData.value.t.x1 = minX
+    attachedLineData.value.t.y1 = yPosition
+    attachedLineData.value.t.x2 = maxX
+    attachedLineData.value.t.y2 = yPosition
+  }
+  else {
+    // 将线条位置置为0
+    for (const key in attachedLineData.value.l)
+      attachedLineData.value.t[key] = 0
+  }
+}
 </script>
 
 <template>
@@ -299,8 +329,8 @@ function handleAttachedLineMiddleVertical(middleVerticalArr: []) {
     <!-- 吸附线 -->
     <g class="pointer-events-auto">
       <line
-        v-for="(item) in Object.values(attachedLineData)"
-        :key="item.name"
+        v-for="(item, index) in Object.values(attachedLineData)"
+        :key="item.name + index"
         :x1="item.x1"
         :y1="item.y1"
         :x2="item.x2 "
