@@ -3,7 +3,7 @@
 import type { GridCellType } from './GridCell'
 
 const props = defineProps(['currentClickedElement', 'attachedLine'])
-const emits = defineEmits(['update:modelValue'])
+// const emits = defineEmits(['update:modelValue'])
 const borderWidth = 10
 
 // 1.四条边 scale 四个角落点 scale 四个旋转角落点 rotate
@@ -180,9 +180,9 @@ function handleAttachedLineLeft(leftArr: any[]) {
     attachedLineData.value.l.x2 = xPosition
     attachedLineData.value.l.y2 = maxY
 
-    const proxyData = props.currentClickedElement
-    proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${xPosition}, ${clickedElementRect.y})`
-    emits('update:modelValue', proxyData)
+    // const proxyData = props.currentClickedElement
+    // proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${xPosition}, ${clickedElementRect.y})`
+    // emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -218,9 +218,9 @@ function handleAttachedLineRight(rightArr: any[]) {
     attachedLineData.value.r.x2 = xPosition + clickedElementRect.width
     attachedLineData.value.r.y2 = maxY
 
-    const proxyData = props.currentClickedElement
-    proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${xPosition}, ${clickedElementRect.y})`
-    emits('update:modelValue', proxyData)
+    // const proxyData = props.currentClickedElement
+    // proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${xPosition}, ${clickedElementRect.y})`
+    // emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -255,9 +255,9 @@ function handleAttachedLineMiddleVertical(middleVerticalArr: any[]) {
     attachedLineData.value.mv.x2 = xPosition
     attachedLineData.value.mv.y2 = maxY
 
-    const proxyData = props.currentClickedElement
-    proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${xPosition - clickedElementRect.width / 2}, ${clickedElementRect.y})`
-    emits('update:modelValue', proxyData)
+    // const proxyData = props.currentClickedElement
+    // proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${xPosition - clickedElementRect.width / 2}, ${clickedElementRect.y})`
+    // emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -293,9 +293,9 @@ function handleAttachedLineTop(topArr: any[]) {
     attachedLineData.value.t.x2 = maxX
     attachedLineData.value.t.y2 = yPosition
 
-    const proxyData = props.currentClickedElement
-    proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${clickedElementRect.x}, ${yPosition})`
-    emits('update:modelValue', proxyData)
+    // const proxyData = props.currentClickedElement
+    // proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${clickedElementRect.x}, ${yPosition})`
+    // emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -331,9 +331,9 @@ function handleAttachedLineBottom(bottomArr: any[]) {
     attachedLineData.value.b.x2 = maxX
     attachedLineData.value.b.y2 = yPosition + clickedElementRect.height
 
-    const proxyData = props.currentClickedElement
-    proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${clickedElementRect.x}, ${yPosition})`
-    emits('update:modelValue', proxyData)
+    // const proxyData = props.currentClickedElement
+    // proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${clickedElementRect.x}, ${yPosition})`
+    // emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -367,9 +367,9 @@ function handleAttachedLineMiddleHorizontal(middleHorizontalArr: any[]) {
     attachedLineData.value.mh.x2 = maxX
     attachedLineData.value.mh.y2 = yPosition
 
-    const proxyData = props.currentClickedElement
-    proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${clickedElementRect.x}, ${yPosition - clickedElementRect.height / 2})`
-    emits('update:modelValue', proxyData)
+    // const proxyData = props.currentClickedElement
+    // proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${clickedElementRect.x}, ${yPosition - clickedElementRect.height / 2})`
+    // emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
