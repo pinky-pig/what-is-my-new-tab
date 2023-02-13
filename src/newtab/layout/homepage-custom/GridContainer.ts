@@ -46,8 +46,9 @@ export function initGridContainer(currentClickedElement: Ref<any>, attachedLine:
     },
   })
   const saveCanvasLayoutData = useDebounceFn(() => {
-    store.gridCells.forEach((cell) => {
-      editAGridCell({ ...cell.cfg })
+    store.gridCells.forEach((cell, index) => {
+      // 存储一个index，是为了将其层级存储一下，越大越顶层
+      editAGridCell({ ...cell.cfg, index })
     })
   }, 1000)
 

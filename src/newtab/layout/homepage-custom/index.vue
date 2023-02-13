@@ -3,7 +3,7 @@ import type { Ref } from 'vue'
 import type { GridCellType } from './GridCell'
 import { GridCell } from './GridCell'
 import { initGridContainer } from './GridContainer'
-import { getAllGridCell } from './gridCellData'
+import { getAllGridCellSortByIndex } from './gridCellData'
 import BoundsSVGContainer from './BoundsSVGContainer.vue'
 import { useLayoutStore } from '~/store'
 
@@ -16,20 +16,10 @@ const store = useLayoutStore()
 // 1.indexDB中查询数据
 const gridCellList = ref<GridCellType[]>([])
 async function initGridCell() {
-  gridCellList.value = await getAllGridCell()
+  gridCellList.value = await getAllGridCellSortByIndex()
 }
 await initGridCell()
 // 2.渲染组件
-// const gridCellComponents = gridCellList.value.map((item) => {
-//   const cell = new GridCell(item)
-
-//   store.gridCells.push(cell)
-//   return {
-//     data: cell,
-//     component: cell.render(),
-//   }
-// })
-
 gridCellList.value.forEach((item) => {
   const cell = new GridCell(item)
   store.gridCells.push(cell)
@@ -42,12 +32,6 @@ const gridCellComponents = computed(() => {
       component: cell.render(),
     }
   })
-})
-
-onMounted(() => {
-  setTimeout(() => {
-    store.gridCells = store.gridCells.reverse()
-  }, 3000)
 })
 </script>
 
