@@ -1,15 +1,8 @@
 <!-- eslint-disable no-console -->
 <script setup lang="ts">
-const props = defineProps(['currentClickedElement', 'attachedLine'])
+import type { GridCellType } from './GridCell'
 
-watch(props.attachedLine, (v) => {
-  if (v.l.length > 0) {
-    console.log(111)
-    console.log(v.x)
-  }
-  if (v.r.length > 0)
-    console.log(v.y)
-})
+const props = defineProps(['currentClickedElement', 'attachedLine'])
 
 const borderWidth = 10
 
@@ -128,15 +121,94 @@ const rectCornerScaleData = ref([
 // 3.旋转四角
 
 // 4.六条吸附线，左中右上中下
-const attachedLineData = ref([
-  {
-    name: 'left',
-    x1: computed(() => (props.currentClickedElement?.cfg?.x) || 0),
-    y1: computed(() => (props.currentClickedElement?.cfg?.y) || 0),
-    x2: 0,
-    y2: 0,
-  },
-])
+const defaultAttachedLine = { x1: 0, y1: 0, x2: 0, y2: 0 }
+const attachedLineData = ref({
+  l: { name: 'left', ...defaultAttachedLine },
+  mv: { name: 'middleVertical', ...defaultAttachedLine },
+  r: { name: 'right', ...defaultAttachedLine },
+  t: { name: 'top', ...defaultAttachedLine },
+  mh: { name: 'middleHorizontal', ...defaultAttachedLine },
+  b: { name: 'bottom', ...defaultAttachedLine },
+})
+watch(props.attachedLine, (v) => {
+  handleAttachedLineLeft(v.l)
+  handleAttachedLineRight(v.r)
+  // if (v.r.length > 0)
+  //   console.log(v.r)
+})
+
+// 从单个cell获取其坐标位置大小
+function getXYFromTransform(cellCfg: GridCellType) {
+  const matchResult = cellCfg?.transform.match(/matrix\((.*)\)/)
+  const result = { x: 0, y: 0, width: cellCfg.width, height: cellCfg.height }
+  if (matchResult) {
+    const matrixVariable = matchResult[1]?.split(',')
+    result.x = Number(matrixVariable.at(-2))
+    result.y = Number(matrixVariable.at(-1))
+  }
+  return result
+}
+// 监听左吸附线的位置
+function handleAttachedLineLeft(leftArr: []) {
+  // 如果数组不为空，说明有左吸附线
+  if (leftArr.length > 0) {
+    // 1.计算x值
+    const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
+    const xPosition = clickedElementRect.x
+
+    // 2.计算y值
+    let minY = clickedElementRect.y
+    let maxY = clickedElementRect.y + clickedElementRect.height
+    const lLineArr = [...leftArr, props.currentClickedElement?.cfg]
+    if (lLineArr.length > 0) {
+      // 获取每个对象的matrix值
+      for (let i = 0; i < lLineArr.length; i++) {
+        const rect = getXYFromTransform(lLineArr[i])
+        minY = Math.min(minY, rect.y)
+        maxY = Math.max(maxY, rect.y + rect.height)
+      }
+    }
+    attachedLineData.value.l.x1 = xPosition
+    attachedLineData.value.l.y1 = minY
+    attachedLineData.value.l.x2 = xPosition
+    attachedLineData.value.l.y2 = maxY
+  }
+  else {
+    // 将线条位置置为0
+    for (const key in attachedLineData.value.l)
+      attachedLineData.value.l[key] = 0
+  }
+}
+function handleAttachedLineRight(rightArr: []) {
+  // 如果数组不为空，说明有左吸附线
+  if (rightArr.length > 0) {
+    // 1.计算x值
+    const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
+    const xPosition = clickedElementRect.x + clickedElementRect.width
+
+    // 2.计算y值
+    let minY = clickedElementRect.y
+    let maxY = clickedElementRect.y + clickedElementRect.height
+    const lLineArr = [...rightArr, props.currentClickedElement?.cfg]
+    if (lLineArr.length > 0) {
+      // 获取每个对象的matrix值
+      for (let i = 0; i < lLineArr.length; i++) {
+        const rect = getXYFromTransform(lLineArr[i])
+        minY = Math.min(minY, rect.y)
+        maxY = Math.max(maxY, rect.y + rect.height)
+      }
+    }
+    attachedLineData.value.r.x1 = xPosition
+    attachedLineData.value.r.y1 = minY
+    attachedLineData.value.r.x2 = xPosition
+    attachedLineData.value.r.y2 = maxY
+  }
+  else {
+    // 将线条位置置为0
+    for (const key in attachedLineData.value.l)
+      attachedLineData.value.r[key] = 0
+  }
+}
 </script>
 
 <template>
@@ -194,7 +266,7 @@ const attachedLineData = ref([
     <!-- 吸附线 -->
     <g class="pointer-events-auto">
       <line
-        v-for="(item) in attachedLineData"
+        v-for="(item) in Object.values(attachedLineData)"
         :key="item.name"
         :x1="item.x1"
         :y1="item.y1"

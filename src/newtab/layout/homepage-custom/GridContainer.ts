@@ -57,7 +57,7 @@ export function initGridContainer(
 
   watch(currentClickedElement, (nVal) => {
     // 设置吸附线误差为5px
-    const DEVIATION = 2
+    const DEVIATION = 5
     if (nVal) {
       // 0.设置将当前点击的要素为最顶层
       const index = store.gridCells.findIndex(ele => ele.cfg.id === nVal.cfg?.id)
@@ -69,6 +69,8 @@ export function initGridContainer(
       // 1.获取当前元素的偏移值
       let clickedTX = 0
       let clickedTY = 0
+      const clickedWidth = currentClickedElement.value?.cfg?.width
+      const clickedHeight = currentClickedElement.value?.cfg?.height
       if (currentClickedElement.value.cfg.transform) {
         const matrixVariable = currentClickedElement.value.cfg.transform.match(/matrix\((.*)\)/)[1]?.split(',')
         clickedTX = Number(matrixVariable.at(-2))
@@ -88,19 +90,40 @@ export function initGridContainer(
           return
 
         // 2.获取所有偏移的x和y值
-        let cellTX = 0
-        let cellTY = 0
+        let cellTX = 0 // cell translate x
+        let cellTY = 0 // cell translate y
+        const cellWidth = cell?.cfg?.width // cell translate y
+        const cellHeight = cell?.cfg?.height // cell translate y
         if (cell?.cfg?.transform) {
           const matrixVariable = cell?.cfg?.transform.match(/matrix\((.*)\)/)[1]?.split(',')
           cellTX = Number(matrixVariable.at(-2))
           cellTY = Number(matrixVariable.at(-1))
         }
 
-        // 3.比较，如果有return出去
-        if ((Math.abs(cellTX) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX) + DEVIATION))
+        // 3.比较，如果有return出去。这里的左中右上中下都是对于当前点击的元素来说
+        // l - 都是左侧
+        if ((Math.abs(cellTX) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX) + DEVIATION)) {
+          currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${cellTX}, ${clickedTY})`
           attachedLine.value.l.push(cell.cfg)
-        if ((Math.abs(cellTY) - DEVIATION) < clickedTY && clickedTY < (Math.abs(cellTY) + DEVIATION))
-          attachedLine.value.t.push(cell.cfg)
+        }
+        // l - 点击的要素是左侧，跟其他的可能有边可以吸附
+        if ((Math.abs(cellTX + cellWidth) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX + cellWidth) + DEVIATION)
+        ) {
+          currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${cellTX + cellWidth}, ${clickedTY})`
+          attachedLine.value.l.push(cell.cfg)
+        }
+        // r
+        if ((Math.abs(cellTX) - DEVIATION) < (clickedTX + clickedWidth) && (clickedTX + clickedWidth) < (Math.abs(cellTX) + DEVIATION)) {
+          // 设置当前元素吸附
+          currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${cellTX - clickedWidth}, ${clickedTY})`
+          attachedLine.value.r.push(cell.cfg)
+        }
+        // r - 点击的要素还是右侧
+        if ((Math.abs(cellTX + cellWidth) - DEVIATION) < (clickedTX + clickedWidth) && (clickedTX + clickedWidth) < (Math.abs(cellTX + cellWidth) + DEVIATION)) {
+          // 设置当前元素吸附
+          currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${cellTX + cellWidth - clickedWidth}, ${clickedTY})`
+          attachedLine.value.r.push(cell.cfg)
+        }
       })
     }
   }, {
@@ -220,25 +243,6 @@ export function initGridContainer(
    * @returns 点击的对象
    */
   function getCellObjectInStoreFromPosition(position: { x: number; y: number }): Object | null {
-    // let result = null
-    // // 1. 从坐标获取DOM
-    // const point = { x: position.x, y: position.y }
-    // const initElement = document.elementFromPoint(point.x, point.y)
-    // if (initElement) {
-    //   // 2.判断DOM是否是在当前Store中缓存
-    //   const index = store.gridCells.findIndex(ele => ele.cfg.id === initElement.id)
-    //   // 3.如果在，那么就筛选出来
-    //   if (index !== -1) {
-    //     const ele = store.gridCells.splice(index, 1)
-    //     store.gridCells.push(ele[0])
-    //     result = ele[0]
-    //   }
-    //   else {
-    //     // 4.不在就返回null
-    //     result = null
-    //   }
-    // }
-    // return result
     let result = null
     const point = { x: position.x, y: position.y }
     const initElement = document.elementFromPoint(point.x, point.y)
