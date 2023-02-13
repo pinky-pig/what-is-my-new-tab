@@ -135,6 +135,8 @@ watch(props.attachedLine, (v) => {
   handleAttachedLineRight(v.r)
   handleAttachedLineMiddleVertical(v.mv)
   handleAttachedLineTop(v.t)
+  handleAttachedLineBottom(v.b)
+  handleAttachedLineMiddleHorizontal(v.mh)
 })
 
 // 从单个cell获取其坐标位置大小
@@ -270,6 +272,67 @@ function handleAttachedLineTop(topArr: []) {
     // 将线条位置置为0
     for (const key in attachedLineData.value.l)
       attachedLineData.value.t[key] = 0
+  }
+}
+// 监听上吸附线的位置
+function handleAttachedLineBottom(bottomArr: []) {
+  // 如果数组不为空，说明有左吸附线
+  if (bottomArr.length > 0) {
+    // 1.计算y值
+    const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
+    const yPosition = clickedElementRect.y + clickedElementRect.height
+
+    // 2.计算x值
+    let minX = clickedElementRect.x
+    let maxX = clickedElementRect.x + clickedElementRect.width
+    const lLineArr = [...bottomArr, props.currentClickedElement?.cfg]
+    if (lLineArr.length > 0) {
+      // 获取每个对象的matrix值
+      for (let i = 0; i < lLineArr.length; i++) {
+        const rect = getXYFromTransform(lLineArr[i])
+        minX = Math.min(minX, rect.x)
+        maxX = Math.max(maxX, rect.x + rect.width)
+      }
+    }
+    attachedLineData.value.b.x1 = minX
+    attachedLineData.value.b.y1 = yPosition
+    attachedLineData.value.b.x2 = maxX
+    attachedLineData.value.b.y2 = yPosition
+  }
+  else {
+    // 将线条位置置为0
+    for (const key in attachedLineData.value.l)
+      attachedLineData.value.b[key] = 0
+  }
+}
+function handleAttachedLineMiddleHorizontal(middleHorizontalArr: []) {
+  // 如果数组不为空，说明有左吸附线
+  if (middleHorizontalArr.length > 0) {
+    // 1.计算y值
+    const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
+    const yPosition = clickedElementRect.y + clickedElementRect.height / 2
+
+    // 2.计算x值
+    let minX = clickedElementRect.x
+    let maxX = clickedElementRect.x + clickedElementRect.width
+    const lLineArr = [...middleHorizontalArr, props.currentClickedElement?.cfg]
+    if (lLineArr.length > 0) {
+      // 获取每个对象的matrix值
+      for (let i = 0; i < lLineArr.length; i++) {
+        const rect = getXYFromTransform(lLineArr[i])
+        minX = Math.min(minX, rect.x)
+        maxX = Math.max(maxX, rect.x + rect.width)
+      }
+    }
+    attachedLineData.value.mh.x1 = minX
+    attachedLineData.value.mh.y1 = yPosition
+    attachedLineData.value.mh.x2 = maxX
+    attachedLineData.value.mh.y2 = yPosition
+  }
+  else {
+    // 将线条位置置为0
+    for (const key in attachedLineData.value.l)
+      attachedLineData.value.mh[key] = 0
   }
 }
 </script>

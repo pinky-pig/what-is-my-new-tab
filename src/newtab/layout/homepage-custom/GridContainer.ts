@@ -20,7 +20,7 @@ let previousEvent: MouseEvent | null = null
 
 export function initGridContainer(
   currentClickedElement: Ref<any>,
-  attachedLine: Ref<{ l: any[]; mv: any[];r: any[];t: any[];vh: any[];b: any[] }>,
+  attachedLine: Ref<{ l: any[]; mv: any[];r: any[];t: any[];mh: any[];b: any[] }>,
 ) {
   const store = useLayoutStore()
 
@@ -137,10 +137,43 @@ export function initGridContainer(
         /* -------------------------------------------------- */
         /*                    横向吸附线                       */
         /* -------------------------------------------------- */
+        // t
         if ((Math.abs(cellTY) - DEVIATION) < clickedTY && clickedTY < (Math.abs(cellTY) + DEVIATION)) {
           nextTick(() => {
             currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${clickedTX}, ${cellTY})`
             attachedLine.value.t.push(cell.cfg)
+          })
+        }
+        // t - 点击的要素是上，跟其他的可能有边可以吸附
+        if ((Math.abs(cellTY + cellHeight) - DEVIATION) < clickedTY && clickedTY < (Math.abs(cellTY + cellHeight) + DEVIATION)) {
+          nextTick(() => {
+            currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${clickedTX}, ${cellTY + cellHeight})`
+            attachedLine.value.t.push(cell.cfg)
+          })
+        }
+
+        // b
+        if ((Math.abs(cellTY) - DEVIATION) < (clickedTY + clickedHeight) && (clickedTY + clickedHeight) < (Math.abs(cellTY) + DEVIATION)) {
+          // 设置当前元素吸附
+          nextTick(() => {
+            currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${clickedTX}, ${cellTY - clickedHeight})`
+            attachedLine.value.b.push(cell.cfg)
+          })
+        }
+        // b - 点击的要素还是下面
+        if ((Math.abs(cellTY + cellHeight) - DEVIATION) < (clickedTY + clickedHeight) && (clickedTY + clickedHeight) < (Math.abs(cellTY + cellHeight) + DEVIATION)) {
+          // 设置当前元素吸附
+          nextTick(() => {
+            currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${clickedTX}, ${cellTY + cellHeight - clickedHeight})`
+            attachedLine.value.b.push(cell.cfg)
+          })
+        }
+        // mh
+        if ((Math.abs(cellTY + (cellHeight) / 2) - DEVIATION) < (clickedTY + (clickedHeight) / 2) && (clickedTY + (clickedHeight) / 2) < (Math.abs(cellTY + (cellHeight) / 2) + DEVIATION)) {
+          // 设置当前元素吸附
+          nextTick(() => {
+            currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${clickedTX}, ${cellTY + (cellHeight) / 2 - (clickedHeight) / 2})`
+            attachedLine.value.mh.push(cell.cfg)
           })
         }
       })

@@ -7,7 +7,7 @@ import { getAllGridCellSortByIndex } from './gridCellData'
 import BoundsSVGContainer from './BoundsSVGContainer.vue'
 import { useLayoutStore } from '~/store'
 
-const attachedLine: Ref<{ l: any[]; mv: any[];r: any[];t: any[];vh: any[];b: any[] } > = ref({ l: [], mv: [], r: [], t: [], vh: [], b: [] })
+const attachedLine: Ref<{ l: any[]; mv: any[];r: any[];t: any[];mh: any[];b: any[] } > = ref({ l: [], mv: [], r: [], t: [], mh: [], b: [] })
 const currentClickedElement: Ref<any> = ref()
 const GridContainer = initGridContainer(currentClickedElement, attachedLine)
 
