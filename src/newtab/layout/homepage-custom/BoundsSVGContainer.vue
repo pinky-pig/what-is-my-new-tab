@@ -133,6 +133,7 @@ const attachedLineData = ref({
 watch(props.attachedLine, (v) => {
   handleAttachedLineLeft(v.l)
   handleAttachedLineRight(v.r)
+  handleAttachedLineMiddleVertical(v.mv)
   // if (v.r.length > 0)
   //   console.log(v.r)
 })
@@ -179,6 +180,7 @@ function handleAttachedLineLeft(leftArr: []) {
       attachedLineData.value.l[key] = 0
   }
 }
+// 监听右吸附线的位置
 function handleAttachedLineRight(rightArr: []) {
   // 如果数组不为空，说明有左吸附线
   if (rightArr.length > 0) {
@@ -207,6 +209,37 @@ function handleAttachedLineRight(rightArr: []) {
     // 将线条位置置为0
     for (const key in attachedLineData.value.l)
       attachedLineData.value.r[key] = 0
+  }
+}
+// 监听中间吸附线的位置
+function handleAttachedLineMiddleVertical(middleVerticalArr: []) {
+  // 如果数组不为空，说明有左吸附线
+  if (middleVerticalArr.length > 0) {
+    // 1.计算x值
+    const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
+    const xPosition = clickedElementRect.x + clickedElementRect.width / 2
+
+    // 2.计算y值
+    let minY = clickedElementRect.y
+    let maxY = clickedElementRect.y + clickedElementRect.height
+    const lLineArr = [...middleVerticalArr, props.currentClickedElement?.cfg]
+    if (lLineArr.length > 0) {
+      // 获取每个对象的matrix值
+      for (let i = 0; i < lLineArr.length; i++) {
+        const rect = getXYFromTransform(lLineArr[i])
+        minY = Math.min(minY, rect.y)
+        maxY = Math.max(maxY, rect.y + rect.height)
+      }
+    }
+    attachedLineData.value.mv.x1 = xPosition
+    attachedLineData.value.mv.y1 = minY
+    attachedLineData.value.mv.x2 = xPosition
+    attachedLineData.value.mv.y2 = maxY
+  }
+  else {
+    // 将线条位置置为0
+    for (const key in attachedLineData.value.l)
+      attachedLineData.value.mv[key] = 0
   }
 }
 </script>

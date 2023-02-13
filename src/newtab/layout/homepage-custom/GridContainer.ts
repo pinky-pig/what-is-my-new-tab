@@ -124,6 +124,13 @@ export function initGridContainer(
           currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${cellTX + cellWidth - clickedWidth}, ${clickedTY})`
           attachedLine.value.r.push(cell.cfg)
         }
+
+        // mv
+        if ((Math.abs(cellTX + (cellWidth) / 2) - DEVIATION) < (clickedTX + (clickedWidth) / 2) && (clickedTX + (clickedWidth) / 2) < (Math.abs(cellTX + (cellWidth) / 2) + DEVIATION)) {
+          // 设置当前元素吸附
+          currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${cellTX + (cellWidth) / 2 - (clickedWidth) / 2}, ${clickedTY})`
+          attachedLine.value.mv.push(cell.cfg)
+        }
       })
     }
   }, {
