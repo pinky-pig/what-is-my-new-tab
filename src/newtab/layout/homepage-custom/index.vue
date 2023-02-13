@@ -40,7 +40,7 @@ const gridCellComponents = computed(() => {
     <GridContainer>
       <component :is="item.component" v-for="item in gridCellComponents" :key="item.data.cfg.value.id" />
     </GridContainer>
-    <BoundsSVGContainer :current-clicked-element="currentClickedElement" :attached-line="attachedLine" />
+    <BoundsSVGContainer v-model="currentClickedElement" :current-clicked-element="currentClickedElement" :attached-line="attachedLine" />
   </div>
 </template>
 

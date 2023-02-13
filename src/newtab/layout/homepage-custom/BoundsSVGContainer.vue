@@ -3,7 +3,7 @@
 import type { GridCellType } from './GridCell'
 
 const props = defineProps(['currentClickedElement', 'attachedLine'])
-
+const emits = defineEmits(['update:modelValue'])
 const borderWidth = 10
 
 // 1.四条边 scale 四个角落点 scale 四个旋转角落点 rotate
@@ -141,6 +141,9 @@ watch(props.attachedLine, (v) => {
 
 // 从单个cell获取其坐标位置大小
 function getXYFromTransform(cellCfg: GridCellType) {
+  if (!cellCfg)
+    return { x: 0, y: 0, width: 0, height: 0 }
+
   const matchResult = cellCfg?.transform.match(/matrix\((.*)\)/)
   const result = { x: 0, y: 0, width: cellCfg.width, height: cellCfg.height }
   if (matchResult) {
@@ -151,12 +154,14 @@ function getXYFromTransform(cellCfg: GridCellType) {
   return result
 }
 // 监听左吸附线的位置
-function handleAttachedLineLeft(leftArr: []) {
+function handleAttachedLineLeft(leftArr: any[]) {
   // 如果数组不为空，说明有左吸附线
   if (leftArr.length > 0) {
     // 1.计算x值
     const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
-    const xPosition = clickedElementRect.x
+    // const xPosition = clickedElementRect.x
+    const firstDataRect = getXYFromTransform(leftArr[0])
+    const xPosition = leftArr[0].type === 0 ? firstDataRect.x : firstDataRect.x + firstDataRect.width
 
     // 2.计算y值
     let minY = clickedElementRect.y
@@ -174,6 +179,10 @@ function handleAttachedLineLeft(leftArr: []) {
     attachedLineData.value.l.y1 = minY
     attachedLineData.value.l.x2 = xPosition
     attachedLineData.value.l.y2 = maxY
+
+    const proxyData = props.currentClickedElement
+    proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${xPosition}, ${clickedElementRect.y})`
+    emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -182,12 +191,15 @@ function handleAttachedLineLeft(leftArr: []) {
   }
 }
 // 监听右吸附线的位置
-function handleAttachedLineRight(rightArr: []) {
+function handleAttachedLineRight(rightArr: any[]) {
   // 如果数组不为空，说明有左吸附线
   if (rightArr.length > 0) {
     // 1.计算x值
     const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
-    const xPosition = clickedElementRect.x + clickedElementRect.width
+    // const xPosition = clickedElementRect.x + clickedElementRect.width
+
+    const firstDataRect = getXYFromTransform(rightArr[0])
+    const xPosition = rightArr[0].type === 0 ? (firstDataRect.x - clickedElementRect.width) : (firstDataRect.x + firstDataRect.width - clickedElementRect.width)
 
     // 2.计算y值
     let minY = clickedElementRect.y
@@ -201,10 +213,14 @@ function handleAttachedLineRight(rightArr: []) {
         maxY = Math.max(maxY, rect.y + rect.height)
       }
     }
-    attachedLineData.value.r.x1 = xPosition
+    attachedLineData.value.r.x1 = xPosition + clickedElementRect.width
     attachedLineData.value.r.y1 = minY
-    attachedLineData.value.r.x2 = xPosition
+    attachedLineData.value.r.x2 = xPosition + clickedElementRect.width
     attachedLineData.value.r.y2 = maxY
+
+    const proxyData = props.currentClickedElement
+    proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${xPosition}, ${clickedElementRect.y})`
+    emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -213,12 +229,14 @@ function handleAttachedLineRight(rightArr: []) {
   }
 }
 // 监听中间吸附线的位置
-function handleAttachedLineMiddleVertical(middleVerticalArr: []) {
+function handleAttachedLineMiddleVertical(middleVerticalArr: any[]) {
   // 如果数组不为空，说明有左吸附线
   if (middleVerticalArr.length > 0) {
     // 1.计算x值
     const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
-    const xPosition = clickedElementRect.x + clickedElementRect.width / 2
+    // const xPosition = clickedElementRect.x + clickedElementRect.width / 2
+    const firstDataRect = getXYFromTransform(middleVerticalArr[0])
+    const xPosition = firstDataRect.x + firstDataRect.width / 2
 
     // 2.计算y值
     let minY = clickedElementRect.y
@@ -236,6 +254,10 @@ function handleAttachedLineMiddleVertical(middleVerticalArr: []) {
     attachedLineData.value.mv.y1 = minY
     attachedLineData.value.mv.x2 = xPosition
     attachedLineData.value.mv.y2 = maxY
+
+    const proxyData = props.currentClickedElement
+    proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${xPosition - clickedElementRect.width / 2}, ${clickedElementRect.y})`
+    emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -244,12 +266,15 @@ function handleAttachedLineMiddleVertical(middleVerticalArr: []) {
   }
 }
 // 监听上吸附线的位置
-function handleAttachedLineTop(topArr: []) {
+function handleAttachedLineTop(topArr: any[]) {
   // 如果数组不为空，说明有左吸附线
   if (topArr.length > 0) {
     // 1.计算y值
     const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
-    const yPosition = clickedElementRect.y
+    // const yPosition = clickedElementRect.y
+
+    const firstDataRect = getXYFromTransform(topArr[0])
+    const yPosition = topArr[0].type === 0 ? firstDataRect.y : firstDataRect.y + firstDataRect.height
 
     // 2.计算x值
     let minX = clickedElementRect.x
@@ -267,6 +292,10 @@ function handleAttachedLineTop(topArr: []) {
     attachedLineData.value.t.y1 = yPosition
     attachedLineData.value.t.x2 = maxX
     attachedLineData.value.t.y2 = yPosition
+
+    const proxyData = props.currentClickedElement
+    proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${clickedElementRect.x}, ${yPosition})`
+    emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -274,13 +303,16 @@ function handleAttachedLineTop(topArr: []) {
       attachedLineData.value.t[key] = 0
   }
 }
-// 监听上吸附线的位置
-function handleAttachedLineBottom(bottomArr: []) {
+// 监听下吸附线的位置
+function handleAttachedLineBottom(bottomArr: any[]) {
   // 如果数组不为空，说明有左吸附线
   if (bottomArr.length > 0) {
     // 1.计算y值
     const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
-    const yPosition = clickedElementRect.y + clickedElementRect.height
+    // const yPosition = clickedElementRect.y + clickedElementRect.height
+
+    const firstDataRect = getXYFromTransform(bottomArr[0])
+    const yPosition = bottomArr[0].type === 0 ? (firstDataRect.y - clickedElementRect.height) : (firstDataRect.y + firstDataRect.height - clickedElementRect.height)
 
     // 2.计算x值
     let minX = clickedElementRect.x
@@ -295,9 +327,13 @@ function handleAttachedLineBottom(bottomArr: []) {
       }
     }
     attachedLineData.value.b.x1 = minX
-    attachedLineData.value.b.y1 = yPosition
+    attachedLineData.value.b.y1 = yPosition + clickedElementRect.height
     attachedLineData.value.b.x2 = maxX
-    attachedLineData.value.b.y2 = yPosition
+    attachedLineData.value.b.y2 = yPosition + clickedElementRect.height
+
+    const proxyData = props.currentClickedElement
+    proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${clickedElementRect.x}, ${yPosition})`
+    emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -305,12 +341,14 @@ function handleAttachedLineBottom(bottomArr: []) {
       attachedLineData.value.b[key] = 0
   }
 }
-function handleAttachedLineMiddleHorizontal(middleHorizontalArr: []) {
+function handleAttachedLineMiddleHorizontal(middleHorizontalArr: any[]) {
   // 如果数组不为空，说明有左吸附线
   if (middleHorizontalArr.length > 0) {
     // 1.计算y值
     const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
-    const yPosition = clickedElementRect.y + clickedElementRect.height / 2
+    // const yPosition = clickedElementRect.y + clickedElementRect.height / 2
+    const firstDataRect = getXYFromTransform(middleHorizontalArr[0])
+    const yPosition = firstDataRect.y + firstDataRect.height / 2
 
     // 2.计算x值
     let minX = clickedElementRect.x
@@ -328,6 +366,10 @@ function handleAttachedLineMiddleHorizontal(middleHorizontalArr: []) {
     attachedLineData.value.mh.y1 = yPosition
     attachedLineData.value.mh.x2 = maxX
     attachedLineData.value.mh.y2 = yPosition
+
+    const proxyData = props.currentClickedElement
+    proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${clickedElementRect.x}, ${yPosition - clickedElementRect.height / 2})`
+    emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
