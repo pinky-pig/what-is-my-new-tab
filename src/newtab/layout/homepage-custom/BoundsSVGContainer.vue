@@ -3,9 +3,11 @@
 const props = defineProps(['currentClickedElement', 'attachedLine'])
 
 watch(props.attachedLine, (v) => {
-  if (v.x.length > 0)
+  if (v.l.length > 0) {
+    console.log(111)
     console.log(v.x)
-  if (v.y.length > 0)
+  }
+  if (v.r.length > 0)
     console.log(v.y)
 })
 
@@ -128,10 +130,10 @@ const rectCornerScaleData = ref([
 // 4.六条吸附线，左中右上中下
 const attachedLineData = ref([
   {
-    name: 'top',
-    x1: 0,
+    name: 'left',
+    x1: computed(() => (props.currentClickedElement?.cfg?.x) || 0),
+    y1: computed(() => (props.currentClickedElement?.cfg?.y) || 0),
     x2: 0,
-    y1: 0,
     y2: 0,
   },
 ])

@@ -18,7 +18,10 @@ let transformMode: ModeTypes | null = null
 let currentScaleType: ScaleType = null
 let previousEvent: MouseEvent | null = null
 
-export function initGridContainer(currentClickedElement: Ref<any>, attachedLine: Ref<{ x: any[]; y: any[] }>) {
+export function initGridContainer(
+  currentClickedElement: Ref<any>,
+  attachedLine: Ref<{ l: any[]; mv: any[];r: any[];t: any[];vh: any[];b: any[] }>,
+) {
   const store = useLayoutStore()
 
   const GridContainer = defineComponent({
@@ -76,8 +79,9 @@ export function initGridContainer(currentClickedElement: Ref<any>, attachedLine:
       }
 
       // 其实应该是更新。这里粗暴先置空
-      attachedLine.value.x = []
-      attachedLine.value.y = []
+      for (const key in attachedLine.value)
+        attachedLine.value[key] = []
+
       store.gridCells.forEach((cell) => {
         // 首先将它自己排除
         if (cell?.cfg?.id === currentClickedElement.value?.cfg?.id)
@@ -94,9 +98,9 @@ export function initGridContainer(currentClickedElement: Ref<any>, attachedLine:
 
         // 3.比较，如果有return出去
         if ((Math.abs(cellTX) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX) + DEVIATION))
-          attachedLine.value.x.push(cell.cfg)
+          attachedLine.value.l.push(cell.cfg)
         if ((Math.abs(cellTY) - DEVIATION) < clickedTY && clickedTY < (Math.abs(cellTY) + DEVIATION))
-          attachedLine.value.y.push(cell.cfg)
+          attachedLine.value.t.push(cell.cfg)
       })
     }
   }, {
