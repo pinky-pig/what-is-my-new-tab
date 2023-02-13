@@ -138,7 +138,7 @@ const attachedLineData = ref([
 </script>
 
 <template>
-  <svg v-show="props.currentClickedElement" id="boundsSVGContainer" class="w-screen h-screen fixed top-0 left-0">
+  <svg v-show="props.currentClickedElement" id="boundsSVGContainer" class="pointer-events-none w-screen h-screen fixed top-0 left-0">
     <!-- bounds -->
     <g>
       <rect
@@ -153,7 +153,7 @@ const attachedLineData = ref([
       />
     </g>
     <!-- 缩放四边 line -->
-    <g>
+    <g class="pointer-events-auto">
       <rect
         v-for="(item) in rectLineData"
         :id="`bounds_${item.name}`"
@@ -170,7 +170,7 @@ const attachedLineData = ref([
     </g>
 
     <!-- 缩放四角 -->
-    <g>
+    <g class="pointer-events-auto">
       <rect
         v-for="(item) in rectCornerScaleData"
         :id="`bounds_${item.name}`"
@@ -190,7 +190,7 @@ const attachedLineData = ref([
     <!-- 旋转四角 -->
 
     <!-- 吸附线 -->
-    <g>
+    <g class="pointer-events-auto">
       <line
         v-for="(item) in attachedLineData"
         :key="item.name"

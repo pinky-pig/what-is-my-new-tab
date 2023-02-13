@@ -32,10 +32,12 @@ const gridCellComponents = gridCellList.value.map((item) => {
 </script>
 
 <template>
-  <GridContainer>
-    <component :is="item.component" v-for="item in gridCellComponents" :key="item.data.cfg.value.id" />
+  <div>
+    <GridContainer>
+      <component :is="item.component" v-for="item in gridCellComponents" :key="item.data.cfg.value.id" />
+    </GridContainer>
     <BoundsSVGContainer :current-clicked-element="currentClickedElement" :attached-line="attachedLine" />
-  </GridContainer>
+  </div>
 </template>
 
 <style scoped>

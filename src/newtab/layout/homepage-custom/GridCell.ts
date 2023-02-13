@@ -54,7 +54,7 @@ export class GridCell {
             borderRadius: '3px',
             pointerEvents: 'auto',
             // transform: translate( calc(642.73px - var(--tl-padding)), calc(90.22px - var(--tl-padding)) )
-            zIndex: 99999,
+            zIndex: 1,
             transform: _this.cfg.value.transform,
           } as StyleValue
         })

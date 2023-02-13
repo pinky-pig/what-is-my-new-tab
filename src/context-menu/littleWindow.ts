@@ -43,7 +43,6 @@ const SelectBoxElement = defineCustomElement({
         outline: '1px solid rgba(59, 130, 246, 0.6)',
         borderRadius: '3px',
         pointerEvents: 'none',
-        zIndex: 99999,
       } as StyleValue
     })
     return () => {
