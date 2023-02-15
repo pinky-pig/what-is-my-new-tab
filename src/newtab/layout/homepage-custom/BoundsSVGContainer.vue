@@ -154,13 +154,7 @@ function getXYFromTransform(cellCfg: GridCellType) {
   if (!cellCfg)
     return { x: 0, y: 0, width: 0, height: 0 }
 
-  const matchResult = cellCfg?.transform.match(/matrix\((.*)\)/)
-  const result = { x: 0, y: 0, width: cellCfg.width, height: cellCfg.height }
-  if (matchResult) {
-    const matrixVariable = matchResult[1]?.split(',')
-    result.x = Number(matrixVariable.at(-2))
-    result.y = Number(matrixVariable.at(-1))
-  }
+  const result = { x: cellCfg.x, y: cellCfg.y, width: cellCfg.width, height: cellCfg.height }
   return result
 }
 // 监听左吸附线的位置
@@ -446,10 +440,10 @@ function handleAttachedLineMiddleHorizontal(middleHorizontalArr: any[]) {
       <line
         v-for="(item, index) in Object.values(attachedLineData)"
         :key="item.name + index"
-        :x1="item.x1"
-        :y1="item.y1"
-        :x2="item.x2 "
-        :y2="item.y2 "
+        :x1="item?.x1 || 0"
+        :y1="item?.y1 || 0"
+        :x2="item?.x2 || 0"
+        :y2="item?.y2 || 0"
         stroke="#58815790"
         fill="#58815790"
         stroke-width="2"

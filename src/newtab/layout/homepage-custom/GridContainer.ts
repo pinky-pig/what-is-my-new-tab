@@ -17,6 +17,7 @@ type ScaleType = 'top' | 'bottom' | 'left' | 'right' | 'top_left' | 'top_right' 
 let transformMode: ModeTypes | null = null
 let currentScaleType: ScaleType = null
 let previousEvent: MouseEvent | null = null
+const DEVIATION = 10
 
 export function initGridContainer(
   currentClickedElement: Ref<any>,
@@ -60,7 +61,7 @@ export function initGridContainer(
   //   const DEVIATION = 5
   //   if (nVal) {
   //     // 0.设置将当前点击的要素为最顶层
-  //     const index = store.gridCells.findIndex(ele => ele.cfg.id === nVal.cfg?.id)
+  //     const index = store.gridCells.findIndex(ele => ele.cfg.id === nVal.id)
   //     if (index !== -1) {
   //       const ele = store.gridCells.splice(index, 1)
   //       store.gridCells.push(ele[0])
@@ -69,8 +70,8 @@ export function initGridContainer(
   //     // 1.获取当前元素的偏移值
   //     let clickedTX = 0
   //     let clickedTY = 0
-  //     const clickedWidth = currentClickedElement.value?.cfg?.width
-  //     const clickedHeight = currentClickedElement.value?.cfg?.height
+  //     const clickedWidth = currentClickedElement.value?.width
+  //     const clickedHeight = currentClickedElement.value?.height
   //     if (currentClickedElement.value.transform) {
   //       const matrixVariable = currentClickedElement.value.transform.match(/matrix\((.*)\)/)[1]?.split(',')
   //       clickedTX = Number(matrixVariable.at(-2))
@@ -86,16 +87,16 @@ export function initGridContainer(
 
   //     store.gridCells.forEach((cell) => {
   //       // 首先将它自己排除
-  //       if (cell?.cfg?.id === currentClickedElement.value?.cfg?.id)
+  //       if (cell?.id === currentClickedElement.value?.id)
   //         return
 
   //       // 2.获取所有偏移的x和y值
   //       let cellTX = 0 // cell translate x
   //       let cellTY = 0 // cell translate y
-  //       const cellWidth = cell?.cfg?.width // cell translate y
-  //       const cellHeight = cell?.cfg?.height // cell translate y
-  //       if (cell?.cfg?.transform) {
-  //         const matrixVariable = cell?.cfg?.transform.match(/matrix\((.*)\)/)[1]?.split(',')
+  //       const cellWidth = cell?.width // cell translate y
+  //       const cellHeight = cell?.height // cell translate y
+  //       if (cell?.transform) {
+  //         const matrixVariable = cell?.transform.match(/matrix\((.*)\)/)[1]?.split(',')
   //         cellTX = Number(matrixVariable.at(-2))
   //         cellTY = Number(matrixVariable.at(-1))
   //       }
@@ -109,35 +110,35 @@ export function initGridContainer(
   //       if ((Math.abs(cellTX) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX) + DEVIATION)) {
   //         nextTick(() => {
   //           // currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${cellTX}, ${clickedTY})`
-  //           attachedLine.value.l.push({ ...cell.cfg, type: 0 })
+  //           attachedLine.value.l.push({ ...cell, type: 0 })
   //         })
   //       }
   //       // l - 点击的要素是左侧，跟其他的可能有边可以吸附
   //       if ((Math.abs(cellTX + cellWidth) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX + cellWidth) + DEVIATION)) {
   //         nextTick(() => {
   //           // currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${cellTX + cellWidth}, ${clickedTY})`
-  //           attachedLine.value.l.push({ ...cell.cfg, type: 1 })
+  //           attachedLine.value.l.push({ ...cell, type: 1 })
   //         })
   //       }
   //       // r
   //       if ((Math.abs(cellTX) - DEVIATION) < (clickedTX + clickedWidth) && (clickedTX + clickedWidth) < (Math.abs(cellTX) + DEVIATION)) {
   //         nextTick(() => {
   //           // currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${cellTX - clickedWidth}, ${clickedTY})`
-  //           attachedLine.value.r.push({ ...cell.cfg, type: 0 })
+  //           attachedLine.value.r.push({ ...cell, type: 0 })
   //         })
   //       }
   //       // r - 点击的要素还是右侧
   //       if ((Math.abs(cellTX + cellWidth) - DEVIATION) < (clickedTX + clickedWidth) && (clickedTX + clickedWidth) < (Math.abs(cellTX + cellWidth) + DEVIATION)) {
   //         nextTick(() => {
   //           // currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${cellTX + cellWidth - clickedWidth}, ${clickedTY})`
-  //           attachedLine.value.r.push({ ...cell.cfg, type: 1 })
+  //           attachedLine.value.r.push({ ...cell, type: 1 })
   //         })
   //       }
   //       // mv
   //       if ((Math.abs(cellTX + (cellWidth) / 2) - DEVIATION) < (clickedTX + (clickedWidth) / 2) && (clickedTX + (clickedWidth) / 2) < (Math.abs(cellTX + (cellWidth) / 2) + DEVIATION)) {
   //         nextTick(() => {
   //           // currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${cellTX + (cellWidth) / 2 - (clickedWidth) / 2}, ${clickedTY})`
-  //           attachedLine.value.mv.push(cell.cfg)
+  //           attachedLine.value.mv.push(cell)
   //         })
   //       }
 
@@ -148,14 +149,14 @@ export function initGridContainer(
   //       if ((Math.abs(cellTY) - DEVIATION) < clickedTY && clickedTY < (Math.abs(cellTY) + DEVIATION)) {
   //         nextTick(() => {
   //           // currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${clickedTX}, ${cellTY})`
-  //           attachedLine.value.t.push({ ...cell.cfg, type: 0 })
+  //           attachedLine.value.t.push({ ...cell, type: 0 })
   //         })
   //       }
   //       // t - 点击的要素是上，跟其他的可能有边可以吸附
   //       if ((Math.abs(cellTY + cellHeight) - DEVIATION) < clickedTY && clickedTY < (Math.abs(cellTY + cellHeight) + DEVIATION)) {
   //         nextTick(() => {
   //           // currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${clickedTX}, ${cellTY + cellHeight})`
-  //           attachedLine.value.t.push({ ...cell.cfg, type: 1 })
+  //           attachedLine.value.t.push({ ...cell, type: 1 })
   //         })
   //       }
 
@@ -164,7 +165,7 @@ export function initGridContainer(
   //         // 设置当前元素吸附
   //         nextTick(() => {
   //           // currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${clickedTX}, ${cellTY - clickedHeight})`
-  //           attachedLine.value.b.push({ ...cell.cfg, type: 0 })
+  //           attachedLine.value.b.push({ ...cell, type: 0 })
   //         })
   //       }
   //       // b - 点击的要素还是下面
@@ -172,7 +173,7 @@ export function initGridContainer(
   //         // 设置当前元素吸附
   //         nextTick(() => {
   //           // currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${clickedTX}, ${cellTY + cellHeight - clickedHeight})`
-  //           attachedLine.value.b.push({ ...cell.cfg, type: 1 })
+  //           attachedLine.value.b.push({ ...cell, type: 1 })
   //         })
   //       }
   //       // mh
@@ -180,7 +181,7 @@ export function initGridContainer(
   //         // 设置当前元素吸附
   //         nextTick(() => {
   //           // currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${clickedTX}, ${cellTY + (cellHeight) / 2 - (clickedHeight) / 2})`
-  //           attachedLine.value.mh.push(cell.cfg)
+  //           attachedLine.value.mh.push(cell)
   //         })
   //       }
   //     })
@@ -224,36 +225,51 @@ export function initGridContainer(
         // currentClickedElement.value.y = currentClickedElement.value.y + (pt.clientY - oriPt.clientY)
 
         // 2.使用css transform方式
-        let lastTranslateX = 0
-        let lastTranslateY = 0
-        if (currentClickedElement.value.transform) {
-          const matrixVariable = currentClickedElement.value.transform.match(/matrix\((.*)\)/)[1]?.split(',')
-          lastTranslateX = Number(matrixVariable.at(-2))
-          lastTranslateY = Number(matrixVariable.at(-1))
-        }
+        const lastTranslateX = currentClickedElement.value.x
+        const lastTranslateY = currentClickedElement.value.y
         const offsetX = lastTranslateX + (pt.clientX - oriPt.clientX)
         const offsetY = lastTranslateY + (pt.clientY - oriPt.clientY)
+
         currentClickedElement.value.x = offsetX
         currentClickedElement.value.y = offsetY
         currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${offsetX}, ${offsetY})`
       }
       else if (transformMode === 'Scale') {
         const oriPt = previousEvent
-        let lastTranslateX = 0
-        let lastTranslateY = 0
-        if (currentClickedElement.value.transform) {
-          const matrixVariable = currentClickedElement.value.transform.match(/matrix\((.*)\)/)[1]?.split(',')
-          lastTranslateX = Number(matrixVariable.at(-2))
-          lastTranslateY = Number(matrixVariable.at(-1))
-        }
+        const lastTranslateX = currentClickedElement.value.x
+        const lastTranslateY = currentClickedElement.value.y
+        const disX = (pt.clientX - oriPt.clientX)
+
         // 😅 开始变形！~
         if (currentScaleType === 'left') {
-          const disX = (pt.clientX - oriPt.clientX)
-          currentClickedElement.value.x = lastTranslateX + disX
-          currentClickedElement.value.y = lastTranslateY
-          currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${lastTranslateX + disX}, ${lastTranslateY})`
-          currentClickedElement.value.width = currentClickedElement.value.width - disX
+          if (attachedLine.value.l.length === 0) {
+            // 说明没有左边线
+            // const disX = (pt.clientX - oriPt.clientX)
+            currentClickedElement.value.x = lastTranslateX + disX
+            currentClickedElement.value.y = lastTranslateY
+            currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${lastTranslateX + disX}, ${lastTranslateY})`
+            currentClickedElement.value.width = currentClickedElement.value.width - disX
+            createAttachedLineForDrag(e)
+          }
+          else {
+            // 说明有左边线
+            const left = attachedLine.value.l[0]
+            if ((Math.abs(left.x) - DEVIATION) < (lastTranslateX + disX) && (lastTranslateX + disX) < (Math.abs(left.x) + DEVIATION)) {
+              // 在误差内。不能缩放了
+              return
+            }
+            else {
+              // const disX = (pt.clientX - oriPt.clientX)
+              currentClickedElement.value.x = lastTranslateX + disX
+              currentClickedElement.value.y = lastTranslateY
+              currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${lastTranslateX + disX}, ${lastTranslateY})`
+              currentClickedElement.value.width = currentClickedElement.value.width - disX
+
+              createAttachedLineForDrag(e)
+            }
+          }
         }
+
         if (currentScaleType === 'right')
           currentClickedElement.value.width = currentClickedElement.value.width + (pt.clientX - oriPt.clientX)
 
@@ -326,23 +342,74 @@ export function initGridContainer(
     return result ? result[0] : null
   }
 
-  function createAttachedLine(e: MouseEvent) {
+  function createAttachedLineForDrag(e: MouseEvent) {
     const DEVIATION = 5
-
     // 获取当前元素的偏移值
-    let clickedTX = 0
-    let clickedTY = 0
-    const clickedWidth = currentClickedElement.value?.cfg?.width
-    const clickedHeight = currentClickedElement.value?.cfg?.height
-    if (currentClickedElement.value.transform) {
-      const matrixVariable = currentClickedElement.value.transform.match(/matrix\((.*)\)/)[1]?.split(',')
-      clickedTX = Number(matrixVariable.at(-2))
-      clickedTY = Number(matrixVariable.at(-1))
-    }
-    else {
-      return
-    }
+    const clickedTX = currentClickedElement.value?.x
+    const clickedTY = currentClickedElement.value?.y
+    const clickedWidth = currentClickedElement.value?.width
+    const clickedHeight = currentClickedElement.value?.height
 
+    // 每个块有六条线
+    // 1.如果当前某条线已经出现，那么就不再吸附那个线
+    // 2.如果当前某条线没有出现，那么就还可以吸附
+
+    for (const cell of store.gridCells) {
+      if (cell?.id === currentClickedElement.value?.id)
+        return [0, 0, 0, 0, 0, 0]
+
+      // 2.获取所有偏移的x和y值
+      const cellTX = cell.x // cell translate x
+      if ((Math.abs(cellTX) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX) + DEVIATION)) {
+        if (attachedLine.value.l.length > 0) {
+          console.log('已经有吸附线')
+        }
+        else {
+          const xClickedAndCell = currentClickedElement.value.x - cellTX
+          currentClickedElement.value.width = currentClickedElement.value.width + xClickedAndCell
+          currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${cellTX}, ${clickedTY})`
+          attachedLine.value.l.push({ ...cell, type: 0 })
+        }
+
+        break
+      }
+      else {
+        attachedLine.value.l = []
+      }
+    }
+  }
+
+  function createAttachedLineForScale(e: MouseEvent) {
+    // 获取当前元素的偏移值
+    const clickedTX = currentClickedElement.value?.x
+    const clickedTY = currentClickedElement.value?.y
+    const clickedWidth = currentClickedElement.value?.width
+    const clickedHeight = currentClickedElement.value?.height
+
+    // 每个块有六条线
+    // 1.如果当前某条线已经出现，那么就不再吸附那个线
+    // 2.如果当前某条线没有出现，那么就还可以吸附
+
+    for (const cell of store.gridCells) {
+      if (cell?.id === currentClickedElement.value?.id)
+        return [0, 0, 0, 0, 0, 0]
+
+      // 2.获取所有偏移的x和y值
+      const cellTX = cell.x // cell translate x
+      if ((Math.abs(cellTX) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX) + DEVIATION)) {
+        // 都是左边
+        const xClickedAndCell = currentClickedElement.value.x - cellTX
+        currentClickedElement.value.width = currentClickedElement.value.width + xClickedAndCell
+
+        currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${cellTX}, ${clickedTY})`
+        attachedLine.value.l.push({ ...cell, type: 0 })
+
+        break
+      }
+      else {
+        attachedLine.value.l = []
+      }
+    }
     // 每个块有六条线
     // 1.如果当前某条线已经出现，那么就不再吸附那个线
     // 2.如果当前某条线没有出现，那么就还可以吸附
@@ -353,31 +420,6 @@ export function initGridContainer(
     else {
       // 说明当前left线没有，需要添加左吸附线
     }
-    const coordinateArr = store.gridCells.map((cell) => {
-      // 首先将它自己排除
-      if (cell?.cfg?.id === currentClickedElement.value?.cfg?.id)
-        return [0, 0, 0, 0, 0, 0]
-
-      // 2.获取所有偏移的x和y值
-      let cellTX = 0 // cell translate x
-      let cellTY = 0 // cell translate y
-      const cellWidth = cell?.cfg?.width // cell translate y
-      const cellHeight = cell?.cfg?.height // cell translate y
-      if (cell?.cfg?.transform) {
-        const matrixVariable = cell?.cfg?.transform.match(/matrix\((.*)\)/)[1]?.split(',')
-        cellTX = Number(matrixVariable.at(-2))
-        cellTY = Number(matrixVariable.at(-1))
-      }
-
-      return [
-        Math.abs(cellTX), // 左
-        Math.abs(cellTX + cellWidth), // 右
-        Math.abs(cellTX + (cellWidth) / 2), // 中间线
-        Math.abs(cellTY), // 上
-        Math.abs(cellTY + cellHeight), // 下
-        Math.abs(cellTY + (cellHeight) / 2), // 中间线
-      ]
-    })
   }
 
   return GridContainer
