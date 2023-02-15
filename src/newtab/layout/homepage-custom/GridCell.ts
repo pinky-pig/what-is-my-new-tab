@@ -46,8 +46,8 @@ export class GridCell {
         const getStyle = computed(() => {
           return {
             position: 'fixed',
-            left: `${_this.cfg.value.x}px`,
-            top: `${_this.cfg.value.y}px`,
+            // left: `${_this.cfg.value.x}px`,
+            // top: `${_this.cfg.value.y}px`,
             width: `${_this.cfg.value.width}px`,
             height: `${_this.cfg.value.height}px`,
             background: '#fca98690',

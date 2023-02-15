@@ -232,6 +232,8 @@ export function initGridContainer(
         }
         const offsetX = lastTranslateX + (pt.clientX - oriPt.clientX)
         const offsetY = lastTranslateY + (pt.clientY - oriPt.clientY)
+        currentClickedElement.value.cfg.x = offsetX
+        currentClickedElement.value.cfg.y = offsetY
         currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${offsetX}, ${offsetY})`
       }
       else if (transformMode === 'Scale') {
@@ -246,13 +248,18 @@ export function initGridContainer(
         // 😅 开始变形！~
         if (currentScaleType === 'left') {
           const disX = (pt.clientX - oriPt.clientX)
+          currentClickedElement.value.cfg.x = lastTranslateX + disX
+          currentClickedElement.value.cfg.y = lastTranslateY
           currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${lastTranslateX + disX}, ${lastTranslateY})`
           currentClickedElement.value.cfg.width = currentClickedElement.value.cfg.width - disX
         }
         if (currentScaleType === 'right')
           currentClickedElement.value.cfg.width = currentClickedElement.value.cfg.width + (pt.clientX - oriPt.clientX)
+
         if (currentScaleType === 'top') {
           const disY = (pt.clientY - oriPt.clientY)
+          currentClickedElement.value.cfg.x = lastTranslateX
+          currentClickedElement.value.cfg.y = lastTranslateY + disY
           currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${lastTranslateX}, ${lastTranslateY + disY})`
           currentClickedElement.value.cfg.height = currentClickedElement.value.cfg.height - disY
         }
@@ -262,6 +269,9 @@ export function initGridContainer(
         // 😅 角落两个同时变形！~ （就是将上面单个的两个为一组组合一下）
         if (currentScaleType === 'bottom_left') {
           const disX = (pt.clientX - oriPt.clientX)
+          currentClickedElement.value.cfg.x = lastTranslateX + disX
+          currentClickedElement.value.cfg.y = lastTranslateY
+
           currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${lastTranslateX + disX}, ${lastTranslateY})`
           currentClickedElement.value.cfg.width = currentClickedElement.value.cfg.width - disX
           currentClickedElement.value.cfg.height = currentClickedElement.value.cfg.height + (pt.clientY - oriPt.clientY)
@@ -273,12 +283,16 @@ export function initGridContainer(
         if (currentScaleType === 'top_left') {
           const disX = (pt.clientX - oriPt.clientX)
           const disY = (pt.clientY - oriPt.clientY)
+          currentClickedElement.value.cfg.x = lastTranslateX + disX
+          currentClickedElement.value.cfg.y = lastTranslateY + disY
           currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1,  ${lastTranslateX + disX}, ${lastTranslateY + disY})`
           currentClickedElement.value.cfg.width = currentClickedElement.value.cfg.width - disX
           currentClickedElement.value.cfg.height = currentClickedElement.value.cfg.height - disY
         }
         if (currentScaleType === 'top_right') {
           const disY = (pt.clientY - oriPt.clientY)
+          currentClickedElement.value.cfg.x = lastTranslateX
+          currentClickedElement.value.cfg.y = lastTranslateY + disY
           currentClickedElement.value.cfg.transform = `matrix(1, 0, 0, 1, ${lastTranslateX}, ${lastTranslateY + disY})`
           currentClickedElement.value.cfg.height = currentClickedElement.value.cfg.height - disY
           currentClickedElement.value.cfg.width = currentClickedElement.value.cfg.width + (pt.clientX - oriPt.clientX)

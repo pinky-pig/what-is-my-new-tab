@@ -11,8 +11,8 @@ const rectLineData = ref([
   {
     name: 'line_top_scale',
     bounds: {
-      x: computed(() => (props.currentClickedElement?.cfg?.x) || 0),
-      y: computed(() => (props.currentClickedElement?.cfg?.y - borderWidth / 2) || 0),
+      x: computed(() => (0) || 0),
+      y: computed(() => (0 - borderWidth / 2) || 0),
       width: computed(() => props.currentClickedElement?.cfg?.width || 0),
       height: 10,
     },
@@ -24,8 +24,8 @@ const rectLineData = ref([
   {
     name: 'line_bottom_scale',
     bounds: {
-      x: computed(() => props.currentClickedElement?.cfg?.x || 0),
-      y: computed(() => (props.currentClickedElement?.cfg?.y + props.currentClickedElement?.cfg?.height - borderWidth / 2) || 0),
+      x: computed(() => 0 || 0),
+      y: computed(() => (0 + props.currentClickedElement?.cfg?.height - borderWidth / 2) || 0),
       width: computed(() => props.currentClickedElement?.cfg?.width || 0),
       height: 10,
     },
@@ -37,8 +37,8 @@ const rectLineData = ref([
   {
     name: 'line_left_scale',
     bounds: {
-      x: computed(() => (props.currentClickedElement?.cfg?.x - borderWidth / 2) || 0),
-      y: computed(() => props.currentClickedElement?.cfg?.y || 0),
+      x: computed(() => (0 - borderWidth / 2) || 0),
+      y: computed(() => 0 || 0),
       width: 10,
       height: computed(() => props.currentClickedElement?.cfg?.height || 0),
     },
@@ -50,8 +50,8 @@ const rectLineData = ref([
   {
     name: 'line_right_scale',
     bounds: {
-      x: computed(() => (props.currentClickedElement?.cfg?.x + props.currentClickedElement?.cfg?.width - borderWidth / 2) || 0),
-      y: computed(() => props.currentClickedElement?.cfg?.y || 0),
+      x: computed(() => (0 + props.currentClickedElement?.cfg?.width - borderWidth / 2) || 0),
+      y: computed(() => 0 || 0),
       width: 10,
       height: computed(() => props.currentClickedElement?.cfg?.height || 0),
     },
@@ -67,8 +67,8 @@ const rectCornerScaleData = ref([
   {
     name: 'corner_top_left_scale',
     bounds: {
-      x: computed(() => (props.currentClickedElement?.cfg?.x - borderWidth / 2) || 0),
-      y: computed(() => (props.currentClickedElement?.cfg?.y - borderWidth / 2) || 0),
+      x: computed(() => (0 - borderWidth / 2) || 0),
+      y: computed(() => (0 - borderWidth / 2) || 0),
       width: 10,
       height: 10,
     },
@@ -80,8 +80,8 @@ const rectCornerScaleData = ref([
   {
     name: 'corner_top_right_scale',
     bounds: {
-      x: computed(() => (props.currentClickedElement?.cfg?.x + props.currentClickedElement?.cfg?.width - borderWidth / 2) || 0),
-      y: computed(() => (props.currentClickedElement?.cfg?.y - borderWidth / 2) || 0),
+      x: computed(() => (0 + props.currentClickedElement?.cfg?.width - borderWidth / 2) || 0),
+      y: computed(() => (0 - borderWidth / 2) || 0),
       width: 10,
       height: 10,
     },
@@ -93,8 +93,8 @@ const rectCornerScaleData = ref([
   {
     name: 'corner_bottom_left_scale',
     bounds: {
-      x: computed(() => (props.currentClickedElement?.cfg?.x - borderWidth / 2) || 0),
-      y: computed(() => (props.currentClickedElement?.cfg?.y + props.currentClickedElement?.cfg?.height - borderWidth / 2) || 0),
+      x: computed(() => (0 - borderWidth / 2) || 0),
+      y: computed(() => (0 + props.currentClickedElement?.cfg?.height - borderWidth / 2) || 0),
       width: 10,
       height: 10,
     },
@@ -106,8 +106,8 @@ const rectCornerScaleData = ref([
   {
     name: 'corner_bottom_right_scale',
     bounds: {
-      x: computed(() => (props.currentClickedElement?.cfg?.x + props.currentClickedElement?.cfg?.width - borderWidth / 2) || 0),
-      y: computed(() => (props.currentClickedElement?.cfg?.y + props.currentClickedElement?.cfg?.height - borderWidth / 2) || 0),
+      x: computed(() => (0 + props.currentClickedElement?.cfg?.width - borderWidth / 2) || 0),
+      y: computed(() => (0 + props.currentClickedElement?.cfg?.height - borderWidth / 2) || 0),
       width: 10,
       height: 10,
     },
@@ -385,8 +385,8 @@ function handleAttachedLineMiddleHorizontal(middleHorizontalArr: any[]) {
     <g>
       <rect
         :style="{ opacity: 1, transform: props.currentClickedElement?.cfg.transform }"
-        :x="props.currentClickedElement?.cfg.x"
-        :y="props.currentClickedElement?.cfg.y"
+        :x="0"
+        :y="0"
         :width="props.currentClickedElement?.cfg.width"
         :height="props.currentClickedElement?.cfg.height"
         fill="#2f80ed40"
