@@ -1,6 +1,16 @@
 <!-- eslint-disable no-console -->
 <script setup lang="ts">
-import type { GridCellType } from './GridCell'
+interface GridCellType {
+  id: string
+  x: number
+  y: number
+  width: number
+  height: number
+  isLocked: boolean // 是否锁定
+  showMode: number
+  transform: string
+  children?: any
+}
 
 const props = defineProps(['currentClickedElement', 'attachedLine'])
 // const emits = defineEmits(['update:modelValue'])
@@ -13,25 +23,25 @@ const rectLineData = ref([
     bounds: {
       x: computed(() => (0) || 0),
       y: computed(() => (0 - borderWidth / 2) || 0),
-      width: computed(() => props.currentClickedElement?.cfg?.width || 0),
+      width: computed(() => props.currentClickedElement?.width || 0),
       height: 10,
     },
     style: {
       cursor: 'ns-resize',
-      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
+      transform: computed(() => (props.currentClickedElement?.transform)),
     },
   },
   {
     name: 'line_bottom_scale',
     bounds: {
       x: computed(() => 0 || 0),
-      y: computed(() => (0 + props.currentClickedElement?.cfg?.height - borderWidth / 2) || 0),
-      width: computed(() => props.currentClickedElement?.cfg?.width || 0),
+      y: computed(() => (0 + props.currentClickedElement?.height - borderWidth / 2) || 0),
+      width: computed(() => props.currentClickedElement?.width || 0),
       height: 10,
     },
     style: {
       cursor: 'ns-resize',
-      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
+      transform: computed(() => (props.currentClickedElement?.transform)),
     },
   },
   {
@@ -40,24 +50,24 @@ const rectLineData = ref([
       x: computed(() => (0 - borderWidth / 2) || 0),
       y: computed(() => 0 || 0),
       width: 10,
-      height: computed(() => props.currentClickedElement?.cfg?.height || 0),
+      height: computed(() => props.currentClickedElement?.height || 0),
     },
     style: {
       cursor: 'ew-resize',
-      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
+      transform: computed(() => (props.currentClickedElement?.transform)),
     },
   },
   {
     name: 'line_right_scale',
     bounds: {
-      x: computed(() => (0 + props.currentClickedElement?.cfg?.width - borderWidth / 2) || 0),
+      x: computed(() => (0 + props.currentClickedElement?.width - borderWidth / 2) || 0),
       y: computed(() => 0 || 0),
       width: 10,
-      height: computed(() => props.currentClickedElement?.cfg?.height || 0),
+      height: computed(() => props.currentClickedElement?.height || 0),
     },
     style: {
       cursor: 'ew-resize',
-      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
+      transform: computed(() => (props.currentClickedElement?.transform)),
     },
   },
 ])
@@ -74,46 +84,46 @@ const rectCornerScaleData = ref([
     },
     style: {
       cursor: 'nwse-resize',
-      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
+      transform: computed(() => (props.currentClickedElement?.transform)),
     },
   },
   {
     name: 'corner_top_right_scale',
     bounds: {
-      x: computed(() => (0 + props.currentClickedElement?.cfg?.width - borderWidth / 2) || 0),
+      x: computed(() => (0 + props.currentClickedElement?.width - borderWidth / 2) || 0),
       y: computed(() => (0 - borderWidth / 2) || 0),
       width: 10,
       height: 10,
     },
     style: {
       cursor: 'nesw-resize',
-      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
+      transform: computed(() => (props.currentClickedElement?.transform)),
     },
   },
   {
     name: 'corner_bottom_left_scale',
     bounds: {
       x: computed(() => (0 - borderWidth / 2) || 0),
-      y: computed(() => (0 + props.currentClickedElement?.cfg?.height - borderWidth / 2) || 0),
+      y: computed(() => (0 + props.currentClickedElement?.height - borderWidth / 2) || 0),
       width: 10,
       height: 10,
     },
     style: {
       cursor: 'nesw-resize',
-      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
+      transform: computed(() => (props.currentClickedElement?.transform)),
     },
   },
   {
     name: 'corner_bottom_right_scale',
     bounds: {
-      x: computed(() => (0 + props.currentClickedElement?.cfg?.width - borderWidth / 2) || 0),
-      y: computed(() => (0 + props.currentClickedElement?.cfg?.height - borderWidth / 2) || 0),
+      x: computed(() => (0 + props.currentClickedElement?.width - borderWidth / 2) || 0),
+      y: computed(() => (0 + props.currentClickedElement?.height - borderWidth / 2) || 0),
       width: 10,
       height: 10,
     },
     style: {
       cursor: 'nwse-resize',
-      transform: computed(() => (props.currentClickedElement?.cfg?.transform)),
+      transform: computed(() => (props.currentClickedElement?.transform)),
     },
   },
 ])
@@ -158,7 +168,7 @@ function handleAttachedLineLeft(leftArr: any[]) {
   // 如果数组不为空，说明有左吸附线
   if (leftArr.length > 0) {
     // 1.计算x值
-    const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
+    const clickedElementRect = getXYFromTransform(props.currentClickedElement)
     // const xPosition = clickedElementRect.x
     const firstDataRect = getXYFromTransform(leftArr[0])
     const xPosition = leftArr[0].type === 0 ? firstDataRect.x : firstDataRect.x + firstDataRect.width
@@ -166,7 +176,7 @@ function handleAttachedLineLeft(leftArr: any[]) {
     // 2.计算y值
     let minY = clickedElementRect.y
     let maxY = clickedElementRect.y + clickedElementRect.height
-    const lLineArr = [...leftArr, props.currentClickedElement?.cfg]
+    const lLineArr = [...leftArr, props.currentClickedElement]
     if (lLineArr.length > 0) {
       // 获取每个对象的matrix值
       for (let i = 0; i < lLineArr.length; i++) {
@@ -195,7 +205,7 @@ function handleAttachedLineRight(rightArr: any[]) {
   // 如果数组不为空，说明有左吸附线
   if (rightArr.length > 0) {
     // 1.计算x值
-    const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
+    const clickedElementRect = getXYFromTransform(props.currentClickedElement)
     // const xPosition = clickedElementRect.x + clickedElementRect.width
 
     const firstDataRect = getXYFromTransform(rightArr[0])
@@ -204,7 +214,7 @@ function handleAttachedLineRight(rightArr: any[]) {
     // 2.计算y值
     let minY = clickedElementRect.y
     let maxY = clickedElementRect.y + clickedElementRect.height
-    const lLineArr = [...rightArr, props.currentClickedElement?.cfg]
+    const lLineArr = [...rightArr, props.currentClickedElement]
     if (lLineArr.length > 0) {
       // 获取每个对象的matrix值
       for (let i = 0; i < lLineArr.length; i++) {
@@ -233,7 +243,7 @@ function handleAttachedLineMiddleVertical(middleVerticalArr: any[]) {
   // 如果数组不为空，说明有左吸附线
   if (middleVerticalArr.length > 0) {
     // 1.计算x值
-    const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
+    const clickedElementRect = getXYFromTransform(props.currentClickedElement)
     // const xPosition = clickedElementRect.x + clickedElementRect.width / 2
     const firstDataRect = getXYFromTransform(middleVerticalArr[0])
     const xPosition = firstDataRect.x + firstDataRect.width / 2
@@ -241,7 +251,7 @@ function handleAttachedLineMiddleVertical(middleVerticalArr: any[]) {
     // 2.计算y值
     let minY = clickedElementRect.y
     let maxY = clickedElementRect.y + clickedElementRect.height
-    const lLineArr = [...middleVerticalArr, props.currentClickedElement?.cfg]
+    const lLineArr = [...middleVerticalArr, props.currentClickedElement]
     if (lLineArr.length > 0) {
       // 获取每个对象的matrix值
       for (let i = 0; i < lLineArr.length; i++) {
@@ -270,7 +280,7 @@ function handleAttachedLineTop(topArr: any[]) {
   // 如果数组不为空，说明有左吸附线
   if (topArr.length > 0) {
     // 1.计算y值
-    const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
+    const clickedElementRect = getXYFromTransform(props.currentClickedElement)
     // const yPosition = clickedElementRect.y
 
     const firstDataRect = getXYFromTransform(topArr[0])
@@ -279,7 +289,7 @@ function handleAttachedLineTop(topArr: any[]) {
     // 2.计算x值
     let minX = clickedElementRect.x
     let maxX = clickedElementRect.x + clickedElementRect.width
-    const lLineArr = [...topArr, props.currentClickedElement?.cfg]
+    const lLineArr = [...topArr, props.currentClickedElement]
     if (lLineArr.length > 0) {
       // 获取每个对象的matrix值
       for (let i = 0; i < lLineArr.length; i++) {
@@ -308,7 +318,7 @@ function handleAttachedLineBottom(bottomArr: any[]) {
   // 如果数组不为空，说明有左吸附线
   if (bottomArr.length > 0) {
     // 1.计算y值
-    const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
+    const clickedElementRect = getXYFromTransform(props.currentClickedElement)
     // const yPosition = clickedElementRect.y + clickedElementRect.height
 
     const firstDataRect = getXYFromTransform(bottomArr[0])
@@ -317,7 +327,7 @@ function handleAttachedLineBottom(bottomArr: any[]) {
     // 2.计算x值
     let minX = clickedElementRect.x
     let maxX = clickedElementRect.x + clickedElementRect.width
-    const lLineArr = [...bottomArr, props.currentClickedElement?.cfg]
+    const lLineArr = [...bottomArr, props.currentClickedElement]
     if (lLineArr.length > 0) {
       // 获取每个对象的matrix值
       for (let i = 0; i < lLineArr.length; i++) {
@@ -345,7 +355,7 @@ function handleAttachedLineMiddleHorizontal(middleHorizontalArr: any[]) {
   // 如果数组不为空，说明有左吸附线
   if (middleHorizontalArr.length > 0) {
     // 1.计算y值
-    const clickedElementRect = getXYFromTransform(props.currentClickedElement?.cfg)
+    const clickedElementRect = getXYFromTransform(props.currentClickedElement)
     // const yPosition = clickedElementRect.y + clickedElementRect.height / 2
     const firstDataRect = getXYFromTransform(middleHorizontalArr[0])
     const yPosition = firstDataRect.y + firstDataRect.height / 2
@@ -353,7 +363,7 @@ function handleAttachedLineMiddleHorizontal(middleHorizontalArr: any[]) {
     // 2.计算x值
     let minX = clickedElementRect.x
     let maxX = clickedElementRect.x + clickedElementRect.width
-    const lLineArr = [...middleHorizontalArr, props.currentClickedElement?.cfg]
+    const lLineArr = [...middleHorizontalArr, props.currentClickedElement]
     if (lLineArr.length > 0) {
       // 获取每个对象的matrix值
       for (let i = 0; i < lLineArr.length; i++) {
@@ -384,11 +394,11 @@ function handleAttachedLineMiddleHorizontal(middleHorizontalArr: any[]) {
     <!-- bounds -->
     <g>
       <rect
-        :style="{ opacity: 1, transform: props.currentClickedElement?.cfg.transform }"
+        :style="{ opacity: 1, transform: props.currentClickedElement?.transform }"
         :x="0"
         :y="0"
-        :width="props.currentClickedElement?.cfg.width"
-        :height="props.currentClickedElement?.cfg.height"
+        :width="props.currentClickedElement?.width"
+        :height="props.currentClickedElement?.height"
         fill="#2f80ed40"
         stroke="#2f80ed"
         stroke-width="3px"
