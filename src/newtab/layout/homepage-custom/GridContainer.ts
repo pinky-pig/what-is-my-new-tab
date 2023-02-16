@@ -227,6 +227,7 @@ export function initGridContainer(
         const lastTranslateX = currentClickedElement.value.x
         const lastTranslateY = currentClickedElement.value.y
         const disX = (pt.clientX - oriPt.clientX)
+        const disY = (pt.clientY - oriPt.clientY)
 
         // 😅 开始变形！~
         if (currentScaleType === 'left') {
@@ -276,17 +277,55 @@ export function initGridContainer(
               createAttachedLineForScale()
             }
           }
-          // currentClickedElement.value.width = currentClickedElement.value.width + (pt.clientX - oriPt.clientX)
         }
 
         if (currentScaleType === 'top') {
-          const disY = (pt.clientY - oriPt.clientY)
-          currentClickedElement.value.x = lastTranslateX
-          currentClickedElement.value.y = lastTranslateY + disY
-          currentClickedElement.value.height = currentClickedElement.value.height - disY
+          if (attachedLine.value.t.length === 0) {
+            // 说明没有左边线
+            currentClickedElement.value.y += disY
+            currentClickedElement.value.height -= disY
+            createAttachedLineForScale()
+          }
+          else {
+            // 说明有左边线。因为左边线可能出现在其他元素的左边或者右边，所以有两个判断，加其他元素的宽度
+            const top = attachedLine.value.t[0]
+            if (
+              ((Math.abs(top.y) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y) + DEVIATION))
+              || ((Math.abs(top.y + top.width) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y + top.height) + DEVIATION))
+            ) {
+              // 在误差内。不能缩放了
+              return
+            }
+            else {
+              // disX是当前的减去上次的。偏移值和宽度一个增加一个必然就减小
+              currentClickedElement.value.y += disY
+              currentClickedElement.value.height -= disY
+              createAttachedLineForScale()
+            }
+          }
         }
-        if (currentScaleType === 'bottom')
-          currentClickedElement.value.height = currentClickedElement.value.height + (pt.clientY - oriPt.clientY)
+        if (currentScaleType === 'bottom') {
+          if (attachedLine.value.b.length === 0) {
+            // 说明没有右边线
+            currentClickedElement.value.height += (pt.clientY - oriPt.clientY)
+            createAttachedLineForScale()
+          }
+          else {
+            // 说明有右边线。因为左边线可能出现在其他元素的左边或者右边，所以有两个判断，加其他元素的宽度
+            const bottom = attachedLine.value.b[0]
+            if (
+              ((Math.abs(bottom.y) - DEVIATION) < (currentClickedElement.value.y + currentClickedElement.value.height + disY) && (currentClickedElement.value.y + currentClickedElement.value.height + disY) < (Math.abs(bottom.y) + DEVIATION))
+              || ((Math.abs(bottom.y + bottom.height) - DEVIATION) < (currentClickedElement.value.y + currentClickedElement.value.height + disY) && (currentClickedElement.value.y + currentClickedElement.value.height + disY) < (Math.abs(bottom.y + bottom.height) + DEVIATION))
+            ) {
+              // 在误差内。不能缩放了
+              return
+            }
+            else {
+              currentClickedElement.value.height += (pt.clientY - oriPt.clientY)
+              createAttachedLineForScale()
+            }
+          }
+        }
 
         // 😅 角落两个同时变形！~ （就是将上面单个的两个为一组组合一下）
         if (currentScaleType === 'bottom_left') {
@@ -328,6 +367,9 @@ export function initGridContainer(
     previousEvent = null
     // currentClickedElement.value = null
     saveCanvasLayoutData()
+
+    for (const key in attachedLine.value)
+      attachedLine.value[key] = []
   }
   /**
    * 通过坐标位置获取当前对象
@@ -352,55 +394,135 @@ export function initGridContainer(
 
     for (const cell of store.gridCells) {
       if (cell?.id !== currentClickedElement.value?.id) {
-        // 1.当前元素的左吸附线
-        if (attachedLine.value.l.length <= 0) {
-          // cell的左边
-          if ((Math.abs(cell.x) - DEVIATION) < currentClickedElement.value?.x && currentClickedElement.value?.x < (Math.abs(cell.x) + DEVIATION)) {
-            const disX = cell.x - currentClickedElement.value.x
-            currentClickedElement.value.x += disX
-            currentClickedElement.value.width -= disX
-            attachedLine.value.l.push({ ...cell, type: 0 })
+        if (currentScaleType === 'left') {
+          const result = generateLeftLine()
+          if (result === 1)
             break
-          }
-          // cell的右边
-          if (
-            (Math.abs(cell.x + cell.width) - DEVIATION) < currentClickedElement.value?.x
-            && currentClickedElement.value?.x < (Math.abs(cell.x + cell.width) + DEVIATION)
-          ) {
-            const disX = cell.x + cell.width - currentClickedElement.value.x
-            currentClickedElement.value.x += disX
-            currentClickedElement.value.width -= disX
-            attachedLine.value.l.push({ ...cell, type: 1 })
-            break
-          }
         }
-        else {
-          attachedLine.value.l = []
+        else if (currentScaleType === 'right') {
+          const result = generateRightLine()
+          if (result === 1)
+            break
+        }
+        else if (currentScaleType === 'top') {
+          const result = generateTopLine()
+          if (result === 1)
+            break
+        }
+        else if (currentScaleType === 'bottom') {
+          const result = generateBottomLine()
+          if (result === 1)
+            break
         }
 
-        // 2.当前元素的右吸附线
-        if (attachedLine.value.r.length <= 0) {
-          // cell的左边
-          if ((Math.abs(cell.x) - DEVIATION) < (currentClickedElement.value?.x + currentClickedElement.value?.width) && (currentClickedElement.value?.x + currentClickedElement.value?.width) < (Math.abs(cell.x) + DEVIATION)) {
-            const disX = cell.x - (currentClickedElement.value.x + currentClickedElement.value.width)
-            currentClickedElement.value.width += disX
-            attachedLine.value.r.push({ ...cell, type: 0 })
-            break
+        function generateLeftLine() {
+          if (attachedLine.value.l.length <= 0) {
+            // cell的左边
+            if ((Math.abs(cell.x) - DEVIATION) < currentClickedElement.value?.x && currentClickedElement.value?.x < (Math.abs(cell.x) + DEVIATION)) {
+              const disX = cell.x - currentClickedElement.value.x
+              currentClickedElement.value.x += disX
+              currentClickedElement.value.width -= disX
+              attachedLine.value.l.push({ ...cell, type: 0 })
+              return 1
+            }
+            // cell的右边
+            if (
+              (Math.abs(cell.x + cell.width) - DEVIATION) < currentClickedElement.value?.x
+              && currentClickedElement.value?.x < (Math.abs(cell.x + cell.width) + DEVIATION)
+            ) {
+              const disX = cell.x + cell.width - currentClickedElement.value.x
+              currentClickedElement.value.x += disX
+              currentClickedElement.value.width -= disX
+              attachedLine.value.l.push({ ...cell, type: 1 })
+              return 1
+            }
           }
-          // cell的右边
-          if (
-            (Math.abs(cell.x + cell.width) - DEVIATION) < (currentClickedElement.value.x + currentClickedElement.value.width)
-            && (currentClickedElement.value.x + currentClickedElement.value.width) < (Math.abs(cell.x + cell.width) + DEVIATION)
-          ) {
-            const disX = (cell.x + cell.width) - (currentClickedElement.value.x + currentClickedElement.value.width)
-            currentClickedElement.value.width += disX
-            attachedLine.value.r.push({ ...cell, type: 1 })
-
-            break
+          else {
+            attachedLine.value.l = []
+            return 0
           }
         }
-        else {
-          attachedLine.value.r = []
+
+        function generateRightLine() {
+          // 2.当前元素的右吸附线
+          if (attachedLine.value.r.length <= 0) {
+            // cell的左边
+            if ((Math.abs(cell.x) - DEVIATION) < (currentClickedElement.value?.x + currentClickedElement.value?.width) && (currentClickedElement.value?.x + currentClickedElement.value?.width) < (Math.abs(cell.x) + DEVIATION)) {
+              const disX = cell.x - (currentClickedElement.value.x + currentClickedElement.value.width)
+              currentClickedElement.value.width += disX
+              attachedLine.value.r.push({ ...cell, type: 0 })
+              return 1
+            }
+            // cell的右边
+            if (
+              (Math.abs(cell.x + cell.width) - DEVIATION) < (currentClickedElement.value.x + currentClickedElement.value.width)
+              && (currentClickedElement.value.x + currentClickedElement.value.width) < (Math.abs(cell.x + cell.width) + DEVIATION)
+            ) {
+              const disX = (cell.x + cell.width) - (currentClickedElement.value.x + currentClickedElement.value.width)
+              currentClickedElement.value.width += disX
+              attachedLine.value.r.push({ ...cell, type: 1 })
+              return 1
+            }
+          }
+          else {
+            attachedLine.value.r = []
+            return 0
+          }
+        }
+
+        function generateTopLine() {
+          if (attachedLine.value.t.length <= 0) {
+            // cell的上边
+            if ((Math.abs(cell.y) - DEVIATION) < currentClickedElement.value?.y && currentClickedElement.value?.y < (Math.abs(cell.y) + DEVIATION)) {
+              const disY = cell.y - currentClickedElement.value.y
+              currentClickedElement.value.y += disY
+              currentClickedElement.value.height -= disY
+              attachedLine.value.t.push({ ...cell, type: 0 })
+              return 1
+            }
+            // cell的下边
+            if (
+              (Math.abs(cell.y + cell.height) - DEVIATION) < currentClickedElement.value?.y
+              && currentClickedElement.value?.y < (Math.abs(cell.y + cell.height) + DEVIATION)
+            ) {
+              const disY = cell.y + cell.height - currentClickedElement.value.y
+              currentClickedElement.value.y += disY
+              currentClickedElement.value.height -= disY
+              attachedLine.value.t.push({ ...cell, type: 1 })
+              return 1
+            }
+          }
+          else {
+            attachedLine.value.t = []
+            return 0
+          }
+        }
+
+        function generateBottomLine() {
+          // 2.当前元素的右吸附线
+          if (attachedLine.value.b.length <= 0) {
+            // cell的左边
+            if ((Math.abs(cell.y) - DEVIATION) < (currentClickedElement.value?.y + currentClickedElement.value?.height) && (currentClickedElement.value?.y + currentClickedElement.value?.height) < (Math.abs(cell.y) + DEVIATION)) {
+              const disY = cell.y - (currentClickedElement.value.y + currentClickedElement.value.height)
+              currentClickedElement.value.height += disY
+              attachedLine.value.b.push({ ...cell, type: 0 })
+              return 1
+            }
+            // cell的右边
+            if (
+              (Math.abs(cell.y + cell.height) - DEVIATION) < (currentClickedElement.value.y + currentClickedElement.value.height)
+              && (currentClickedElement.value.y + currentClickedElement.value.height) < (Math.abs(cell.y + cell.height) + DEVIATION)
+            ) {
+              const disY = (cell.y + cell.height) - (currentClickedElement.value.y + currentClickedElement.value.height)
+              currentClickedElement.value.height += disY
+              attachedLine.value.b.push({ ...cell, type: 1 })
+              return 1
+            }
+          }
+          else {
+            attachedLine.value.b = []
+            return 0
+          }
         }
       }
     }
