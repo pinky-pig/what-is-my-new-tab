@@ -234,6 +234,7 @@ export function initGridContainer(
             // 说明没有左边线
             currentClickedElement.value.x += disX
             currentClickedElement.value.width -= disX
+            console.log(333)
             createAttachedLineForScale()
           }
           else {
@@ -247,6 +248,8 @@ export function initGridContainer(
               return
             }
             else {
+              console.log(444)
+
               // disX是当前的减去上次的。偏移值和宽度一个增加一个必然就减小
               currentClickedElement.value.x += disX
               currentClickedElement.value.width -= disX
@@ -330,34 +333,32 @@ export function initGridContainer(
     // 也就是说，当没有线的时候，并且在线段附近才能有吸附功能
 
     for (const cell of store.gridCells) {
-      if (cell?.id === currentClickedElement.value?.id)
-        return [0, 0, 0, 0, 0, 0]
-
-      if (attachedLine.value.l.length <= 0) {
-        // 1.当前元素的左吸附线
-        // cell的左边
-        if ((Math.abs(cell.x) - DEVIATION) < currentClickedElement.value?.x && currentClickedElement.value?.x < (Math.abs(cell.x) + DEVIATION)) {
-          const disX = cell.x - currentClickedElement.value.x
-          currentClickedElement.value.x += disX
-          currentClickedElement.value.width -= disX
-          attachedLine.value.l.push({ ...cell, type: 0 })
-          break
+      if (cell?.id !== currentClickedElement.value?.id) {
+        if (attachedLine.value.l.length <= 0) {
+          // 1.当前元素的左吸附线
+          // cell的左边
+          if ((Math.abs(cell.x) - DEVIATION) < currentClickedElement.value?.x && currentClickedElement.value?.x < (Math.abs(cell.x) + DEVIATION)) {
+            const disX = cell.x - currentClickedElement.value.x
+            currentClickedElement.value.x += disX
+            currentClickedElement.value.width -= disX
+            attachedLine.value.l.push({ ...cell, type: 0 })
+            break
+          }
+          // cell的右边
+          if (
+            (Math.abs(cell.x + cell.width) - DEVIATION) < currentClickedElement.value?.x
+            && currentClickedElement.value?.x < (Math.abs(cell.x + cell.width) + DEVIATION)
+          ) {
+            const disX = cell.x + cell.width - currentClickedElement.value.x
+            currentClickedElement.value.x += disX
+            currentClickedElement.value.width -= disX
+            attachedLine.value.l.push({ ...cell, type: 1 })
+            break
+          }
         }
-        // cell的右边
-        if (
-          (Math.abs(cell.x + cell.width) - DEVIATION) < currentClickedElement.value?.x
-          && currentClickedElement.value?.x < (Math.abs(cell.x + cell.width) + DEVIATION)
-        ) {
-          const disX = cell.x + cell.width - currentClickedElement.value.x
-          currentClickedElement.value.x += disX
-          currentClickedElement.value.width -= disX
-          attachedLine.value.l.push({ ...cell, type: 1 })
-          break
+        else {
+          attachedLine.value.l = []
         }
-      }
-
-      else {
-        attachedLine.value.l = []
       }
     }
   }
