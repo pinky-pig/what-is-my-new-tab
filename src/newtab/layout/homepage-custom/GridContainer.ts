@@ -234,7 +234,6 @@ export function initGridContainer(
             // 说明没有左边线
             currentClickedElement.value.x += disX
             currentClickedElement.value.width -= disX
-            console.log(333)
             createAttachedLineForScale()
           }
           else {
@@ -248,8 +247,6 @@ export function initGridContainer(
               return
             }
             else {
-              console.log(444)
-
               // disX是当前的减去上次的。偏移值和宽度一个增加一个必然就减小
               currentClickedElement.value.x += disX
               currentClickedElement.value.width -= disX
@@ -258,8 +255,29 @@ export function initGridContainer(
           }
         }
 
-        if (currentScaleType === 'right')
-          currentClickedElement.value.width = currentClickedElement.value.width + (pt.clientX - oriPt.clientX)
+        if (currentScaleType === 'right') {
+          if (attachedLine.value.r.length === 0) {
+            // 说明没有右边线
+            currentClickedElement.value.width += (pt.clientX - oriPt.clientX)
+            createAttachedLineForScale()
+          }
+          else {
+            // 说明有右边线。因为左边线可能出现在其他元素的左边或者右边，所以有两个判断，加其他元素的宽度
+            const right = attachedLine.value.r[0]
+            if (
+              ((Math.abs(right.x) - DEVIATION) < (currentClickedElement.value.x + currentClickedElement.value.width + disX) && (currentClickedElement.value.x + currentClickedElement.value.width + disX) < (Math.abs(right.x) + DEVIATION))
+              || ((Math.abs(right.x + right.width) - DEVIATION) < (currentClickedElement.value.x + currentClickedElement.value.width + disX) && (currentClickedElement.value.x + currentClickedElement.value.width + disX) < (Math.abs(right.x + right.width) + DEVIATION))
+            ) {
+              // 在误差内。不能缩放了
+              return
+            }
+            else {
+              currentClickedElement.value.width += (pt.clientX - oriPt.clientX)
+              createAttachedLineForScale()
+            }
+          }
+          // currentClickedElement.value.width = currentClickedElement.value.width + (pt.clientX - oriPt.clientX)
+        }
 
         if (currentScaleType === 'top') {
           const disY = (pt.clientY - oriPt.clientY)
@@ -334,8 +352,8 @@ export function initGridContainer(
 
     for (const cell of store.gridCells) {
       if (cell?.id !== currentClickedElement.value?.id) {
+        // 1.当前元素的左吸附线
         if (attachedLine.value.l.length <= 0) {
-          // 1.当前元素的左吸附线
           // cell的左边
           if ((Math.abs(cell.x) - DEVIATION) < currentClickedElement.value?.x && currentClickedElement.value?.x < (Math.abs(cell.x) + DEVIATION)) {
             const disX = cell.x - currentClickedElement.value.x
@@ -358,6 +376,31 @@ export function initGridContainer(
         }
         else {
           attachedLine.value.l = []
+        }
+
+        // 2.当前元素的右吸附线
+        if (attachedLine.value.r.length <= 0) {
+          // cell的左边
+          if ((Math.abs(cell.x) - DEVIATION) < (currentClickedElement.value?.x + currentClickedElement.value?.width) && (currentClickedElement.value?.x + currentClickedElement.value?.width) < (Math.abs(cell.x) + DEVIATION)) {
+            const disX = cell.x - (currentClickedElement.value.x + currentClickedElement.value.width)
+            currentClickedElement.value.width += disX
+            attachedLine.value.r.push({ ...cell, type: 0 })
+            break
+          }
+          // cell的右边
+          if (
+            (Math.abs(cell.x + cell.width) - DEVIATION) < (currentClickedElement.value.x + currentClickedElement.value.width)
+            && (currentClickedElement.value.x + currentClickedElement.value.width) < (Math.abs(cell.x + cell.width) + DEVIATION)
+          ) {
+            const disX = (cell.x + cell.width) - (currentClickedElement.value.x + currentClickedElement.value.width)
+            currentClickedElement.value.width += disX
+            attachedLine.value.r.push({ ...cell, type: 1 })
+
+            break
+          }
+        }
+        else {
+          attachedLine.value.r = []
         }
       }
     }
