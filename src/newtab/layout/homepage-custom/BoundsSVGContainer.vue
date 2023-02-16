@@ -21,8 +21,8 @@ const rectLineData = ref([
   {
     name: 'line_top_scale',
     bounds: {
-      x: computed(() => (0) || 0),
-      y: computed(() => (0 - borderWidth / 2) || 0),
+      x: computed(() => (props.currentClickedElement?.x) || 0),
+      y: computed(() => (props.currentClickedElement?.y - borderWidth / 2) || 0),
       width: computed(() => props.currentClickedElement?.width || 0),
       height: 10,
     },
@@ -34,8 +34,8 @@ const rectLineData = ref([
   {
     name: 'line_bottom_scale',
     bounds: {
-      x: computed(() => 0 || 0),
-      y: computed(() => (0 + props.currentClickedElement?.height - borderWidth / 2) || 0),
+      x: computed(() => props.currentClickedElement?.x || 0),
+      y: computed(() => (props.currentClickedElement?.y + props.currentClickedElement?.height - borderWidth / 2) || 0),
       width: computed(() => props.currentClickedElement?.width || 0),
       height: 10,
     },
@@ -47,8 +47,8 @@ const rectLineData = ref([
   {
     name: 'line_left_scale',
     bounds: {
-      x: computed(() => (0 - borderWidth / 2) || 0),
-      y: computed(() => 0 || 0),
+      x: computed(() => (props.currentClickedElement?.x - borderWidth / 2) || 0),
+      y: computed(() => props.currentClickedElement?.y || 0),
       width: 10,
       height: computed(() => props.currentClickedElement?.height || 0),
     },
@@ -60,8 +60,8 @@ const rectLineData = ref([
   {
     name: 'line_right_scale',
     bounds: {
-      x: computed(() => (0 + props.currentClickedElement?.width - borderWidth / 2) || 0),
-      y: computed(() => 0 || 0),
+      x: computed(() => (props.currentClickedElement?.x + props.currentClickedElement?.width - borderWidth / 2) || 0),
+      y: computed(() => props.currentClickedElement?.y || 0),
       width: 10,
       height: computed(() => props.currentClickedElement?.height || 0),
     },
@@ -77,8 +77,8 @@ const rectCornerScaleData = ref([
   {
     name: 'corner_top_left_scale',
     bounds: {
-      x: computed(() => (0 - borderWidth / 2) || 0),
-      y: computed(() => (0 - borderWidth / 2) || 0),
+      x: computed(() => (props.currentClickedElement?.x - borderWidth / 2) || 0),
+      y: computed(() => (props.currentClickedElement?.y - borderWidth / 2) || 0),
       width: 10,
       height: 10,
     },
@@ -90,8 +90,8 @@ const rectCornerScaleData = ref([
   {
     name: 'corner_top_right_scale',
     bounds: {
-      x: computed(() => (0 + props.currentClickedElement?.width - borderWidth / 2) || 0),
-      y: computed(() => (0 - borderWidth / 2) || 0),
+      x: computed(() => (props.currentClickedElement?.x + props.currentClickedElement?.width - borderWidth / 2) || 0),
+      y: computed(() => (props.currentClickedElement?.y - borderWidth / 2) || 0),
       width: 10,
       height: 10,
     },
@@ -103,8 +103,8 @@ const rectCornerScaleData = ref([
   {
     name: 'corner_bottom_left_scale',
     bounds: {
-      x: computed(() => (0 - borderWidth / 2) || 0),
-      y: computed(() => (0 + props.currentClickedElement?.height - borderWidth / 2) || 0),
+      x: computed(() => (props.currentClickedElement?.x - borderWidth / 2) || 0),
+      y: computed(() => (props.currentClickedElement?.y + props.currentClickedElement?.height - borderWidth / 2) || 0),
       width: 10,
       height: 10,
     },
@@ -116,8 +116,8 @@ const rectCornerScaleData = ref([
   {
     name: 'corner_bottom_right_scale',
     bounds: {
-      x: computed(() => (0 + props.currentClickedElement?.width - borderWidth / 2) || 0),
-      y: computed(() => (0 + props.currentClickedElement?.height - borderWidth / 2) || 0),
+      x: computed(() => (props.currentClickedElement?.x + props.currentClickedElement?.width - borderWidth / 2) || 0),
+      y: computed(() => (props.currentClickedElement?.y + props.currentClickedElement?.height - borderWidth / 2) || 0),
       width: 10,
       height: 10,
     },
@@ -183,10 +183,6 @@ function handleAttachedLineLeft(leftArr: any[]) {
     attachedLineData.value.l.y1 = minY
     attachedLineData.value.l.x2 = xPosition
     attachedLineData.value.l.y2 = maxY
-
-    // const proxyData = props.currentClickedElement
-    // proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${xPosition}, ${clickedElementRect.y})`
-    // emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -221,10 +217,6 @@ function handleAttachedLineRight(rightArr: any[]) {
     attachedLineData.value.r.y1 = minY
     attachedLineData.value.r.x2 = xPosition + clickedElementRect.width
     attachedLineData.value.r.y2 = maxY
-
-    // const proxyData = props.currentClickedElement
-    // proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${xPosition}, ${clickedElementRect.y})`
-    // emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -258,10 +250,6 @@ function handleAttachedLineMiddleVertical(middleVerticalArr: any[]) {
     attachedLineData.value.mv.y1 = minY
     attachedLineData.value.mv.x2 = xPosition
     attachedLineData.value.mv.y2 = maxY
-
-    // const proxyData = props.currentClickedElement
-    // proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${xPosition - clickedElementRect.width / 2}, ${clickedElementRect.y})`
-    // emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -296,10 +284,6 @@ function handleAttachedLineTop(topArr: any[]) {
     attachedLineData.value.t.y1 = yPosition
     attachedLineData.value.t.x2 = maxX
     attachedLineData.value.t.y2 = yPosition
-
-    // const proxyData = props.currentClickedElement
-    // proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${clickedElementRect.x}, ${yPosition})`
-    // emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -334,10 +318,6 @@ function handleAttachedLineBottom(bottomArr: any[]) {
     attachedLineData.value.b.y1 = yPosition + clickedElementRect.height
     attachedLineData.value.b.x2 = maxX
     attachedLineData.value.b.y2 = yPosition + clickedElementRect.height
-
-    // const proxyData = props.currentClickedElement
-    // proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${clickedElementRect.x}, ${yPosition})`
-    // emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -370,10 +350,6 @@ function handleAttachedLineMiddleHorizontal(middleHorizontalArr: any[]) {
     attachedLineData.value.mh.y1 = yPosition
     attachedLineData.value.mh.x2 = maxX
     attachedLineData.value.mh.y2 = yPosition
-
-    // const proxyData = props.currentClickedElement
-    // proxyData.cfg.transform = `matrix(1, 0, 0, 1, ${clickedElementRect.x}, ${yPosition - clickedElementRect.height / 2})`
-    // emits('update:modelValue', proxyData)
   }
   else {
     // 将线条位置置为0
@@ -388,9 +364,9 @@ function handleAttachedLineMiddleHorizontal(middleHorizontalArr: any[]) {
     <!-- bounds -->
     <g>
       <rect
-        :style="{ opacity: 1, transform: props.currentClickedElement?.transform }"
-        :x="0"
-        :y="0"
+        :style="{ opacity: 1 }"
+        :x="props.currentClickedElement?.x"
+        :y="props.currentClickedElement?.y"
         :width="props.currentClickedElement?.width"
         :height="props.currentClickedElement?.height"
         fill="#2f80ed40"
@@ -404,7 +380,7 @@ function handleAttachedLineMiddleHorizontal(middleHorizontalArr: any[]) {
         v-for="(item) in rectLineData"
         :id="`bounds_${item.name}`"
         :key="item.name"
-        :style="{ opacity: 1, cursor: item.style.cursor, transform: item.style.transform }"
+        :style="{ opacity: 1, cursor: item.style.cursor }"
         :x="item.bounds.x"
         :y="item.bounds.y"
         :width="item.bounds.width"
@@ -421,7 +397,7 @@ function handleAttachedLineMiddleHorizontal(middleHorizontalArr: any[]) {
         v-for="(item) in rectCornerScaleData"
         :id="`bounds_${item.name}`"
         :key="item.name"
-        :style="{ opacity: 1, cursor: item.style.cursor, transform: item.style.transform }"
+        :style="{ opacity: 1, cursor: item.style.cursor }"
         :rx="3"
         :ry="3"
         :x="item.bounds.x"

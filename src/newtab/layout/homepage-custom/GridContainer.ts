@@ -249,7 +249,7 @@ export function initGridContainer(
             currentClickedElement.value.y = lastTranslateY
             currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${lastTranslateX + disX}, ${lastTranslateY})`
             currentClickedElement.value.width = currentClickedElement.value.width - disX
-            createAttachedLineForDrag(e)
+            createAttachedLineForScale(e)
           }
           else {
             // 说明有左边线
@@ -259,13 +259,14 @@ export function initGridContainer(
               return
             }
             else {
-              // const disX = (pt.clientX - oriPt.clientX)
-              currentClickedElement.value.x = lastTranslateX + disX
-              currentClickedElement.value.y = lastTranslateY
-              currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${lastTranslateX + disX}, ${lastTranslateY})`
-              currentClickedElement.value.width = currentClickedElement.value.width - disX
+              // disX是当前的减去上次的。
+              // 如果是正数，说明是向右移动了，宽度减少了，x增加了。宽度减少多少，x增加多少
+              // 如果是负数，说明是向左移动了，宽度增加了，x减小了。宽度增加多少，x减少多少
+              currentClickedElement.value.x += disX
+              currentClickedElement.value.width -= disX
+              currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${currentClickedElement.value.x}, ${lastTranslateY})`
 
-              createAttachedLineForDrag(e)
+              createAttachedLineForScale(e)
             }
           }
         }
@@ -342,32 +343,26 @@ export function initGridContainer(
     return result ? result[0] : null
   }
 
-  function createAttachedLineForDrag(e: MouseEvent) {
-    const DEVIATION = 5
-    // 获取当前元素的偏移值
-    const clickedTX = currentClickedElement.value?.x
-    const clickedTY = currentClickedElement.value?.y
-    const clickedWidth = currentClickedElement.value?.width
-    const clickedHeight = currentClickedElement.value?.height
-
+  function createAttachedLineForScale(e: MouseEvent) {
     // 每个块有六条线
     // 1.如果当前某条线已经出现，那么就不再吸附那个线
     // 2.如果当前某条线没有出现，那么就还可以吸附
+    // 3.设置的主要是x,y,width,height。这里的x,y是为了逻辑显示，实际使用transform代替x,y
 
     for (const cell of store.gridCells) {
       if (cell?.id === currentClickedElement.value?.id)
         return [0, 0, 0, 0, 0, 0]
 
       // 2.获取所有偏移的x和y值
-      const cellTX = cell.x // cell translate x
-      if ((Math.abs(cellTX) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX) + DEVIATION)) {
+      if ((Math.abs(cell.x) - DEVIATION) < currentClickedElement.value?.x && currentClickedElement.value?.x < (Math.abs(cell.x) + DEVIATION)) {
         if (attachedLine.value.l.length > 0) {
           console.log('已经有吸附线')
         }
         else {
-          const xClickedAndCell = currentClickedElement.value.x - cellTX
-          currentClickedElement.value.width = currentClickedElement.value.width + xClickedAndCell
-          currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${cellTX}, ${clickedTY})`
+          const disX = cell.x - currentClickedElement.value.x
+          currentClickedElement.value.x += disX
+          currentClickedElement.value.width -= disX
+          currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${currentClickedElement.value.x}, ${currentClickedElement.value?.y})`
           attachedLine.value.l.push({ ...cell, type: 0 })
         }
 
@@ -376,49 +371,6 @@ export function initGridContainer(
       else {
         attachedLine.value.l = []
       }
-    }
-  }
-
-  function createAttachedLineForScale(e: MouseEvent) {
-    // 获取当前元素的偏移值
-    const clickedTX = currentClickedElement.value?.x
-    const clickedTY = currentClickedElement.value?.y
-    const clickedWidth = currentClickedElement.value?.width
-    const clickedHeight = currentClickedElement.value?.height
-
-    // 每个块有六条线
-    // 1.如果当前某条线已经出现，那么就不再吸附那个线
-    // 2.如果当前某条线没有出现，那么就还可以吸附
-
-    for (const cell of store.gridCells) {
-      if (cell?.id === currentClickedElement.value?.id)
-        return [0, 0, 0, 0, 0, 0]
-
-      // 2.获取所有偏移的x和y值
-      const cellTX = cell.x // cell translate x
-      if ((Math.abs(cellTX) - DEVIATION) < clickedTX && clickedTX < (Math.abs(cellTX) + DEVIATION)) {
-        // 都是左边
-        const xClickedAndCell = currentClickedElement.value.x - cellTX
-        currentClickedElement.value.width = currentClickedElement.value.width + xClickedAndCell
-
-        currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${cellTX}, ${clickedTY})`
-        attachedLine.value.l.push({ ...cell, type: 0 })
-
-        break
-      }
-      else {
-        attachedLine.value.l = []
-      }
-    }
-    // 每个块有六条线
-    // 1.如果当前某条线已经出现，那么就不再吸附那个线
-    // 2.如果当前某条线没有出现，那么就还可以吸附
-
-    if (attachedLine.value.l.length > 0) {
-      // 说明当前left线已经出现，那么左吸附线的吸附功能就被屏蔽
-    }
-    else {
-      // 说明当前left线没有，需要添加左吸附线
     }
   }
 
