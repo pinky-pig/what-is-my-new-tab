@@ -17,7 +17,7 @@ type ScaleType = 'top' | 'bottom' | 'left' | 'right' | 'top_left' | 'top_right' 
 let transformMode: ModeTypes | null = null
 let currentScaleType: ScaleType = null
 let previousEvent: MouseEvent | null = null
-const DEVIATION = 10
+const DEVIATION = 5
 
 export function initGridContainer(
   currentClickedElement: Ref<any>,
@@ -349,12 +349,10 @@ export function initGridContainer(
           currentClickedElement.value.height = currentClickedElement.value.height + (pt.clientY - oriPt.clientY)
         }
         if (currentScaleType === 'top_left') {
-          const disX = (pt.clientX - oriPt.clientX)
-          const disY = (pt.clientY - oriPt.clientY)
-          currentClickedElement.value.x = lastTranslateX + disX
-          currentClickedElement.value.y = lastTranslateY + disY
-          currentClickedElement.value.width = currentClickedElement.value.width - disX
-          currentClickedElement.value.height = currentClickedElement.value.height - disY
+          currentClickedElement.value.x += disX
+          currentClickedElement.value.width -= disX
+          currentClickedElement.value.y += disY
+          currentClickedElement.value.height -= disY
         }
         if (currentScaleType === 'top_right') {
           const disY = (pt.clientY - oriPt.clientY)
