@@ -32,11 +32,12 @@ const getStyle = computed(() => {
     position: 'fixed',
     width: `${props.modelValue.width}px`,
     height: `${props.modelValue.height}px`,
+    left: `${props.modelValue.x}px`,
+    top: `${props.modelValue.y}px`,
     background: '#fca98690',
     borderRadius: '3px',
     pointerEvents: 'auto',
     zIndex: 1,
-    transform: props.modelValue.transform,
   } as StyleValue
 })
 </script>
