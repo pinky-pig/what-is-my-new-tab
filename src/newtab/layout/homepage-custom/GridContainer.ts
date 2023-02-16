@@ -232,7 +232,6 @@ export function initGridContainer(
 
         currentClickedElement.value.x = offsetX
         currentClickedElement.value.y = offsetY
-        currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${offsetX}, ${offsetY})`
       }
       else if (transformMode === 'Scale') {
         const oriPt = previousEvent
@@ -247,7 +246,6 @@ export function initGridContainer(
             // const disX = (pt.clientX - oriPt.clientX)
             currentClickedElement.value.x = lastTranslateX + disX
             currentClickedElement.value.y = lastTranslateY
-            currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${lastTranslateX + disX}, ${lastTranslateY})`
             currentClickedElement.value.width = currentClickedElement.value.width - disX
             createAttachedLineForScale(e)
           }
@@ -264,7 +262,6 @@ export function initGridContainer(
               // 如果是负数，说明是向左移动了，宽度增加了，x减小了。宽度增加多少，x减少多少
               currentClickedElement.value.x += disX
               currentClickedElement.value.width -= disX
-              currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${currentClickedElement.value.x}, ${lastTranslateY})`
 
               createAttachedLineForScale(e)
             }
@@ -278,7 +275,6 @@ export function initGridContainer(
           const disY = (pt.clientY - oriPt.clientY)
           currentClickedElement.value.x = lastTranslateX
           currentClickedElement.value.y = lastTranslateY + disY
-          currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${lastTranslateX}, ${lastTranslateY + disY})`
           currentClickedElement.value.height = currentClickedElement.value.height - disY
         }
         if (currentScaleType === 'bottom')
@@ -290,7 +286,6 @@ export function initGridContainer(
           currentClickedElement.value.x = lastTranslateX + disX
           currentClickedElement.value.y = lastTranslateY
 
-          currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${lastTranslateX + disX}, ${lastTranslateY})`
           currentClickedElement.value.width = currentClickedElement.value.width - disX
           currentClickedElement.value.height = currentClickedElement.value.height + (pt.clientY - oriPt.clientY)
         }
@@ -303,7 +298,6 @@ export function initGridContainer(
           const disY = (pt.clientY - oriPt.clientY)
           currentClickedElement.value.x = lastTranslateX + disX
           currentClickedElement.value.y = lastTranslateY + disY
-          currentClickedElement.value.transform = `matrix(1, 0, 0, 1,  ${lastTranslateX + disX}, ${lastTranslateY + disY})`
           currentClickedElement.value.width = currentClickedElement.value.width - disX
           currentClickedElement.value.height = currentClickedElement.value.height - disY
         }
@@ -311,7 +305,6 @@ export function initGridContainer(
           const disY = (pt.clientY - oriPt.clientY)
           currentClickedElement.value.x = lastTranslateX
           currentClickedElement.value.y = lastTranslateY + disY
-          currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${lastTranslateX}, ${lastTranslateY + disY})`
           currentClickedElement.value.height = currentClickedElement.value.height - disY
           currentClickedElement.value.width = currentClickedElement.value.width + (pt.clientX - oriPt.clientX)
         }
@@ -362,7 +355,6 @@ export function initGridContainer(
           const disX = cell.x - currentClickedElement.value.x
           currentClickedElement.value.x += disX
           currentClickedElement.value.width -= disX
-          currentClickedElement.value.transform = `matrix(1, 0, 0, 1, ${currentClickedElement.value.x}, ${currentClickedElement.value?.y})`
           attachedLine.value.l.push({ ...cell, type: 0 })
         }
 
