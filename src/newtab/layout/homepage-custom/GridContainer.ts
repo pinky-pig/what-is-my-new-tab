@@ -336,18 +336,6 @@ export function initGridContainer(
         }
 
         // 😅 角落两个同时变形！~ （就是将上面单个的两个为一组组合一下）
-        if (currentScaleType === 'bottom_left') {
-          const disX = (pt.clientX - oriPt.clientX)
-          currentClickedElement.value.x = lastTranslateX + disX
-          currentClickedElement.value.y = lastTranslateY
-
-          currentClickedElement.value.width = currentClickedElement.value.width - disX
-          currentClickedElement.value.height = currentClickedElement.value.height + (pt.clientY - oriPt.clientY)
-        }
-        if (currentScaleType === 'bottom_right') {
-          currentClickedElement.value.width = currentClickedElement.value.width + (pt.clientX - oriPt.clientX)
-          currentClickedElement.value.height = currentClickedElement.value.height + (pt.clientY - oriPt.clientY)
-        }
         if (currentScaleType === 'top_left') {
           currentClickedElement.value.x += disX
           currentClickedElement.value.width -= disX
@@ -355,11 +343,18 @@ export function initGridContainer(
           currentClickedElement.value.height -= disY
         }
         if (currentScaleType === 'top_right') {
-          const disY = (pt.clientY - oriPt.clientY)
-          currentClickedElement.value.x = lastTranslateX
-          currentClickedElement.value.y = lastTranslateY + disY
-          currentClickedElement.value.height = currentClickedElement.value.height - disY
-          currentClickedElement.value.width = currentClickedElement.value.width + (pt.clientX - oriPt.clientX)
+          currentClickedElement.value.y += disY
+          currentClickedElement.value.height -= disY
+          currentClickedElement.value.width += (pt.clientX - oriPt.clientX)
+        }
+        if (currentScaleType === 'bottom_left') {
+          currentClickedElement.value.x += disX
+          currentClickedElement.value.width -= disX
+          currentClickedElement.value.height += (pt.clientY - oriPt.clientY)
+        }
+        if (currentScaleType === 'bottom_right') {
+          currentClickedElement.value.width += (pt.clientX - oriPt.clientX)
+          currentClickedElement.value.height += (pt.clientY - oriPt.clientY)
         }
       }
       else if (transformMode === 'Rotate') {
