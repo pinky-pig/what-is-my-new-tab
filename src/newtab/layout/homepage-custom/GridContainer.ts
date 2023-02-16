@@ -219,19 +219,8 @@ export function initGridContainer(
     if (previousEvent && currentClickedElement.value) {
       if (transformMode === 'Drag') {
         const oriPt = previousEvent
-
-        // 1.直接修改x和y比较简单的方式
-        // currentClickedElement.value.x = currentClickedElement.value.x + (pt.clientX - oriPt.clientX)
-        // currentClickedElement.value.y = currentClickedElement.value.y + (pt.clientY - oriPt.clientY)
-
-        // 2.使用css transform方式
-        const lastTranslateX = currentClickedElement.value.x
-        const lastTranslateY = currentClickedElement.value.y
-        const offsetX = lastTranslateX + (pt.clientX - oriPt.clientX)
-        const offsetY = lastTranslateY + (pt.clientY - oriPt.clientY)
-
-        currentClickedElement.value.x = offsetX
-        currentClickedElement.value.y = offsetY
+        currentClickedElement.value.x = currentClickedElement.value.x + (pt.clientX - oriPt.clientX)
+        currentClickedElement.value.y = currentClickedElement.value.y + (pt.clientY - oriPt.clientY)
       }
       else if (transformMode === 'Scale') {
         const oriPt = previousEvent
@@ -243,27 +232,25 @@ export function initGridContainer(
         if (currentScaleType === 'left') {
           if (attachedLine.value.l.length === 0) {
             // 说明没有左边线
-            // const disX = (pt.clientX - oriPt.clientX)
-            currentClickedElement.value.x = lastTranslateX + disX
-            currentClickedElement.value.y = lastTranslateY
-            currentClickedElement.value.width = currentClickedElement.value.width - disX
-            createAttachedLineForScale(e)
+            currentClickedElement.value.x += disX
+            currentClickedElement.value.width -= disX
+            createAttachedLineForScale()
           }
           else {
-            // 说明有左边线
+            // 说明有左边线。因为左边线可能出现在其他元素的左边或者右边，所以有两个判断，加其他元素的宽度
             const left = attachedLine.value.l[0]
-            if ((Math.abs(left.x) - DEVIATION) < (lastTranslateX + disX) && (lastTranslateX + disX) < (Math.abs(left.x) + DEVIATION)) {
+            if (
+              ((Math.abs(left.x) - DEVIATION) < (currentClickedElement.value.x + disX) && (currentClickedElement.value.x + disX) < (Math.abs(left.x) + DEVIATION))
+              || ((Math.abs(left.x + left.width) - DEVIATION) < (currentClickedElement.value.x + disX) && (currentClickedElement.value.x + disX) < (Math.abs(left.x + left.width) + DEVIATION))
+            ) {
               // 在误差内。不能缩放了
               return
             }
             else {
-              // disX是当前的减去上次的。
-              // 如果是正数，说明是向右移动了，宽度减少了，x增加了。宽度减少多少，x增加多少
-              // 如果是负数，说明是向左移动了，宽度增加了，x减小了。宽度增加多少，x减少多少
+              // disX是当前的减去上次的。偏移值和宽度一个增加一个必然就减小
               currentClickedElement.value.x += disX
               currentClickedElement.value.width -= disX
-
-              createAttachedLineForScale(e)
+              createAttachedLineForScale()
             }
           }
         }
@@ -336,30 +323,39 @@ export function initGridContainer(
     return result ? result[0] : null
   }
 
-  function createAttachedLineForScale(e: MouseEvent) {
+  function createAttachedLineForScale() {
     // 每个块有六条线
-    // 1.如果当前某条线已经出现，那么就不再吸附那个线
-    // 2.如果当前某条线没有出现，那么就还可以吸附
-    // 3.设置的主要是x,y,width,height。这里的x,y是为了逻辑显示，实际使用transform代替x,y
+    // 1.如果当前某条线已经出现，屏蔽吸附功能
+    // 2.如果当前某条线没有出现，恢复吸附功能
+    // 也就是说，当没有线的时候，并且在线段附近才能有吸附功能
 
     for (const cell of store.gridCells) {
       if (cell?.id === currentClickedElement.value?.id)
         return [0, 0, 0, 0, 0, 0]
 
-      // 2.获取所有偏移的x和y值
-      if ((Math.abs(cell.x) - DEVIATION) < currentClickedElement.value?.x && currentClickedElement.value?.x < (Math.abs(cell.x) + DEVIATION)) {
-        if (attachedLine.value.l.length > 0) {
-          console.log('已经有吸附线')
-        }
-        else {
+      if (attachedLine.value.l.length <= 0) {
+        // 1.当前元素的左吸附线
+        // cell的左边
+        if ((Math.abs(cell.x) - DEVIATION) < currentClickedElement.value?.x && currentClickedElement.value?.x < (Math.abs(cell.x) + DEVIATION)) {
           const disX = cell.x - currentClickedElement.value.x
           currentClickedElement.value.x += disX
           currentClickedElement.value.width -= disX
           attachedLine.value.l.push({ ...cell, type: 0 })
+          break
         }
-
-        break
+        // cell的右边
+        if (
+          (Math.abs(cell.x + cell.width) - DEVIATION) < currentClickedElement.value?.x
+          && currentClickedElement.value?.x < (Math.abs(cell.x + cell.width) + DEVIATION)
+        ) {
+          const disX = cell.x + cell.width - currentClickedElement.value.x
+          currentClickedElement.value.x += disX
+          currentClickedElement.value.width -= disX
+          attachedLine.value.l.push({ ...cell, type: 1 })
+          break
+        }
       }
+
       else {
         attachedLine.value.l = []
       }
