@@ -231,7 +231,7 @@ export function initGridContainer(
             currentClickedElement.value.x += disX
             currentClickedElement.value.width -= disX
             attachedLine.value.l = []
-
+            store.mouseFrom = { x: e.clientX, y: e.clientY }
             createAttachedLineForScale()
           }
           else {
@@ -242,14 +242,13 @@ export function initGridContainer(
               || ((Math.abs(left.x + left.width) - DEVIATION) < (currentClickedElement.value.x + disX) && (currentClickedElement.value.x + disX) < (Math.abs(left.x + left.width) + DEVIATION))
             ) {
               // 在误差内。不能缩放了
-              return
             }
             else {
               // disX是当前的减去上次的。偏移值和宽度一个增加一个必然就减小
               currentClickedElement.value.x += disX
               currentClickedElement.value.width -= disX
               attachedLine.value.l = []
-
+              store.mouseFrom = { x: e.clientX, y: e.clientY }
               createAttachedLineForScale()
             }
           }
@@ -259,6 +258,7 @@ export function initGridContainer(
             // 说明没有右边线
             currentClickedElement.value.width += (store.mouseTo.x - store.mouseFrom.x)
             attachedLine.value.r = []
+            store.mouseFrom = { x: e.clientX, y: e.clientY }
             createAttachedLineForScale()
           }
           else {
@@ -269,11 +269,11 @@ export function initGridContainer(
               || ((Math.abs(right.x + right.width) - DEVIATION) < (currentClickedElement.value.x + currentClickedElement.value.width + disX) && (currentClickedElement.value.x + currentClickedElement.value.width + disX) < (Math.abs(right.x + right.width) + DEVIATION))
             ) {
               // 在误差内。不能缩放了
-              return
             }
             else {
               currentClickedElement.value.width += (store.mouseTo.x - store.mouseFrom.x)
               attachedLine.value.r = []
+              store.mouseFrom = { x: e.clientX, y: e.clientY }
               createAttachedLineForScale()
             }
           }
@@ -284,6 +284,7 @@ export function initGridContainer(
             currentClickedElement.value.y += disY
             currentClickedElement.value.height -= disY
             attachedLine.value.t = []
+            store.mouseFrom = { x: e.clientX, y: e.clientY }
             createAttachedLineForScale()
           }
           else {
@@ -294,13 +295,13 @@ export function initGridContainer(
               || ((Math.abs(top.y + top.width) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y + top.height) + DEVIATION))
             ) {
               // 在误差内。不能缩放了
-              return
             }
             else {
               // disX是当前的减去上次的。偏移值和宽度一个增加一个必然就减小
               currentClickedElement.value.y += disY
               currentClickedElement.value.height -= disY
               attachedLine.value.t = []
+              store.mouseFrom = { x: e.clientX, y: e.clientY }
               createAttachedLineForScale()
             }
           }
@@ -310,6 +311,7 @@ export function initGridContainer(
             // 说明没有右边线
             currentClickedElement.value.height += (store.mouseTo.y - store.mouseFrom.y)
             attachedLine.value.b = []
+            store.mouseFrom = { x: e.clientX, y: e.clientY }
             createAttachedLineForScale()
           }
           else {
@@ -320,11 +322,11 @@ export function initGridContainer(
               || ((Math.abs(bottom.y + bottom.height) - DEVIATION) < (currentClickedElement.value.y + currentClickedElement.value.height + disY) && (currentClickedElement.value.y + currentClickedElement.value.height + disY) < (Math.abs(bottom.y + bottom.height) + DEVIATION))
             ) {
               // 在误差内。不能缩放了
-              return
             }
             else {
               currentClickedElement.value.height += (store.mouseTo.y - store.mouseFrom.y)
               attachedLine.value.b = []
+              store.mouseFrom = { x: e.clientX, y: e.clientY }
               createAttachedLineForScale()
             }
           }
@@ -332,10 +334,11 @@ export function initGridContainer(
 
         // 😅 角落两个同时变形！~ （就是将上面单个的两个为一组组合一下）
         if (currentScaleType === 'top_left') {
-          // currentClickedElement.value.x += disX
-          // currentClickedElement.value.width -= disX
-          // currentClickedElement.value.y += disY
-          // currentClickedElement.value.height -= disY
+          currentClickedElement.value.x += disX
+          currentClickedElement.value.width -= disX
+          currentClickedElement.value.y += disY
+          currentClickedElement.value.height -= disY
+          store.mouseFrom = { x: e.clientX, y: e.clientY }
 
           // attachedLine.value.l = []
           // attachedLine.value.t = []
@@ -344,105 +347,24 @@ export function initGridContainer(
           // 2. 碰到右边线
           // 3. 两条线都碰到
           // 4. 两条线都没有
-
-          if (attachedLine.value.l.length === 0) {
-            // 说明没有左边线
-            currentClickedElement.value.x += disX
-            currentClickedElement.value.width -= disX
-            currentClickedElement.value.y += disY
-            currentClickedElement.value.height -= disY
-
-            attachedLine.value.t = []
-            attachedLine.value.l = []
-            createAttachedLineForScale()
-            console.log(111)
-          }
-          else if (attachedLine.value.l.length > 0) {
-            // 说明有左边线。因为左边线可能出现在其他元素的左边或者右边，所以有两个判断，加其他元素的宽度
-            const left = attachedLine.value.l[0]
-            if (
-              ((Math.abs(left.x) - DEVIATION) < (currentClickedElement.value.x + disX) && (currentClickedElement.value.x + disX) < (Math.abs(left.x) + DEVIATION))
-                || ((Math.abs(left.x + left.width) - DEVIATION) < (currentClickedElement.value.x + disX) && (currentClickedElement.value.x + disX) < (Math.abs(left.x + left.width) + DEVIATION))
-            ) {
-              // 在误差内。不能缩放了
-              currentClickedElement.value.x += disX
-              currentClickedElement.value.width -= disX
-              currentClickedElement.value.y += disY
-              currentClickedElement.value.height -= disY
-              console.log(222)
-              console.log(disY)
-              // attachedLine.value.t = []
-
-              // createAttachedLineForScale()
-            }
-            else {
-              // disX是当前的减去上次的。偏移值和宽度一个增加一个必然就减小
-              currentClickedElement.value.x += disX
-              currentClickedElement.value.width -= disX
-              currentClickedElement.value.y += disY
-              currentClickedElement.value.height -= disY
-
-              attachedLine.value.t = []
-              attachedLine.value.l = []
-              console.log(333)
-
-              createAttachedLineForScale()
-            }
-          }
-          else if (attachedLine.value.t.length === 0) {
-            // 说明没有左边线
-            currentClickedElement.value.x += disX
-            currentClickedElement.value.width -= disX
-            currentClickedElement.value.y += disY
-            currentClickedElement.value.height -= disY
-            attachedLine.value.t = []
-            attachedLine.value.l = []
-            console.log(444)
-
-            createAttachedLineForScale()
-          }
-          else {
-            // 说明有左边线。因为左边线可能出现在其他元素的左边或者右边，所以有两个判断，加其他元素的宽度
-            const top = attachedLine.value.t[0]
-            if (
-              ((Math.abs(top.y) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y) + DEVIATION))
-              || ((Math.abs(top.y + top.width) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y + top.height) + DEVIATION))
-            ) {
-              // 在误差内。不能缩放了
-              console.log(555)
-
-              currentClickedElement.value.x += disX
-              currentClickedElement.value.width -= disX
-            }
-            else {
-              console.log(666)
-
-              // disX是当前的减去上次的。偏移值和宽度一个增加一个必然就减小
-              currentClickedElement.value.x += disX
-              currentClickedElement.value.width -= disX
-              currentClickedElement.value.y += disY
-              currentClickedElement.value.height -= disY
-              attachedLine.value.t = []
-              attachedLine.value.l = []
-              createAttachedLineForScale()
-            }
-          }
         }
         if (currentScaleType === 'top_right') {
           currentClickedElement.value.y += disY
           currentClickedElement.value.height -= disY
           currentClickedElement.value.width += (store.mouseTo.x - store.mouseFrom.x)
+          store.mouseFrom = { x: e.clientX, y: e.clientY }
         }
         if (currentScaleType === 'bottom_left') {
           currentClickedElement.value.x += disX
           currentClickedElement.value.width -= disX
           currentClickedElement.value.height += (store.mouseTo.y - store.mouseFrom.y)
+          store.mouseFrom = { x: e.clientX, y: e.clientY }
         }
         if (currentScaleType === 'bottom_right') {
           currentClickedElement.value.width += (store.mouseTo.x - store.mouseFrom.x)
           currentClickedElement.value.height += (store.mouseTo.y - store.mouseFrom.y)
+          store.mouseFrom = { x: e.clientX, y: e.clientY }
         }
-        store.mouseFrom = { x: e.clientX, y: e.clientY }
       }
       else if (transformMode === 'Rotate') {
         console.log('Rotate')
