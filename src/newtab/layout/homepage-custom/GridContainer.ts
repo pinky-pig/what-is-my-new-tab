@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useDebounceFn } from '@vueuse/core'
 import type { Ref } from 'vue'
@@ -360,7 +359,6 @@ export function initGridContainer(
           }
           else if (attachedLine.value.l.length > 0 && attachedLine.value.t.length === 0) {
             // 碰到了左边线
-            console.log('碰到了左边线')
             currentClickedElement.value.y += disY
             currentClickedElement.value.height -= disY
 
@@ -384,7 +382,6 @@ export function initGridContainer(
           }
           else if (attachedLine.value.l.length === 0 && attachedLine.value.t.length > 0) {
             // 碰到了上边线
-            console.log('碰到了上边线')
             currentClickedElement.value.x += disX
             currentClickedElement.value.width -= disX
 
@@ -408,9 +405,6 @@ export function initGridContainer(
           }
           else if (attachedLine.value.l.length > 0 && attachedLine.value.t.length > 0) {
             // 碰到了两条线
-            console.log('碰到了两条线')
-
-            // 碰到了左边线
             currentClickedElement.value.y += disY
             currentClickedElement.value.height -= disY
             currentClickedElement.value.x += disX
@@ -438,11 +432,9 @@ export function initGridContainer(
               ((Math.abs(top.y) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y) + DEVIATION))
               || ((Math.abs(top.y + top.width) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y + top.height) + DEVIATION))
             ) {
-              // 在误差内。不能缩放了
               createAttachedLineForScale()
             }
             else {
-              // disX是当前的减去上次的。偏移值和宽度一个增加一个必然就减小
               currentClickedElement.value.y += disY
               currentClickedElement.value.height -= disY
               attachedLine.value.t = []
@@ -470,7 +462,7 @@ export function initGridContainer(
         }
       }
       else if (transformMode === 'Rotate') {
-        console.log('Rotate')
+        // console.log('Rotate')
       }
     }
   }
