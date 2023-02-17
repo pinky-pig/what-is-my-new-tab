@@ -16,7 +16,6 @@ type ScaleType = 'top' | 'bottom' | 'left' | 'right' | 'top_left' | 'top_right' 
 
 let transformMode: ModeTypes | null = null
 let currentScaleType: ScaleType = null
-let previousEvent: MouseEvent | null = null
 const DEVIATION = 5
 
 export function initGridContainer(
@@ -192,7 +191,6 @@ export function initGridContainer(
 
   function mousedown(e: MouseEvent) {
     store.mouseFrom = { x: e.clientX, y: e.clientY }
-    previousEvent = e
 
     const initElement = document.elementFromPoint(e.clientX, e.clientY)
     if (initElement && initElement?.id.startsWith('bounds_') && currentClickedElement.value) {
@@ -216,16 +214,15 @@ export function initGridContainer(
   function mousemove(e: MouseEvent) {
     store.mouseTo = { x: e.clientX, y: e.clientY }
 
-    if (previousEvent && currentClickedElement.value) {
+    if (store.mouseFrom.x !== 0 && store.mouseFrom.y !== 0 && currentClickedElement.value) {
       if (transformMode === 'Drag') {
-        currentClickedElement.value.x = currentClickedElement.value.x + (store.mouseTo.x - previousEvent.clientX)
-        currentClickedElement.value.y = currentClickedElement.value.y + (store.mouseTo.y - previousEvent.clientY)
-        previousEvent = e
+        currentClickedElement.value.x = currentClickedElement.value.x + (store.mouseTo.x - store.mouseFrom.x)
+        currentClickedElement.value.y = currentClickedElement.value.y + (store.mouseTo.y - store.mouseFrom.y)
+        store.mouseFrom = { x: e.clientX, y: e.clientY }
       }
       else if (transformMode === 'Scale') {
-        const oriPt = previousEvent
-        const disX = (store.mouseTo.x - oriPt.clientX)
-        const disY = (store.mouseTo.y - oriPt.clientY)
+        const disX = (store.mouseTo.x - store.mouseFrom.x)
+        const disY = (store.mouseTo.y - store.mouseFrom.y)
 
         // 😅 开始变形！~
         if (currentScaleType === 'left') {
@@ -260,7 +257,7 @@ export function initGridContainer(
         if (currentScaleType === 'right') {
           if (attachedLine.value.r.length === 0) {
             // 说明没有右边线
-            currentClickedElement.value.width += (store.mouseTo.x - oriPt.clientX)
+            currentClickedElement.value.width += (store.mouseTo.x - store.mouseFrom.x)
             attachedLine.value.r = []
             createAttachedLineForScale()
           }
@@ -275,7 +272,7 @@ export function initGridContainer(
               return
             }
             else {
-              currentClickedElement.value.width += (store.mouseTo.x - oriPt.clientX)
+              currentClickedElement.value.width += (store.mouseTo.x - store.mouseFrom.x)
               attachedLine.value.r = []
               createAttachedLineForScale()
             }
@@ -311,7 +308,7 @@ export function initGridContainer(
         if (currentScaleType === 'bottom') {
           if (attachedLine.value.b.length === 0) {
             // 说明没有右边线
-            currentClickedElement.value.height += (store.mouseTo.y - oriPt.clientY)
+            currentClickedElement.value.height += (store.mouseTo.y - store.mouseFrom.y)
             attachedLine.value.b = []
             createAttachedLineForScale()
           }
@@ -326,7 +323,7 @@ export function initGridContainer(
               return
             }
             else {
-              currentClickedElement.value.height += (store.mouseTo.y - oriPt.clientY)
+              currentClickedElement.value.height += (store.mouseTo.y - store.mouseFrom.y)
               attachedLine.value.b = []
               createAttachedLineForScale()
             }
@@ -434,18 +431,18 @@ export function initGridContainer(
         if (currentScaleType === 'top_right') {
           currentClickedElement.value.y += disY
           currentClickedElement.value.height -= disY
-          currentClickedElement.value.width += (store.mouseTo.x - oriPt.clientX)
+          currentClickedElement.value.width += (store.mouseTo.x - store.mouseFrom.x)
         }
         if (currentScaleType === 'bottom_left') {
           currentClickedElement.value.x += disX
           currentClickedElement.value.width -= disX
-          currentClickedElement.value.height += (store.mouseTo.y - oriPt.clientY)
+          currentClickedElement.value.height += (store.mouseTo.y - store.mouseFrom.y)
         }
         if (currentScaleType === 'bottom_right') {
-          currentClickedElement.value.width += (store.mouseTo.x - oriPt.clientX)
-          currentClickedElement.value.height += (store.mouseTo.y - oriPt.clientY)
+          currentClickedElement.value.width += (store.mouseTo.x - store.mouseFrom.x)
+          currentClickedElement.value.height += (store.mouseTo.y - store.mouseFrom.y)
         }
-        previousEvent = e
+        store.mouseFrom = { x: e.clientX, y: e.clientY }
       }
       else if (transformMode === 'Rotate') {
         console.log('Rotate')
@@ -454,8 +451,8 @@ export function initGridContainer(
   }
 
   function mouseup(e: MouseEvent) {
-    previousEvent = null
-    // currentClickedElement.value = null
+    store.mouseFrom.x = 0
+    store.mouseFrom.y = 0
     saveCanvasLayoutData()
 
     for (const key in attachedLine.value)
