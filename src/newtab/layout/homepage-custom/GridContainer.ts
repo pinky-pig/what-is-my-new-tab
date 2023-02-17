@@ -214,18 +214,18 @@ export function initGridContainer(
   }
 
   function mousemove(e: MouseEvent) {
-    const pt = e
+    store.mouseTo = { x: e.clientX, y: e.clientY }
 
     if (previousEvent && currentClickedElement.value) {
       if (transformMode === 'Drag') {
-        const oriPt = previousEvent
-        currentClickedElement.value.x = currentClickedElement.value.x + (pt.clientX - oriPt.clientX)
-        currentClickedElement.value.y = currentClickedElement.value.y + (pt.clientY - oriPt.clientY)
+        currentClickedElement.value.x = currentClickedElement.value.x + (store.mouseTo.x - previousEvent.clientX)
+        currentClickedElement.value.y = currentClickedElement.value.y + (store.mouseTo.y - previousEvent.clientY)
+        previousEvent = e
       }
       else if (transformMode === 'Scale') {
         const oriPt = previousEvent
-        const disX = (pt.clientX - oriPt.clientX)
-        const disY = (pt.clientY - oriPt.clientY)
+        const disX = (store.mouseTo.x - oriPt.clientX)
+        const disY = (store.mouseTo.y - oriPt.clientY)
 
         // 😅 开始变形！~
         if (currentScaleType === 'left') {
@@ -260,7 +260,7 @@ export function initGridContainer(
         if (currentScaleType === 'right') {
           if (attachedLine.value.r.length === 0) {
             // 说明没有右边线
-            currentClickedElement.value.width += (pt.clientX - oriPt.clientX)
+            currentClickedElement.value.width += (store.mouseTo.x - oriPt.clientX)
             attachedLine.value.r = []
             createAttachedLineForScale()
           }
@@ -275,7 +275,7 @@ export function initGridContainer(
               return
             }
             else {
-              currentClickedElement.value.width += (pt.clientX - oriPt.clientX)
+              currentClickedElement.value.width += (store.mouseTo.x - oriPt.clientX)
               attachedLine.value.r = []
               createAttachedLineForScale()
             }
@@ -311,7 +311,7 @@ export function initGridContainer(
         if (currentScaleType === 'bottom') {
           if (attachedLine.value.b.length === 0) {
             // 说明没有右边线
-            currentClickedElement.value.height += (pt.clientY - oriPt.clientY)
+            currentClickedElement.value.height += (store.mouseTo.y - oriPt.clientY)
             attachedLine.value.b = []
             createAttachedLineForScale()
           }
@@ -326,7 +326,7 @@ export function initGridContainer(
               return
             }
             else {
-              currentClickedElement.value.height += (pt.clientY - oriPt.clientY)
+              currentClickedElement.value.height += (store.mouseTo.y - oriPt.clientY)
               attachedLine.value.b = []
               createAttachedLineForScale()
             }
@@ -343,6 +343,10 @@ export function initGridContainer(
           // attachedLine.value.l = []
           // attachedLine.value.t = []
           // createAttachedLineForScale()
+          // 1. 碰到左边线
+          // 2. 碰到右边线
+          // 3. 两条线都碰到
+          // 4. 两条线都没有
 
           if (attachedLine.value.l.length === 0) {
             // 说明没有左边线
@@ -430,22 +434,22 @@ export function initGridContainer(
         if (currentScaleType === 'top_right') {
           currentClickedElement.value.y += disY
           currentClickedElement.value.height -= disY
-          currentClickedElement.value.width += (pt.clientX - oriPt.clientX)
+          currentClickedElement.value.width += (store.mouseTo.x - oriPt.clientX)
         }
         if (currentScaleType === 'bottom_left') {
           currentClickedElement.value.x += disX
           currentClickedElement.value.width -= disX
-          currentClickedElement.value.height += (pt.clientY - oriPt.clientY)
+          currentClickedElement.value.height += (store.mouseTo.y - oriPt.clientY)
         }
         if (currentScaleType === 'bottom_right') {
-          currentClickedElement.value.width += (pt.clientX - oriPt.clientX)
-          currentClickedElement.value.height += (pt.clientY - oriPt.clientY)
+          currentClickedElement.value.width += (store.mouseTo.x - oriPt.clientX)
+          currentClickedElement.value.height += (store.mouseTo.y - oriPt.clientY)
         }
+        previousEvent = e
       }
       else if (transformMode === 'Rotate') {
         console.log('Rotate')
       }
-      previousEvent = e
     }
   }
 
