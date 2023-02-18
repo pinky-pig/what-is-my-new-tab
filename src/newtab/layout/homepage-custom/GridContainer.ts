@@ -206,10 +206,11 @@ export function initGridContainer(
     else {
       // 点击的是block
       currentClickedElement.value = getCellObjectInStoreFromPosition(store.mouseFrom)
-      transformMode = 'Drag'
 
       // 将点击的 block 置顶
       if (currentClickedElement.value) {
+        transformMode = 'Drag'
+
         const index = store.gridCells.findIndex(ele => ele.id === currentClickedElement.value.id)
         if (index !== -1) {
           const ele = store.gridCells.splice(index, 1)
