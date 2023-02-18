@@ -285,61 +285,66 @@ export function initGridContainer(
           }
         }
 
-        // 如果没有左边线，正常移动
-        // 如果有左边线，
-        //  --- 在范围内，那就不移动
-        //  --- 不在范围内，正常移动
-        // if (attachedLine.value.l.length === 0) {
-        //   // 说明没有左边线
-        //   currentClickedElement.value.x += disX
-        //   attachedLine.value.l = []
-        //   store.mouseFrom = Object.assign(store.mouseFrom, { x: e.clientX })
-        //   createAttachedLineForDrag('l')
-        // }
-        // else {
-        //   // 说明有左边线。因为左边线可能出现在其他元素的左边或者右边，所以有两个判断，加其他元素的宽度
-        //   const left = attachedLine.value.l[0]
-        //   if (
-        //     ((Math.abs(left.x) - DEVIATION) < (currentClickedElement.value.x + disX) && (currentClickedElement.value.x + disX) < (Math.abs(left.x) + DEVIATION))
-        //     || ((Math.abs(left.x + left.width) - DEVIATION) < (currentClickedElement.value.x + disX) && (currentClickedElement.value.x + disX) < (Math.abs(left.x + left.width) + DEVIATION))
-        //   ) {
-        //     // 在误差内。不能缩放了
-        //   }
-        //   else {
-        //     // disX是当前的减去上次的。偏移值和宽度一个增加一个必然就减小
-        //     currentClickedElement.value.x += disX
-        //     attachedLine.value.l = []
-        //     store.mouseFrom = Object.assign(store.mouseFrom, { x: e.clientX })
-        //     createAttachedLineForDrag('l')
-        //   }
-        // }
+        // 上下的线的代码逻辑是相同的，所以不能重新赋值一样的。
+        // 1. 两个都没有线 --- 正常赋值拖拽
+        // 2. 只有上线    --- 按照上线的吸附线逻辑
+        // 3. 只有下线    --- 按照下线的吸附线逻辑
+        // 4. 有两条线    --- 按照任意一条吸附线逻辑就行
 
-        // if (attachedLine.value.r.length === 0) {
-        //   // 说明没有右边线
-        //   currentClickedElement.value.x += disX
-        //   attachedLine.value.r = []
-        //   store.mouseFrom = Object.assign(store.mouseFrom, { x: e.clientX })
-        //   createAttachedLineForDrag('r')
-        //   console.log(444)
-        // }
-        // else {
-        //   // 说明有右边线。因为左边线可能出现在其他元素的左边或者右边，所以有两个判断，加其他元素的宽度
-        //   const right = attachedLine.value.r[0]
-        //   if (
-        //     ((Math.abs(right.x) - DEVIATION) < (currentClickedElement.value.x + currentClickedElement.value.width + disX) && (currentClickedElement.value.x + currentClickedElement.value.width + disX) < (Math.abs(right.x) + DEVIATION))
-        //     || ((Math.abs(right.x + right.width) - DEVIATION) < (currentClickedElement.value.x + currentClickedElement.value.width + disX) && (currentClickedElement.value.x + currentClickedElement.value.width + disX) < (Math.abs(right.x + right.width) + DEVIATION))
-        //   ) {
-        //     // 在误差内。不能缩放了
-        //     console.log(555)
-        //   }
-        //   else {
-        //     currentClickedElement.value.x += disX
-        //     attachedLine.value.r = []
-        //     store.mouseFrom = Object.assign(store.mouseFrom, { x: e.clientX })
-        //     createAttachedLineForDrag('r')
-        //     console.log(666)
-        //   }
-        // }
+        if (attachedLine.value.t.length === 0 && attachedLine.value.b.length === 0) {
+          currentClickedElement.value.y += disY
+          attachedLine.value.t = []
+          attachedLine.value.b = []
+          store.mouseFrom = Object.assign(store.mouseFrom, { y: e.clientY })
+          createAttachedLineForDrag('t')
+          createAttachedLineForDrag('b')
+        }
+        else if (attachedLine.value.t.length > 0 && attachedLine.value.b.length === 0) {
+          const top = attachedLine.value.t[0]
+          if (
+            ((Math.abs(top.y) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y) + DEVIATION))
+            || ((Math.abs(top.y + top.height) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y + top.height) + DEVIATION))
+          ) {
+            // 在误差内。不能缩放了
+          }
+          else {
+            // disX是当前的减去上次的。偏移值和宽度一个增加一个必然就减小
+            currentClickedElement.value.y += disY
+            attachedLine.value.t = []
+            store.mouseFrom = Object.assign(store.mouseFrom, { y: e.clientY })
+            createAttachedLineForDrag('t')
+          }
+        }
+        else if (attachedLine.value.t.length === 0 && attachedLine.value.b.length > 0) {
+          const bottom = attachedLine.value.b[0]
+          if (
+            ((Math.abs(bottom.y) - DEVIATION) < (currentClickedElement.value.y + currentClickedElement.value.height + disY) && (currentClickedElement.value.y + currentClickedElement.value.height + disY) < (Math.abs(bottom.y) + DEVIATION))
+              || ((Math.abs(bottom.y + bottom.height) - DEVIATION) < (currentClickedElement.value.y + currentClickedElement.value.height + disY) && (currentClickedElement.value.y + currentClickedElement.value.height + disY) < (Math.abs(bottom.y + bottom.height) + DEVIATION))
+          ) {
+            // 在误差内。不能缩放了
+          }
+          else {
+            currentClickedElement.value.y += disY
+            attachedLine.value.b = []
+            store.mouseFrom = { x: e.clientX, y: e.clientY }
+            createAttachedLineForDrag('b')
+          }
+        }
+        else if (attachedLine.value.t.length > 0 && attachedLine.value.b.length > 0) {
+          const bottom = attachedLine.value.b[0]
+          if (
+            ((Math.abs(bottom.y) - DEVIATION) < (currentClickedElement.value.y + currentClickedElement.value.height + disY) && (currentClickedElement.value.y + currentClickedElement.value.height + disY) < (Math.abs(bottom.y) + DEVIATION))
+              || ((Math.abs(bottom.y + bottom.height) - DEVIATION) < (currentClickedElement.value.y + currentClickedElement.value.height + disY) && (currentClickedElement.value.y + currentClickedElement.value.height + disY) < (Math.abs(bottom.y + bottom.height) + DEVIATION))
+          ) {
+            // 在误差内。不能缩放了
+          }
+          else {
+            currentClickedElement.value.y += disY
+            attachedLine.value.b = []
+            store.mouseFrom = { x: e.clientX, y: e.clientY }
+            createAttachedLineForDrag('b')
+          }
+        }
 
         // if (attachedLine.value.t.length === 0) {
         //   // 说明没有左边线
@@ -438,7 +443,7 @@ export function initGridContainer(
             const top = attachedLine.value.t[0]
             if (
               ((Math.abs(top.y) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y) + DEVIATION))
-              || ((Math.abs(top.y + top.width) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y + top.height) + DEVIATION))
+              || ((Math.abs(top.y + top.height) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y + top.height) + DEVIATION))
             ) {
               // 在误差内。不能缩放了
             }
