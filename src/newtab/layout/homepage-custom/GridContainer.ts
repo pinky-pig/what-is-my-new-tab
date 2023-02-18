@@ -190,7 +190,7 @@ export function initGridContainer(
 
   function mousedown(e: MouseEvent) {
     store.mouseFrom = { x: e.clientX, y: e.clientY }
-
+    // 1. 设置模式 drag or scale
     const initElement = document.elementFromPoint(e.clientX, e.clientY)
     if (initElement && initElement?.id.startsWith('bounds_') && currentClickedElement.value) {
       // 进行尺寸改变的点
@@ -207,6 +207,15 @@ export function initGridContainer(
       // 点击的是block
       currentClickedElement.value = getCellObjectInStoreFromPosition(store.mouseFrom)
       transformMode = 'Drag'
+
+      // 将点击的 block 置顶
+      if (currentClickedElement.value) {
+        const index = store.gridCells.findIndex(ele => ele.id === currentClickedElement.value.id)
+        if (index !== -1) {
+          const ele = store.gridCells.splice(index, 1)
+          store.gridCells.push(ele[0])
+        }
+      }
     }
   }
 
@@ -345,31 +354,6 @@ export function initGridContainer(
             createAttachedLineForDrag('b')
           }
         }
-
-        // if (attachedLine.value.t.length === 0) {
-        //   // 说明没有左边线
-        //   currentClickedElement.value.y += disY
-        //   attachedLine.value.t = []
-        //   store.mouseFrom = Object.assign(store.mouseFrom, { y: e.clientY })
-        //   createAttachedLineForDrag('t')
-        // }
-        // else {
-        //   // 说明有左边线。因为左边线可能出现在其他元素的左边或者右边，所以有两个判断，加其他元素的宽度
-        //   const top = attachedLine.value.t[0]
-        //   if (
-        //     ((Math.abs(top.y) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y) + DEVIATION))
-        //     || ((Math.abs(top.y + top.width) - DEVIATION) < (currentClickedElement.value.y + disY) && (currentClickedElement.value.y + disY) < (Math.abs(top.y + top.height) + DEVIATION))
-        //   ) {
-        //     // 在误差内。不能缩放了
-        //   }
-        //   else {
-        //     // disX是当前的减去上次的。偏移值和宽度一个增加一个必然就减小
-        //     currentClickedElement.value.y += disY
-        //     attachedLine.value.t = []
-        //     store.mouseFrom = Object.assign(store.mouseFrom, { y: e.clientY })
-        //     createAttachedLineForDrag('t')
-        //   }
-        // }
       }
       else if (transformMode === 'Scale') {
         const disX = (store.mouseTo.x - store.mouseFrom.x)
