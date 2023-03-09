@@ -84,6 +84,7 @@ onUnmounted(() => {
 
 <style scoped>
 .polygonPathCanvas{
-  filter: url(#blur);
+  /* filter: url(#blur); */
+  filter: blur(200px);
 }
 </style>

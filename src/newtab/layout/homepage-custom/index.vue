@@ -7,7 +7,7 @@ import GridCellOne from './GridCellOne.vue'
 // import { useDebounceFn } from '@vueuse/core';
 
 const gridCells = ref([
-  { id: '0', index: 0, x: 20, y: 35, width: 190, height: 110, component: markRaw(GridCellOne ) }, // 辫子
+  { id: '0', index: 0, x: 20, y: 35, width: 190, height: 110, component: markRaw(GridCellOne) }, // 辫子
   { id: '1', index: 0, x: 465, y: 25, width: 170, height: 160, component: markRaw(GridCellOne) }, // 摆手
   { id: '2', index: 0, x: 385, y: 265, width: 200, height: 50, component: markRaw(GridCellOne) }, // text
   { id: '3', index: 0, x: 150, y: 195, width: 130, height: 130, component: markRaw(GridCellOne) }, // 白边
@@ -27,13 +27,12 @@ const adsorbLineStyle = {
 // await initGridCell()
 // console.log(store.gridCells,'initGridCell');
 
-
 const print = (val: string, e: any) => {
 
 }
 
 const save = (val: string, e: any) => {
-  console.log(val, e)
+  // console.log(val, e)
 }
 
 // const saveCanvasLayoutData = useDebounceFn(() => {
@@ -42,7 +41,6 @@ const save = (val: string, e: any) => {
 //     editAGridCell({ ...cell, index })
 //   })
 // }, 1000)
-
 </script>
 
 <template>
