@@ -5,6 +5,8 @@ declare module '*.vue' {
   export default component
 }
 
+declare module 'three'
+
 interface Window {
   $loadingBar: import('naive-ui').LoadingBarProviderInst
   $dialog: import('naive-ui').DialogProviderInst
