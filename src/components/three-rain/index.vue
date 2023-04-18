@@ -4,6 +4,7 @@ import rainFrag from './shaders/rain.frag?raw'
 
 const settings = { fps: 30, parallaxVal: 1 }
 let scene: any, camera: any, renderer: any, material: any
+let videoElement: any
 let clock = new THREE.Clock()
 
 async function init() {
@@ -92,6 +93,71 @@ watch(rainSettings, () => {
   material.uniforms.u_zoom.value = rainSettings.zoomValue
   material.uniforms.u_lightning.value = rainSettings.lightningValue
 })
+
+const backgroundSettings = reactive({
+  blurQualityValue: 16,
+  blurValue: 0.5,
+  parallaxValue: 1,
+  scaleToFillValue: true,
+  panningValue: false,
+  postProcessingValue: true,
+})
+watch(backgroundSettings, () => {
+
+})
+
+function changeBackground() {
+  document.getElementById('filePicker')!.addEventListener('change', function () {
+    if ((this as any).files[0] === undefined)
+      return
+    const file = (this as any).files[0]
+    if (file.type === 'image/jpg' || file.type === 'image/jpeg' || file.type === 'image/png') {
+      disposeVideoElement(videoElement)
+      material.uniforms.u_tex0.value?.dispose()
+
+      new THREE.TextureLoader().load(URL.createObjectURL(file), (tex: any) => {
+        material.uniforms.u_tex0.value = tex
+        material.uniforms.u_tex0_resolution.value = new THREE.Vector2(tex.image.width, tex.image.height)
+      })
+    }
+    else if (file.type === 'video/mp4' || file.type === 'video/webm') {
+      disposeVideoElement(videoElement)
+      material.uniforms.u_tex0.value?.dispose()
+
+      videoElement = createVideoElement(URL.createObjectURL(file))
+      const videoTexture = new THREE.VideoTexture(videoElement)
+      videoElement.addEventListener(
+        'loadedmetadata',
+        (e: any) => {
+          material.uniforms.u_tex0_resolution.value = new THREE.Vector2(
+            videoTexture.image.videoWidth,
+            videoTexture.image.videoHeight,
+          )
+        },
+        false,
+      )
+      material.uniforms.u_tex0.value = videoTexture
+    }
+  })
+
+  document.getElementById('filePicker')!.click()
+}
+
+function createVideoElement(src: any) {
+  const htmlVideo = document.createElement('video')
+  htmlVideo.src = src
+  htmlVideo.muted = true
+  htmlVideo.loop = true
+  htmlVideo.play()
+  return htmlVideo
+}
+function disposeVideoElement(video: any) {
+  if (video != null && video.hasAttribute('src')) {
+    video.pause()
+    video.removeAttribute('src') // empty source
+    video.load()
+  }
+}
 </script>
 
 <template>
@@ -100,6 +166,7 @@ watch(rainSettings, () => {
     <input id="filePicker" type="file" accept=".jpg, .jpeg, .png, .mp4, .webm" style="visibility: hidden">
     <Teleport to="body">
       <div class="setting-modal flex flex-col ">
+        Rain:
         <div>Intensity</div>
         <input v-model="rainSettings.intensityValue" class="rangeMain " type="range" :step="0.01" :min="0" :max="1" name="Intensity">
         <div>Speed</div>
@@ -112,6 +179,11 @@ watch(rainSettings, () => {
         <input v-model="rainSettings.zoomValue" class="rangeMain " type="range" :step="0.01" :min="0" :max="3" name="Zoom">
         <div>Lightning</div>
         <input v-model="rainSettings.lightningValue" class="rangeMain " type="checkbox" name="Lightning">
+        Background:
+
+        <button class="btn" @click="changeBackground">
+          更改背景
+        </button>
       </div>
     </Teleport>
   </div>
