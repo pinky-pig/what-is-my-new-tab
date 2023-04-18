@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SearchBox from '../search-box/index.vue'
+import Footer from './Footer.vue'
 </script>
 
 <template>
@@ -10,8 +11,16 @@ import SearchBox from '../search-box/index.vue'
     pt-24
   >
     <SearchBox />
-
     <div
+      class="
+      fixed bottom-30px left-0
+      w-full
+      flex justify-center items-center"
+    >
+      <Footer />
+    </div>
+
+    <!-- <div
       class="
       fixed bottom-30px left-0
       w-full
@@ -28,7 +37,7 @@ import SearchBox from '../search-box/index.vue'
           <div i-carbon:settings class=" text-[var(--dockbar-text)] w-full h-full" />
         </DockbarItem>
       </Dockbar>
-    </div>
+    </div> -->
   </div>
 </template>
 

@@ -56,7 +56,7 @@ function clearSearchText() {
         <!-- 输入框 -->
         <input
           v-model="searchText"
-          class="text-gray-900 outline-none h-full grow bg-[transparent] py-[12px] pl-[4px] pr-[42px] placeholder:text-gray-500 placeholder:text-color-t1"
+          class="text-white tracking-widest outline-none h-full grow bg-[transparent] py-[12px] pl-[4px] pr-[42px] placeholder:text-gray-500 placeholder:text-color-t1"
           placeholder="输入搜索内容"
           autocomplete="off"
           @keydown.enter="handleSearch"
@@ -65,7 +65,7 @@ function clearSearchText() {
         <!-- 清除 icon -->
         <div class="absolute top-0 right-0 flex h-full w-[48px] items-center justify-center">
           <button v-show="searchText" tabindex="-1" type="button" class="h-[32px] w-[32px]" @click="clearSearchText">
-            <div i-ooui:clear />
+            <div class=" bg-[rgba(0,0,0,0.3)]" i-ooui:clear />
           </button>
         </div>
       </div>
@@ -75,8 +75,22 @@ function clearSearchText() {
 
 <style scoped>
 .search-box {
-  backdrop-filter: blur(40px);
-  border: 1px solid #ffffff1a;
-  box-shadow: 0 4px 16px 0 #0000001a;
+  position: absolute;
+  top: 130px;
+  left: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 40px;
+  max-width: calc(100% - 200px);
+  min-width: 300px;
+  width: 500px;
+  border-radius: 20px;
+  background-color: rgba(0,0,0,0.1);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: row;
+  border: 2px solid transparent;
+  transition: 0.2s ease-in-out all;
+  z-index: 10;
 }
 </style>
