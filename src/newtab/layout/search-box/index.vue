@@ -56,7 +56,7 @@ function clearSearchText() {
         <!-- 输入框 -->
         <input
           v-model="searchText"
-          class=" outline-none h-full grow bg-[transparent] py-[12px] pl-[4px] pr-[42px] placeholder:text-color-t1 placeholder:text-opacity-40"
+          class="text-gray-900 outline-none h-full grow bg-[transparent] py-[12px] pl-[4px] pr-[42px] placeholder:text-gray-500 placeholder:text-color-t1"
           placeholder="输入搜索内容"
           autocomplete="off"
           @keydown.enter="handleSearch"

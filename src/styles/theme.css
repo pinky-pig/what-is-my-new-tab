@@ -4,6 +4,10 @@ html.dark{
   --primary-text-color                    :rgba(229, 231, 235, 0.8);
 
   --second-bg-color                       :#2c2c32;
+
+  --dockbar-bg              : #262626;
+  --dockbar-placeholder-bg  : #404040;
+  --dockbar-text            : #FAFAFA;
 }
 
 html{
@@ -12,4 +16,8 @@ html{
   --primary-text-color                    :rgba(55, 65, 81, 0.8);
 
   --second-bg-color                       :#fff;
+
+  --dockbar-bg              : #FFFEFE;
+  --dockbar-placeholder-bg  : #EEEEEE;
+  --dockbar-text            : #858585;
 }

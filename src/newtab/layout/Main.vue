@@ -10,7 +10,6 @@ import HomepageSimple from './homepage-simple/index.vue'
     <!-- <SearchBox class="mt-10 z-2" />
     <Homepage class="flex-1 z-2" />
     <StickyNotes /> -->
-
     <!-- <HomepageCustom class="z-2" /> -->
     <HomepageSimple class="z-2" />
   </div>
