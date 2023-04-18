@@ -27,11 +27,11 @@ const adsorbLineStyle = {
 // await initGridCell()
 // console.log(store.gridCells,'initGridCell');
 
-const print = (val: string, e: any) => {
+function print(val: string, e: any) {
 
 }
 
-const save = (val: string, e: any) => {
+function save(val: string, e: any) {
   // console.log(val, e)
 }
 

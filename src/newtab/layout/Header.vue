@@ -9,7 +9,7 @@ const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
 const drawerRef = ref()
-const openDrawer = () => {
+function openDrawer() {
   const { openDrawer } = drawerRef.value
   openDrawer()
 }

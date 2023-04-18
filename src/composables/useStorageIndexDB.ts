@@ -13,7 +13,7 @@ export interface WebsiteType {
   type: number // 0 随机 1 自定义
 }
 
-export const useStorageIndexDB = (dataName: string, storeDetails: string) => {
+export function useStorageIndexDB(dataName: string, storeDetails: string) {
   class MySubClassedDexie extends Dexie {
     common!: Table<any>
     constructor() {

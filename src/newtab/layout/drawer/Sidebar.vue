@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SETTINGS } from './settings'
+
 const props = defineProps({
   modelValue: {
     default: [0] as number[],

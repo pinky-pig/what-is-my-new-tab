@@ -1,6 +1,6 @@
 import { storageWebsiteDB } from '~/logic'
 
-export const getPinedWebsite = async () => {
+export async function getPinedWebsite() {
   const queryResult = await storageWebsiteDB.getItemBySQL(
     { key: 'where', value: 'type' },
     { key: 'equals', value: 0 },
@@ -9,6 +9,12 @@ export const getPinedWebsite = async () => {
 
   return queryResult
 }
-export const addPinedWebsite = async (params: { url: string; type: number; webName: string; property: { color: string } }) => await storageWebsiteDB.addItem(params)
-export const deletePinedWebsite = async (params: number) => await storageWebsiteDB.removeItem(params)
-export const editPinedWebsite = async (params: { id: number; url: string; type: number; webName: string; property: { color: string } }) => await storageWebsiteDB.editItem(params)
+export async function addPinedWebsite(params: { url: string; type: number; webName: string; property: { color: string } }) {
+  return await storageWebsiteDB.addItem(params)
+}
+export async function deletePinedWebsite(params: number) {
+  return await storageWebsiteDB.removeItem(params)
+}
+export async function editPinedWebsite(params: { id: number; url: string; type: number; webName: string; property: { color: string } }) {
+  return await storageWebsiteDB.editItem(params)
+}

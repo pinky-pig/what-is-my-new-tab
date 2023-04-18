@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+
 type BgType = 'random-colors' | 'linear-colors' | 'image'
 interface currentWallpaperType {
   type: BgType

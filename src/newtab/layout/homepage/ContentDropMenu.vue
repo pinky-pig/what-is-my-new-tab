@@ -7,10 +7,10 @@ interface PropsType {
 }
 defineProps<PropsType>()
 const emit = defineEmits(['update:showDropdownRef', 'd'])
-const onClickoutside = () => {
+function onClickoutside() {
   emit('update:showDropdownRef', false)
 }
-const handleSelect = (e: any) => {
+function handleSelect(e: any) {
   emit('d', e)
 }
 </script>

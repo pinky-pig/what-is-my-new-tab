@@ -2,7 +2,7 @@ import { useMagicKeys } from '@vueuse/core'
 import type { StyleValue } from 'vue'
 import { defineCustomElement, h } from 'vue'
 
-export const watchContextMenuEvent = () => {
+export function watchContextMenuEvent() {
   let events: any = []
   let elements: any
   browser.runtime.onMessage.addListener(

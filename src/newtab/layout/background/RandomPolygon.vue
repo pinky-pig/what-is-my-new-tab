@@ -24,7 +24,7 @@ function randomGeneratePolygon() {
   const polygonColorArray = getRandomIntInclusive(0, themes.length - 1)
 
   // 遍历每个多边形
-  polygonPathList.value = polygonList.map((item, index) => {
+  polygonPathList.value = polygonList.map((_item, index) => {
     // 1.首先获取每个多边形随机的边数
     const num = new Array(getRandomIntInclusive(3, 10)).fill([])
 

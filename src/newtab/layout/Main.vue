@@ -2,7 +2,7 @@
 // import SearchBox from './search-box/index.vue'
 // import Homepage from './homepage/index.vue'
 // import StickyNotes from './sticky-notes/index.vue'
-import HomepageCustom from './homepage-custom/index.vue'
+import HomepageSimple from './homepage-simple/index.vue'
 </script>
 
 <template>
@@ -11,6 +11,7 @@ import HomepageCustom from './homepage-custom/index.vue'
     <Homepage class="flex-1 z-2" />
     <StickyNotes /> -->
 
-    <HomepageCustom class="z-2" />
+    <!-- <HomepageCustom class="z-2" /> -->
+    <HomepageSimple class="z-2" />
   </div>
 </template>

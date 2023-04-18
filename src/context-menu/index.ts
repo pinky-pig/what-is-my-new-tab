@@ -1,4 +1,4 @@
-export const contextMenu = () => {
+export function contextMenu() {
   browser.contextMenus.create({
     type: 'normal',
     title: 'Menu Demo',

@@ -8,7 +8,7 @@ import { DrawerSetting } from '~/types'
 
 const store = useNewtabStore()
 const { isOpenDrawer } = storeToRefs(store)
-const openDrawer = () => {
+function openDrawer() {
   isOpenDrawer.value = !isOpenDrawer.value
 }
 
@@ -46,7 +46,7 @@ function smoothScrollToArchor(observerObjects: any) {
 
 type refItem = Element | ComponentPublicInstance | null
 const refMap: Record<string, refItem> = {}
-const setRefMap = (el: refItem, item: any) => {
+function setRefMap(el: refItem, item: any) {
   if (el)
     refMap[`${item.key}`] = el
 }

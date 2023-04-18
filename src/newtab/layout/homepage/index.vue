@@ -3,6 +3,7 @@ import ContentDropMenu from './ContentDropMenu.vue'
 import { addPinedWebsite, deletePinedWebsite, editPinedWebsite, getPinedWebsite } from './websiteData'
 import { getBrowserTopSites } from '~/chrome-api'
 import { watchContextMenuEvent } from '~/context-menu/littleWindow'
+
 const pinedWebsiteList = ref<{ webName: string; type: number; url: string; property: { color: string } }[]>([])
 onMounted(async () => {
   pinedWebsiteList.value = await getPinedWebsite()
@@ -32,7 +33,7 @@ const currentClickedItem = ref<{
 }>()
 
 // 添加新pined网址
-const handleAddPinedWebsite = () => {
+function handleAddPinedWebsite() {
   if (pinedWebsiteUrlInput.value === '') {
     window.$message.warning('请先输入网站地址')
     return
@@ -78,7 +79,7 @@ const xRef = ref(0)
 const yRef = ref(0)
 
 // 打开右键菜单
-const handlePinedContextMenu = (e: MouseEvent, item: any, index: number) => {
+function handlePinedContextMenu(e: MouseEvent, item: any, index: number) {
   e.preventDefault()
   showDropdownRef.value = false
   nextTick().then(() => {

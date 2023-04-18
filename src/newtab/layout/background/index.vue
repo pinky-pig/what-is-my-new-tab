@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useDark } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
-import RandomPolygon from './RandomPolygon.vue'
 import CustomImage from './CustomImage.vue'
 import LinearGradient from './LinearGradient.vue'
 import Gradient from './Gradient.vue'

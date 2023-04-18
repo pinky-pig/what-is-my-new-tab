@@ -1,7 +1,9 @@
 import { storageCustomLayoutDB } from '~/logic'
 
-export const getAllGridCell = async () => await storageCustomLayoutDB.getAllItem()
-export const addAGridCell = async (params: {
+export async function getAllGridCell() {
+  return await storageCustomLayoutDB.getAllItem()
+}
+export async function addAGridCell(params: {
   id: string
   index: number
   x: number
@@ -12,25 +14,29 @@ export const addAGridCell = async (params: {
   showMode: number
   transform: string
   children?: any
-}) => await storageCustomLayoutDB.addItem(params)
+}) {
+  return await storageCustomLayoutDB.addItem(params)
+}
 
-export const deleteAGridCell = async (params: number) => await storageCustomLayoutDB.removeItem(params)
-export const editAGridCell = async (
-  params: {
-    id: string
-    index: number
-    x: number
-    y: number
-    width: number
-    height: number
-    isLocked: boolean // 是否锁定
-    showMode: number
-    transform: string
-    children?: any
-  },
-) => await storageCustomLayoutDB.editItem(params)
+export async function deleteAGridCell(params: number) {
+  return await storageCustomLayoutDB.removeItem(params)
+}
+export async function editAGridCell(params: {
+  id: string
+  index: number
+  x: number
+  y: number
+  width: number
+  height: number
+  isLocked: boolean // 是否锁定
+  showMode: number
+  transform: string
+  children?: any
+}) {
+  return await storageCustomLayoutDB.editItem(params)
+}
 
-export const getAllGridCellSortByIndex = async () => {
+export async function getAllGridCellSortByIndex() {
   return await storageCustomLayoutDB.getItemBySQL(
     { key: 'where', value: 'index' },
     { key: 'above', value: -1 },

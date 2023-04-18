@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div id="linear-gradient-canvas" ref="linearGradientCanvasRef" class="linear-gradient-canvas w-full h-full relative " />
+  <div id="linear-gradient-canvas" class="linear-gradient-canvas w-full h-full relative " />
 </template>
 
 <style scoped>

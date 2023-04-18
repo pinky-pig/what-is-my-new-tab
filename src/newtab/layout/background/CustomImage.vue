@@ -12,7 +12,7 @@ const customWallPaper = computed(() => {
 </script>
 
 <template>
-  <div id="custom-image-canvas" ref="customImageCanvasRef" class="custom-image-canvas w-full h-full relative ">
+  <div id="custom-image-canvas" class="custom-image-canvas w-full h-full relative ">
     <img
       class=" custom-wallpaper-preview-img w-full h-full absolute object-cover"
       :src="customWallPaper"

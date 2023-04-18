@@ -24,11 +24,11 @@ const mode = ref<BackgroundMode[]>([
     value: 'https://',
     name: '图片',
   },
-  // {
-  //   type: 'linear-colors',
-  //   value: 'rgba(0,0,0,)',
-  //   name: '线性渐变',
-  // },
+  {
+    type: 'linear-colors',
+    value: 'rgba(0,0,0,)',
+    name: '线性渐变',
+  },
 ])
 
 const store = useNewtabStore()
@@ -59,7 +59,7 @@ onMounted(async () => {
 })
 
 // 上传自定义图片壁纸
-const handleUploadImage = (e: Event) => {
+function handleUploadImage(e: Event) {
   // 这里其实只选择了一个文件
   const files = []
   for (let i = 0; i < uploadInputRef.value.files.length; i++)
