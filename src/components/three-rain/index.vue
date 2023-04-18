@@ -75,12 +75,45 @@ onMounted(() => {
     material.uniforms.u_resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight)
   })
 })
+
+const rainSettings = reactive({
+  intensityValue: 0.4,
+  speedValue: 0.4,
+  brightnessValue: 0.8,
+  normalValue: 0.5,
+  zoomValue: 2.61,
+  lightningValue: false,
+})
+watch(rainSettings, () => {
+  material.uniforms.u_intensity.value = rainSettings.intensityValue
+  material.uniforms.u_speed.value = rainSettings.speedValue
+  material.uniforms.u_brightness.value = rainSettings.brightnessValue
+  material.uniforms.u_normal.value = rainSettings.normalValue
+  material.uniforms.u_zoom.value = rainSettings.zoomValue
+  material.uniforms.u_lightning.value = rainSettings.lightningValue
+})
 </script>
 
 <template>
   <div>
     <div id="container" />
     <input id="filePicker" type="file" accept=".jpg, .jpeg, .png, .mp4, .webm" style="visibility: hidden">
+    <Teleport to="body">
+      <div class="setting-modal flex flex-col ">
+        <div>Intensity</div>
+        <input v-model="rainSettings.intensityValue" class="rangeMain " type="range" :step="0.01" :min="0" :max="1" name="Intensity">
+        <div>Speed</div>
+        <input v-model="rainSettings.speedValue" class="rangeMain " type="range" :step="0.01" :min="0" :max="1" name="Speed">
+        <div>Brightness</div>
+        <input v-model="rainSettings.brightnessValue" class="rangeMain " type="range" :step="0.01" :min="0" :max="1" name="Brightness">
+        <div>Normal</div>
+        <input v-model="rainSettings.normalValue" class="rangeMain " type="range" :step="0.01" :min="0" :max="1" name="Normal">
+        <div>Zoom</div>
+        <input v-model="rainSettings.zoomValue" class="rangeMain " type="range" :step="0.01" :min="0" :max="3" name="Zoom">
+        <div>Lightning</div>
+        <input v-model="rainSettings.lightningValue" class="rangeMain " type="checkbox" name="Lightning">
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -92,5 +125,24 @@ onMounted(() => {
   top: 0;
   right: 0;
   bottom: 0;
+}
+
+.setting-modal{
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: fit-content;
+  max-width: calc(100% - 200px);
+  min-width: 100px;
+  width: 400px;
+  border-radius: 20px;
+  background-color: rgba(0,0,0,0.1);
+  backdrop-filter: blur(20px);
+  border: 2px solid transparent;
+  transition: 0.2s ease-in-out all;
+  z-index: 10;
+  padding: 20px;
+  color: white;
 }
 </style>
