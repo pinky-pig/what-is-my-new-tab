@@ -76,6 +76,7 @@ onMounted(() => {
     <n-config-provider :theme="naiveUIDarkTheme" :theme-overrides="naiveUIThemeOverrides">
       <div class="main-container w-screen h-screen">
         <main
+          id="mainTest"
           ref="mainRef"
           :style="{ transform: mainRefTransform }"
           class=" w-full h-full text-center text-gray-700 absolute z-2"
@@ -83,7 +84,8 @@ onMounted(() => {
         >
           <!-- <Background /> -->
           <!-- <Header /> -->
-          <Rain class="fixed top-0 left-0 right-0 bottom-0 overflow-hidden pointer-events-none" />
+
+          <Rain class="fixed top-0 left-0 right-0 bottom-0 overflow-hidden " />
           <Main />
         </main>
       </div>

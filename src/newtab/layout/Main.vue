@@ -6,7 +6,7 @@ import HomepageSimple from './homepage-simple/index.vue'
 </script>
 
 <template>
-  <div class="mx-auto w-4/5 h-full flex flex-col py-10 justify-center items-center">
+  <div class="mx-auto w-4/5  flex flex-col py-10 justify-center items-center">
     <!-- <SearchBox class="mt-10 z-2" />
     <Homepage class="flex-1 z-2" />
     <StickyNotes /> -->

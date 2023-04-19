@@ -110,63 +110,63 @@ function handleActiveTab(item: Setting, index: number) {
 
 <template>
   <div>
-    <Teleport to="body">
-      <div class="setting-modal flex flex-col ">
-        <div
-          class="
+    <!-- <Teleport to="#mainTest"> -->
+    <div class="setting-modal flex flex-col ">
+      <div
+        class="
             tab-panel
             w-full h-0 overflow-hidden
             transition-all
             duration-500
             ease-in-out"
-        >
-          <div class="tab-panel-dom">
-            <div
-              v-for="item in currentItem?.children"
-              :key="item.label"
-              class=" w-full relative my-10px"
-            >
-              <div v-if="item.type === 'range'" class=" flex flex-row justify-between ">
-                <div>
-                  {{ item.label }}
-                </div>
-                <input v-model="rainSettings[item.value]" class="rounded-md" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
-                <input class="w-38px h-20px text-center text-10px bg-gray-500 rounded-md" type="text">
+      >
+        <div class="tab-panel-dom">
+          <div
+            v-for="item in currentItem?.children"
+            :key="item.label"
+            class=" w-full relative my-10px"
+          >
+            <div v-if="item.type === 'range'" class=" flex flex-row justify-between ">
+              <div>
+                {{ item.label }}
               </div>
-              <div v-if="item.type === 'checkbox'" class=" flex flex-row justify-between ">
-                <span>
-                  {{ item.label }}
-                </span>
-                <input v-model="rainSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-model="rainSettings[item.value]" class="rounded-md" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input class="w-38px h-20px text-center text-10px bg-gray-500 rounded-md" type="text">
+            </div>
+            <div v-if="item.type === 'checkbox'" class=" flex flex-row justify-between ">
+              <span>
+                {{ item.label }}
+              </span>
+              <input v-model="rainSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+            </div>
+            <div v-if="item.type === 'button'" class=" flex flex-row justify-between ">
+              <div>
+                {{ item.label }}
               </div>
-              <div v-if="item.type === 'button'" class=" flex flex-row justify-between ">
-                <div>
-                  {{ item.label }}
-                </div>
-                <button class="btn" @click="changeBackground">
-                  更改
-                </button>
-              </div>
+              <button class="btn" @click="changeBackground">
+                更改
+              </button>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- tab -->
-        <div class=" flex flex-row w-full justify-between relative">
-          <div
-            v-for="item, index in settingList"
-            :key="item.label"
-            class="tab-item w-60px h-45px grid place-items-center cursor-pointer relative z-1"
-            @click="handleActiveTab(item, index)"
-          >
-            {{ item.label }}
-          </div>
+      <!-- tab -->
+      <div class=" flex flex-row w-full justify-between relative">
+        <div
+          v-for="item, index in settingList"
+          :key="item.label"
+          class="tab-item w-60px h-45px grid place-items-center cursor-pointer relative z-1"
+          @click="handleActiveTab(item, index)"
+        >
+          {{ item.label }}
+        </div>
 
-          <!-- tab-bg -->
-          <div
-            v-show="currentItem"
-            ref="currentItemBgRef"
-            class="
+        <!-- tab-bg -->
+        <div
+          v-show="currentItem"
+          ref="currentItemBgRef"
+          class="
               w-60px h-45px
               absolute top-0 left-0 z-0
               pointer-events-none
@@ -174,14 +174,14 @@ function handleActiveTab(item: Setting, index: number) {
               duration-300
               ease-in-out
             "
-          >
-            <div class="animate-dom animate-jello  w-full h-full rounded-xl">
+        >
+          <div class="animate-dom animate-jello  w-full h-full rounded-xl">
               &nbsp;
-            </div>
           </div>
         </div>
       </div>
-    </Teleport>
+    </div>
+    <!-- </Teleport> -->
   </div>
 </template>
 

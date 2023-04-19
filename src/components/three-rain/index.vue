@@ -168,6 +168,7 @@ function disposeVideoElement(video: any) {
 
     <Settings
       :rain-settings="rainSettings"
+      :background-settings="backgroundSettings"
       @changeBackground="changeBackground"
     />
   </div>
