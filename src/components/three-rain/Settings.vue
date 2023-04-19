@@ -124,21 +124,27 @@ function handleActiveTab(item: Setting, index: number) {
             <div
               v-for="item in currentItem?.children"
               :key="item.label"
-              class=" flex flex-row w-full justify-between relative"
+              class=" w-full relative my-10px"
             >
-              <span>
-                {{ item.label }}
-              </span>
-              <div v-if="item.type === 'range'">
-                <input v-model="rainSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
-                <input class="w-38px h-20px text-center text-10px bg-gray-500 " type="text">
+              <div v-if="item.type === 'range'" class=" flex flex-row justify-between ">
+                <div>
+                  {{ item.label }}
+                </div>
+                <input v-model="rainSettings[item.value]" class="rounded-md" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+                <input class="w-38px h-20px text-center text-10px bg-gray-500 rounded-md" type="text">
               </div>
-              <div v-if="item.type === 'checkbox'">
+              <div v-if="item.type === 'checkbox'" class=" flex flex-row justify-between ">
+                <span>
+                  {{ item.label }}
+                </span>
                 <input v-model="rainSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
               </div>
-              <div v-if="item.type === 'button'">
+              <div v-if="item.type === 'button'" class=" flex flex-row justify-between ">
+                <div>
+                  {{ item.label }}
+                </div>
                 <button class="btn" @click="changeBackground">
-                  更改背景
+                  更改
                 </button>
               </div>
             </div>
@@ -235,5 +241,9 @@ function handleActiveTab(item: Setting, index: number) {
   100% {
     transform: scale3d(1, 1, 1);
   }
+}
+
+input{
+  outline: none;
 }
 </style>
