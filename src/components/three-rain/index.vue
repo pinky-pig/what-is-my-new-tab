@@ -104,7 +104,19 @@ const backgroundSettings = reactive({
   postProcessingValue: true,
 })
 watch(backgroundSettings, () => {
+  material.uniforms.u_blur_iterations.value = backgroundSettings.blurQualityValue
+  material.uniforms.u_blur_intensity.value = backgroundSettings.blurValue
+  settings.parallaxVal = backgroundSettings.parallaxValue
+  material.uniforms.u_texture_fill.value = backgroundSettings.scaleToFillValue
+  material.uniforms.u_panning.value = backgroundSettings.panningValue
+  material.uniforms.u_post_processing.value = backgroundSettings.postProcessingValue
+})
 
+const renderSettings = reactive({
+  fps: 30,
+})
+watch(renderSettings, () => {
+  settings.fps = renderSettings.fps
 })
 
 function changeBackground() {
@@ -169,6 +181,7 @@ function disposeVideoElement(video: any) {
     <Settings
       :rain-settings="rainSettings"
       :background-settings="backgroundSettings"
+      :render-settings="renderSettings"
       @changeBackground="changeBackground"
     />
   </div>

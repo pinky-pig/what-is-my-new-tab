@@ -22,12 +22,19 @@ const props = defineProps({
     },
     required: true,
   },
+  renderSettings: {
+    default: {
+      fps: 30,
+    },
+    required: true,
+  },
 })
 
 const emits = defineEmits(
   [
     'update:rainSettings',
     'update:backgroundSettings',
+    'update:renderSettings',
     'changeBackground',
   ],
 )
@@ -38,6 +45,23 @@ const rainSettings = computed({
   },
   set(value) {
     emits('update:rainSettings', value)
+  },
+})
+const backgroundSettings = computed({
+  get() {
+    return props.backgroundSettings
+  },
+  set(value) {
+    emits('update:backgroundSettings', value)
+  },
+})
+
+const renderSettings = computed({
+  get() {
+    return props.renderSettings
+  },
+  set(value) {
+    emits('update:renderSettings', value)
   },
 })
 
@@ -71,12 +95,20 @@ const settingList = ref<Setting[]>([
   {
     label: '背景',
     children: [
-      { label: '上传背景', value: 'changeBackground', type: 'button' },
+      { label: '模糊质量', value: 'blurQualityValue', type: 'range', steps: 1, min: 1, max: 64 },
+      { label: '模糊程度', value: 'blurValue', type: 'range', steps: 0.2, min: 0, max: 10 },
+      // { label: '视差', value: 'parallaxValue', type: 'range', steps: 1, min: 0, max: 5 },
+      { label: '缩放', value: 'scaleToFillValue', type: 'checkbox' },
+      { label: '平移', value: 'panningValue', type: 'checkbox' },
+      { label: '滤镜', value: 'postProcessingValue', type: 'checkbox' },
+
+      { label: '自定义背景', value: 'changeBackground', type: 'button' },
     ],
   },
   {
     label: '渲染',
     children: [
+      { label: 'FPS', value: 'fps', type: 'range', steps: 15, min: 15, max: 120 },
     ],
   },
 ])
@@ -98,11 +130,13 @@ function handleActiveTab(item: Setting, index: number) {
 
     if (document.querySelector('.tab-panel-dom')?.scrollHeight === parseInt(computedStyle.paddingTop) + parseInt(computedStyle.paddingBottom)) {
       (document.querySelector('.tab-panel') as HTMLElement).style.height = '0';
-      (document.querySelector('.tab-panel') as HTMLElement).style.marginBottom = '0'
+      (document.querySelector('.tab-panel') as HTMLElement).style.marginBottom = '0';
+      (document.querySelector('.tab-panel') as HTMLElement).style.marginTop = '0'
     }
     else {
       (document.querySelector('.tab-panel') as HTMLElement).style.height = `${document.querySelector('.tab-panel-dom')?.scrollHeight}px`;
-      (document.querySelector('.tab-panel') as HTMLElement).style.marginBottom = '10px'
+      (document.querySelector('.tab-panel') as HTMLElement).style.marginBottom = '10px';
+      (document.querySelector('.tab-panel') as HTMLElement).style.marginTop = '5px'
     }
   })
 }
@@ -114,11 +148,11 @@ function handleActiveTab(item: Setting, index: number) {
     <div class="setting-modal flex flex-col ">
       <div
         class="
-            tab-panel
-            w-full h-0 overflow-hidden
-            transition-all
-            duration-500
-            ease-in-out"
+          tab-panel
+          w-full h-0 overflow-hidden
+          transition-all
+          duration-500
+          ease-in-out"
       >
         <div class="tab-panel-dom">
           <div
@@ -126,25 +160,36 @@ function handleActiveTab(item: Setting, index: number) {
             :key="item.label"
             class=" w-full relative my-10px"
           >
-            <div v-if="item.type === 'range'" class=" flex flex-row justify-between ">
-              <div>
+            <div v-if="item.type === 'range'">
+              <div class=" flex flex-row justify-between px-2">
                 {{ item.label }}
+                <input v-if="currentItem.label === '雨滴'" v-model="rainSettings[item.value] " class="slider-number w-45px h-25px text-center text-10px rounded-md" type="text">
+                <input v-if="currentItem.label === '背景'" v-model="backgroundSettings[item.value] " class="slider-number w-45px h-25px text-center text-10px rounded-md" type="text">
+                <input v-if="currentItem.label === '渲染'" v-model="renderSettings[item.value] " class="slider-number w-45px h-25px text-center text-10px rounded-md" type="text">
               </div>
-              <input v-model="rainSettings[item.value]" class="rounded-md" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
-              <input class="w-38px h-20px text-center text-10px bg-gray-500 rounded-md" type="text">
+
+              <input v-if="currentItem.label === '雨滴'" v-model="rainSettings[item.value]" class="slider-bar rounded-md w-full my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem.label === '背景'" v-model="backgroundSettings[item.value]" class="slider-bar rounded-md w-full my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem.label === '渲染'" v-model="renderSettings[item.value]" class="slider-bar rounded-md w-full my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
             </div>
-            <div v-if="item.type === 'checkbox'" class=" flex flex-row justify-between ">
+            <div v-if="item.type === 'checkbox'" class=" flex flex-row justify-between px-2">
               <span>
                 {{ item.label }}
               </span>
-              <input v-model="rainSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem.label === '雨滴'" v-model="rainSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem.label === '背景'" v-model="backgroundSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem.label === '渲染'" v-model="renderSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
             </div>
-            <div v-if="item.type === 'button'" class=" flex flex-row justify-between ">
+
+            <div v-if="item.type === 'button'" class=" flex flex-row justify-between px-2">
               <div>
                 {{ item.label }}
               </div>
-              <button class="btn" @click="changeBackground">
-                更改
+              <button
+                class="px-4 py-1 rounded inline-block bg-[rgba(0,0,0,0.1)] text-white cursor-pointer hover:bg-[rgba(0,0,0,0.5)] disabled:cursor-default disabled:bg-gray-600 disabled:opacity-50"
+                @click="changeBackground"
+              >
+                上传
               </button>
             </div>
           </div>
@@ -242,8 +287,35 @@ function handleActiveTab(item: Setting, index: number) {
     transform: scale3d(1, 1, 1);
   }
 }
-
+.slider-number{
+  background-color: rgba(255,255,255,0.1);
+  backdrop-filter: blur(20px);
+}
 input{
   outline: none;
+}
+.slider-bar{
+  @apply dark:bg-[#e5e7eb];
+  margin: auto;
+  width: 100%;
+  background: #C2C5C7;
+  outline: none;
+  -webkit-appearance: none;
+  /*清除系统默认样式*/
+  height: 3px;
+  /*横条的高度*/
+}
+input[type="range"]::-webkit-slider-thumb {
+  @apply dark:bg-[#e5e7eb];
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  outline: 5px solid #C2C5C790;
+  background-color: #ececec;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3),
+    0 3px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  -webkit-appearance: none;
+  border: 0;
 }
 </style>
