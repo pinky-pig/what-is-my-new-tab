@@ -196,7 +196,7 @@ function handleActiveTab(item: Setting, index: number) {
   min-width: 100px;
   width: 400px;
   border-radius: 20px;
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(255,255,255,0.1);
   backdrop-filter: blur(20px);
   border: 2px solid transparent;
   transition: 0.2s ease-in-out all;
@@ -206,14 +206,14 @@ function handleActiveTab(item: Setting, index: number) {
 }
 .tab-panel {
   border-radius: 10px;
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(255,255,255,0.1);
   backdrop-filter: blur(20px);
 }
 .tab-panel-dom{
   padding: 10px;
 }
 .animate-dom{
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(255,255,255,0.1);
   backdrop-filter: blur(20px);
 }
 .animate-jello {
