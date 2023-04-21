@@ -69,6 +69,10 @@ function calculateMainScale() {
 onMounted(() => {
   store.setSystemFontFamily(store.currentFontFamily)
 })
+
+// 背景设置
+const rainRef = ref<HTMLElement | null>(null)
+provide('rainRef', rainRef)
 </script>
 
 <template>
@@ -85,7 +89,7 @@ onMounted(() => {
           <!-- <Background /> -->
           <!-- <Header /> -->
 
-          <Rain class="fixed top-0 left-0 right-0 bottom-0 overflow-hidden " />
+          <Rain ref="rainRef" class="fixed top-0 left-0 right-0 bottom-0 overflow-hidden " />
           <Main />
         </main>
       </div>
@@ -96,7 +100,11 @@ onMounted(() => {
 
 <style scoped>
 .main-container {
-  background: var(--primary-bg-color);
+  --bg-color: #ede9e9;
+  background-image: repeating-linear-gradient(to right,var(--bg-color),var(--bg-color) 1px,transparent 1px,transparent 30px),
+  repeating-linear-gradient(to bottom,var(--bg-color),var(--bg-color) 1px,transparent 1px,transparent 30px);
+
+  /* background: var(--primary-bg-color); */
   /* background-image: url(/assets/noise.png);
   background-attachment: fixed; */
 }

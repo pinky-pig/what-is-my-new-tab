@@ -171,6 +171,16 @@ function disposeVideoElement(video: any) {
     video.load()
   }
 }
+
+const isShowRainSettings = ref(false)
+function handleIsOpenSettingsPanel() {
+  isShowRainSettings.value = !isShowRainSettings.value
+}
+
+defineExpose({
+  isShowRainSettings,
+  handleIsOpenSettingsPanel,
+})
 </script>
 
 <template>
@@ -179,6 +189,7 @@ function disposeVideoElement(video: any) {
     <input id="filePicker" type="file" accept=".jpg, .jpeg, .png, .mp4, .webm" style="visibility: hidden">
 
     <Settings
+      v-if="isShowRainSettings"
       :rain-settings="rainSettings"
       :background-settings="backgroundSettings"
       :render-settings="renderSettings"
