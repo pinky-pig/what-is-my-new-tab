@@ -1,29 +1,20 @@
 <script setup lang="ts">
-// <div v-if="item.key === 'baidu'" i-ri-baidu-fill />
-//       <div v-else-if="item.key === 'google'" i-ri:google-fill />
-//       <div v-else-if="item.key === 'bing'" i-uil:bing />
-//       <div v-else-if="item.key === 'zhihu'" i-ri:zhihu-fill />
-//       <div v-else-if="item.key === 'github'" i-ri:github-fill />
-//       <div v-else-if="item.key === 'tiktok'" i-ic:baseline-tiktok />
-//       <div v-else-if="item.key === 'more'" i-ri:add-circle-line />
-//       <div v-else>自定义icon</div>
-// const config = ref({
-//   size: SizeStyle.Small,
-//   items: [
-//     { key: 'baidu', url: 'https://www.baidu.com/s?wd=', color: '#669AE1', icon: 'ri-baidu-fill' },
-//     { key: 'google', url: 'https://www.google.com/search?q=', color: '#70CC72', icon: 'ri:google-fill' },
-//     { key: 'bing', url: 'https://www.bing.com/search?mkt=zh-CN&q=', color: '#FE4365', icon: 'uil:bing' },
-//     { key: 'zhihu', url: 'https://www.zhihu.com/search?q=', color: '#C49CDE', icon: 'ri:zhihu-fill' },
-//     { key: 'github', url: 'https://www.github.com/search?q=test', color: '#FC913A', icon: 'ri:github-fill' },
-//     { key: 'more', url: '', color: '#62C2E4', icon: 'ri:add-circle-line' },
-//   ],
-// })
+const searchConfig = ref([
+  { label: 'baidu', url: 'https://www.baidu.com/s?wd=', color: '#669AE1', icon: 'ri-baidu-fill' },
+  { label: 'google', url: 'https://www.google.com/search?q=', color: '#70CC72', icon: 'ri:google-fill' },
+  { label: 'bing', url: 'https://www.bing.com/search?mkt=zh-CN&q=', color: '#FE4365', icon: 'uil:bing' },
+  { label: 'zhihu', url: 'https://www.zhihu.com/search?q=', color: '#C49CDE', icon: 'ri:zhihu-fill' },
+  { label: 'github', url: 'https://www.github.com/search?q=test', color: '#FC913A', icon: 'ri:github-fill' },
+  { label: 'more', url: '', color: '#62C2E4', icon: 'ri:add-circle-line' },
+])
+
+const currentSearchEngine = ref(searchConfig.value[0])
 
 const searchText = ref('')
 function handleSearch(e: KeyboardEvent) {
   if (!e.isComposing) {
     setTimeout(() => {
-      window.open(`https://www.baidu.com/s?wd=${searchText.value}`)
+      window.open(`${currentSearchEngine.value.url}${searchText.value}`)
     })
   }
 }
@@ -31,10 +22,17 @@ function handleSearch(e: KeyboardEvent) {
 function clearSearchText() {
   searchText.value = ''
 }
+
+function handleSelectedSearchEngine(item: typeof searchConfig.value[0]) {
+  if (item.label !== 'more')
+    currentSearchEngine.value = item
+}
+
+const isShowSearchEngine = ref(false)
 </script>
 
 <template>
-  <div class=" w-full flex justify-center items-center pointer-events-none top-[12vh]">
+  <div class=" w-full flex flex-col justify-center items-center pointer-events-none top-[12vh]">
     <section
       class="w-[676px] max-w-[86vw] pointer-events-auto"
       style="transition-property: top; transition-duration: 200ms; top: 50px;"
@@ -47,6 +45,7 @@ function clearSearchText() {
           >
             <section
               class=" flex items-center justify-center overflow-hidden bg-cover h-[24px] w-[24px] rounded-[6px] bg-transparent"
+              @click="isShowSearchEngine = !isShowSearchEngine"
             >
               <div class="text-blue-500 text-2xl" i-ri-baidu-fill />
             </section>
@@ -70,6 +69,30 @@ function clearSearchText() {
         </div>
       </div>
     </section>
+
+    <!-- 搜索引擎 -->
+    <section
+      v-show="isShowSearchEngine"
+      class="
+        search-engine
+        w-[676px] max-w-[86vw] h-[90px]
+        pointer-events-auto
+        rounded-[12px]
+        mt-10px p-4
+        flex flex-row justify-start items-center
+        "
+      style="transition-property: top; transition-duration: 200ms; top: 50px;"
+    >
+      <div
+        v-for="item in searchConfig"
+        :key="item.label"
+        class="w-70px h-64px flex flex-col justify-center items-center cursor-pointer"
+        @click="handleSelectedSearchEngine(item)"
+      >
+        <img class="w-36px h-36px rounded-8px" src="http://placekitten.com/36/36" alt="">
+        <span>{{ item.label }}</span>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -79,5 +102,9 @@ function clearSearchText() {
   backdrop-filter: blur(40px);
   border: 1px solid #ffffff1a;
   box-shadow: 0 4px 16px 0 #0000001a;
+}
+.search-engine{
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(40px);
 }
 </style>
