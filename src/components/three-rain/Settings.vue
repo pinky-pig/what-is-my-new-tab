@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { onClickOutside } from '@vueuse/core'
+
 const props = defineProps({
   rainSettings: {
     default: {
@@ -114,7 +116,7 @@ const settingList = ref<Setting[]>([
 ])
 
 // 当前的选项卡
-const currentItem = ref()
+const currentItem = ref<Setting | null>()
 // 当前的选项卡的背景颜色
 const currentItemBgRef = ref<HTMLElement>()
 // 选中当前选项卡
@@ -140,12 +142,20 @@ function handleActiveTab(item: Setting, index: number) {
     }
   })
 }
+
+const target = ref(null)
+onClickOutside(target, (event) => {
+  currentItem.value = null;
+  (document.querySelector('.tab-panel') as HTMLElement).style.height = '0';
+  (document.querySelector('.tab-panel') as HTMLElement).style.marginBottom = '0';
+  (document.querySelector('.tab-panel') as HTMLElement).style.marginTop = '0'
+})
 </script>
 
 <template>
   <div>
     <!-- <Teleport to="#mainTest"> -->
-    <div class="setting-modal flex flex-col ">
+    <div ref="target" class="setting-modal flex flex-col ">
       <div
         class="
           tab-panel
@@ -163,22 +173,22 @@ function handleActiveTab(item: Setting, index: number) {
             <div v-if="item.type === 'range'">
               <div class=" flex flex-row justify-between px-2">
                 {{ item.label }}
-                <input v-if="currentItem.label === '雨滴'" v-model="rainSettings[item.value] " class="slider-number w-45px h-25px text-center text-10px rounded-md" type="text">
-                <input v-if="currentItem.label === '背景'" v-model="backgroundSettings[item.value] " class="slider-number w-45px h-25px text-center text-10px rounded-md" type="text">
-                <input v-if="currentItem.label === '渲染'" v-model="renderSettings[item.value] " class="slider-number w-45px h-25px text-center text-10px rounded-md" type="text">
+                <input v-if="currentItem?.label === '雨滴'" v-model="rainSettings[item.value] " class="slider-number w-45px h-25px text-center text-10px rounded-md" type="text">
+                <input v-if="currentItem?.label === '背景'" v-model="backgroundSettings[item.value] " class="slider-number w-45px h-25px text-center text-10px rounded-md" type="text">
+                <input v-if="currentItem?.label === '渲染'" v-model="renderSettings[item.value] " class="slider-number w-45px h-25px text-center text-10px rounded-md" type="text">
               </div>
 
-              <input v-if="currentItem.label === '雨滴'" v-model="rainSettings[item.value]" class="slider-bar rounded-md w-full my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
-              <input v-if="currentItem.label === '背景'" v-model="backgroundSettings[item.value]" class="slider-bar rounded-md w-full my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
-              <input v-if="currentItem.label === '渲染'" v-model="renderSettings[item.value]" class="slider-bar rounded-md w-full my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem?.label === '雨滴'" v-model="rainSettings[item.value]" class="slider-bar rounded-md w-full my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem?.label === '背景'" v-model="backgroundSettings[item.value]" class="slider-bar rounded-md w-full my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem?.label === '渲染'" v-model="renderSettings[item.value]" class="slider-bar rounded-md w-full my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
             </div>
             <div v-if="item.type === 'checkbox'" class=" flex flex-row justify-between px-2">
               <span>
                 {{ item.label }}
               </span>
-              <input v-if="currentItem.label === '雨滴'" v-model="rainSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
-              <input v-if="currentItem.label === '背景'" v-model="backgroundSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
-              <input v-if="currentItem.label === '渲染'" v-model="renderSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem?.label === '雨滴'" v-model="rainSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem?.label === '背景'" v-model="backgroundSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem?.label === '渲染'" v-model="renderSettings[item.value]" :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
             </div>
 
             <div v-if="item.type === 'button'" class=" flex flex-row justify-between px-2">
