@@ -143,6 +143,12 @@ function handleActiveTab(item: Setting, index: number) {
   })
 }
 
+onMounted(() => {
+  const animateDom = document.querySelector('.setting-modal') as HTMLElement
+  animateDom.classList.remove('animate-jello')
+  animateDom.classList.add('animate-jello')
+})
+
 const target = ref(null)
 onClickOutside(target, (event) => {
   currentItem.value = null;
@@ -153,7 +159,7 @@ onClickOutside(target, (event) => {
 </script>
 
 <template>
-  <div>
+  <div class=" absolute bottom-50px flex justify-center items-center w-full ">
     <!-- <Teleport to="#mainTest"> -->
     <div ref="target" class="setting-modal flex flex-col ">
       <div
@@ -242,10 +248,6 @@ onClickOutside(target, (event) => {
 
 <style scoped>
 .setting-modal{
-  position: absolute;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
   height: fit-content;
   max-width: calc(100% - 200px);
   min-width: 100px;
