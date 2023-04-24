@@ -69,16 +69,19 @@ function handleSelectedSearchEngine(item: typeof searchConfig.value[0]) {
 
     <!-- 搜索引擎 -->
     <section
-      v-show="isShowSearchEngine"
+      :style="{
+        height: isShowSearchEngine ? '90px' : '0px',
+        padding: isShowSearchEngine ? '1rem' : '0 1rem',
+      }"
       class="
         search-engine
-        w-[676px] max-w-[86vw] h-[90px]
+        w-[676px] max-w-[86vw] overflow-hidden
         pointer-events-auto
         rounded-[12px]
         mt-10px p-4
         flex flex-row justify-start items-center
+        transition-all ease-in duration-300
         "
-      style="transition-property: top; transition-duration: 200ms; top: 50px;"
     >
       <div
         v-for="item in searchConfig"
