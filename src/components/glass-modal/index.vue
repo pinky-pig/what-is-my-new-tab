@@ -55,8 +55,7 @@ defineExpose({
             </div>
           </div>
           <div class="modal-content">
-            <slot name="content" />
-            modal
+            <slot />
           </div>
         </div>
       </div>

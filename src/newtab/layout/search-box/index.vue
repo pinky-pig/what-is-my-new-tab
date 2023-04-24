@@ -123,7 +123,23 @@ function handleShowEngineModal() {
       </div>
     </section>
 
-    <GlassModal v-model="isShowEngineModal" class="pointer-events-auto" />
+    <GlassModal v-model="isShowEngineModal" class="pointer-events-auto">
+      <div>
+        <div class=" flex flex-col">
+          <span>名称</span>
+          <input type="text" class=" border">
+        </div>
+        <div class=" flex flex-col">
+          <span>地址</span>
+          <div class=" flex flex-row">
+            <div class="w-30px h-20px border-white border bg-pink-200 flex-shrink-0 flex-grow-0">
+              https://
+            </div>
+            <input type="text" class=" border w-full">
+          </div>
+        </div>
+      </div>
+    </GlassModal>
   </div>
 </template>
 
