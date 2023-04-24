@@ -36,6 +36,12 @@ onClickOutside(target, (event: PointerEvent) => {
     return
   isShowSearchEngine.value = false
 })
+
+const isShowEngineModal = ref(false)
+
+function handleShowEngineModal() {
+  isShowEngineModal.value = !isShowEngineModal.value
+}
 </script>
 
 <template>
@@ -108,6 +114,7 @@ onClickOutside(target, (event: PointerEvent) => {
       <div
         v-show="searchConfig.length < 10"
         class="search-engine-item w-70px h-64px flex flex-col justify-center items-center cursor-pointer gap-5px flex-shrink-0 flex-grow-0"
+        @click="handleShowEngineModal"
       >
         <div class="w-36px h-36px text-blue-500 rounded-8px bg-white flex flex-col justify-center items-center">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 11V7h2v4h4v2h-4v4h-2v-4H7v-2h4Zm1 11C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10Zm0-2a8 8 0 1 0 0-16a8 8 0 0 0 0 16Z" /></svg>
@@ -115,6 +122,8 @@ onClickOutside(target, (event: PointerEvent) => {
         <span class="text-12px"> 更多 </span>
       </div>
     </section>
+
+    <GlassModal v-model="isShowEngineModal" class="pointer-events-auto" />
   </div>
 </template>
 
