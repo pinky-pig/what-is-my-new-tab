@@ -1,12 +1,7 @@
 <script setup lang="ts">
-const searchConfig = ref([
-  { label: 'baidu', url: 'https://www.baidu.com/s?wd=', color: '#669AE1', icon: 'ri-baidu-fill' },
-  { label: 'google', url: 'https://www.google.com/search?q=', color: '#70CC72', icon: 'ri:google-fill' },
-  { label: 'bing', url: 'https://www.bing.com/search?mkt=zh-CN&q=', color: '#FE4365', icon: 'uil:bing' },
-  { label: 'zhihu', url: 'https://www.zhihu.com/search?q=', color: '#C49CDE', icon: 'ri:zhihu-fill' },
-  { label: 'github', url: 'https://www.github.com/search?q=test', color: '#FC913A', icon: 'ri:github-fill' },
-  { label: 'more', url: '', color: '#62C2E4', icon: 'ri:add-circle-line' },
-])
+import { searchEngine } from './engine'
+
+const searchConfig = ref(searchEngine)
 
 const currentSearchEngine = ref(searchConfig.value[0])
 
@@ -23,12 +18,14 @@ function clearSearchText() {
   searchText.value = ''
 }
 
-function handleSelectedSearchEngine(item: typeof searchConfig.value[0]) {
-  if (item.label !== 'more')
-    currentSearchEngine.value = item
-}
-
 const isShowSearchEngine = ref(false)
+
+function handleSelectedSearchEngine(item: typeof searchConfig.value[0]) {
+  if (item.label !== '更多') {
+    currentSearchEngine.value = item
+    isShowSearchEngine.value = !isShowSearchEngine.value
+  }
+}
 </script>
 
 <template>
@@ -47,7 +44,7 @@ const isShowSearchEngine = ref(false)
               class=" flex items-center justify-center overflow-hidden bg-cover h-[24px] w-[24px] rounded-[6px] bg-transparent"
               @click="isShowSearchEngine = !isShowSearchEngine"
             >
-              <div class="text-blue-500 text-2xl" i-ri-baidu-fill />
+              <div class="text-blue-500 " v-html="currentSearchEngine.icon" />
             </section>
           </div>
         </div>
@@ -86,11 +83,12 @@ const isShowSearchEngine = ref(false)
       <div
         v-for="item in searchConfig"
         :key="item.label"
-        class="w-70px h-64px flex flex-col justify-center items-center cursor-pointer"
+        class="w-70px h-64px flex flex-col justify-center items-center cursor-pointer gap-5px"
         @click="handleSelectedSearchEngine(item)"
       >
-        <img class="w-36px h-36px rounded-8px" src="http://placekitten.com/36/36" alt="">
-        <span>{{ item.label }}</span>
+        <div class="w-36px h-36px text-blue-500 rounded-8px bg-white flex flex-col justify-center items-center" v-html="item.icon" />
+
+        <span class="text-12px">{{ item.label }}</span>
       </div>
     </section>
   </div>
