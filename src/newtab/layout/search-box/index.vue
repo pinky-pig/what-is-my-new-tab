@@ -46,7 +46,7 @@ onClickOutside(target, (event: PointerEvent) => {
       class="w-[676px] max-w-[86vw] pointer-events-auto"
       style="transition-property: top; transition-duration: 200ms; top: 50px;"
     >
-      <div class="search-box w-full h-[48px] flex items-center rounded-[12px] text-[var(--primary-text-color)] bg-opacity-60 transition-colors duration-100 focus-within:bg-opacity-80 dark:focus-within:bg-opacity-70 ">
+      <div class="search-box overflow-hidden w-full h-[48px] flex items-center rounded-[12px] text-[var(--primary-text-color)] bg-opacity-60 transition-colors duration-100 focus-within:bg-opacity-80 dark:focus-within:bg-opacity-70 ">
         <!-- icon -->
         <div id="search-icon" class="cursor-pointer flex h-full w-[48px] items-center justify-center" @click="isOpenSearchEngineList">
           <div
@@ -92,13 +92,13 @@ onClickOutside(target, (event: PointerEvent) => {
         rounded-[12px]
         mt-10px p-4
         flex flex-row justify-start items-center
-        transition-all ease-in duration-300
+        transition-all ease-in duration-200
         "
     >
       <div
         v-for="item in searchConfig"
         :key="item.label"
-        class="w-70px h-64px flex flex-col justify-center items-center cursor-pointer gap-5px"
+        class="search-engine-item w-70px h-64px flex flex-col justify-center items-center cursor-pointer gap-5px"
         @click="handleSelectedSearchEngine(item)"
       >
         <div class="w-36px h-36px text-blue-500 rounded-8px bg-white flex flex-col justify-center items-center" v-html="item.icon" />
@@ -119,5 +119,16 @@ onClickOutside(target, (event: PointerEvent) => {
 .search-engine{
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(40px);
+}
+.search-engine-item:hover{
+  border-radius: 10px;
+  overflow: hidden;
+  height: 70px;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(80px);
+}
+#search-icon:hover{
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(80px);
 }
 </style>
