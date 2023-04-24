@@ -22,10 +22,8 @@ function clearSearchText() {
 const isShowSearchEngine = ref(false)
 
 function handleSelectedSearchEngine(item: typeof searchConfig.value[0]) {
-  if (item.label !== '更多') {
-    currentSearchEngine.value = item
-    isShowSearchEngine.value = !isShowSearchEngine.value
-  }
+  currentSearchEngine.value = item
+  isShowSearchEngine.value = !isShowSearchEngine.value
 }
 
 function isOpenSearchEngineList() {
@@ -78,12 +76,12 @@ onClickOutside(target, (event: PointerEvent) => {
       </div>
     </section>
 
-    <!-- 搜索引擎 -->
+    <!-- 搜索引擎 ，最多 9 个 -->
     <section
       ref="target"
       :style="{
         height: isShowSearchEngine ? '90px' : '0px',
-        padding: isShowSearchEngine ? '1rem' : '0 1rem',
+        padding: isShowSearchEngine ? '1rem 1.4rem' : '0 1.4rem',
       }"
       class="
         search-engine
@@ -91,19 +89,30 @@ onClickOutside(target, (event: PointerEvent) => {
         pointer-events-auto
         rounded-[12px]
         mt-10px p-4
+        select-none
         flex flex-row justify-start items-center
         transition-all ease-in duration-200
         "
     >
       <div
-        v-for="item in searchConfig"
+        v-for="item in searchConfig.slice(0, 9)"
         :key="item.label"
-        class="search-engine-item w-70px h-64px flex flex-col justify-center items-center cursor-pointer gap-5px"
+        class="search-engine-item w-70px h-64px flex flex-col justify-center items-center cursor-pointer gap-5px flex-shrink-0 flex-grow-0"
         @click="handleSelectedSearchEngine(item)"
       >
         <div class="w-36px h-36px text-blue-500 rounded-8px bg-white flex flex-col justify-center items-center" v-html="item.icon" />
 
         <span class="text-12px">{{ item.label }}</span>
+      </div>
+
+      <div
+        v-show="searchConfig.length < 10"
+        class="search-engine-item w-70px h-64px flex flex-col justify-center items-center cursor-pointer gap-5px flex-shrink-0 flex-grow-0"
+      >
+        <div class="w-36px h-36px text-blue-500 rounded-8px bg-white flex flex-col justify-center items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 11V7h2v4h4v2h-4v4h-2v-4H7v-2h4Zm1 11C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10Zm0-2a8 8 0 1 0 0-16a8 8 0 0 0 0 16Z" /></svg>
+        </div>
+        <span class="text-12px"> 更多 </span>
       </div>
     </section>
   </div>
