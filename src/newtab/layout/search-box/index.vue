@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onClickOutside } from '@vueuse/core'
 import { searchEngine } from './engine'
 
 const searchConfig = ref(searchEngine)
@@ -26,6 +27,17 @@ function handleSelectedSearchEngine(item: typeof searchConfig.value[0]) {
     isShowSearchEngine.value = !isShowSearchEngine.value
   }
 }
+
+function isOpenSearchEngineList() {
+  isShowSearchEngine.value = !isShowSearchEngine.value
+}
+
+const target = ref(null)
+onClickOutside(target, (event: PointerEvent) => {
+  if ((event.target as HTMLElement).id === 'search-icon')
+    return
+  isShowSearchEngine.value = false
+})
 </script>
 
 <template>
@@ -36,13 +48,12 @@ function handleSelectedSearchEngine(item: typeof searchConfig.value[0]) {
     >
       <div class="search-box w-full h-[48px] flex items-center rounded-[12px] text-[var(--primary-text-color)] bg-opacity-60 transition-colors duration-100 focus-within:bg-opacity-80 dark:focus-within:bg-opacity-70 ">
         <!-- icon -->
-        <div class="current flex h-full w-[48px] items-center justify-center">
+        <div id="search-icon" class="cursor-pointer flex h-full w-[48px] items-center justify-center" @click="isOpenSearchEngineList">
           <div
-            class=" flex h-[28px] w-[28px] cursor-pointer items-center justify-center rounded-[8px] bg-opacity-80 hover:bg-color-white hover:bg-opacity-80"
+            class="pointer-events-none flex h-[28px] w-[28px] cursor-pointer items-center justify-center rounded-[8px] bg-opacity-80 hover:bg-color-white hover:bg-opacity-80"
           >
             <section
               class=" flex items-center justify-center overflow-hidden bg-cover h-[24px] w-[24px] rounded-[6px] bg-transparent"
-              @click="isShowSearchEngine = !isShowSearchEngine"
             >
               <div class="text-blue-500 " v-html="currentSearchEngine.icon" />
             </section>
@@ -69,6 +80,7 @@ function handleSelectedSearchEngine(item: typeof searchConfig.value[0]) {
 
     <!-- 搜索引擎 -->
     <section
+      ref="target"
       :style="{
         height: isShowSearchEngine ? '90px' : '0px',
         padding: isShowSearchEngine ? '1rem' : '0 1rem',
