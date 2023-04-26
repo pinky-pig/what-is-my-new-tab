@@ -9,7 +9,7 @@ function handleOpenDrawer() {
 
 const rainRef = inject('rainRef') as Ref<boolean>
 function handleOpenRainSettings() {
-  (rainRef.value as any).isShowRainSettings = !(rainRef.value as any).isShowRainSettings
+  (rainRef.value as any).handleIsOpenSettingsPanel()
 }
 </script>
 

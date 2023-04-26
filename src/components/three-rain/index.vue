@@ -172,13 +172,15 @@ function disposeVideoElement(video: any) {
   }
 }
 
-const isShowRainSettings = ref(false)
+const settingsRef = ref<typeof import('./Settings.vue').default | null>(null)
 function handleIsOpenSettingsPanel() {
-  isShowRainSettings.value = !isShowRainSettings.value
+  if (settingsRef.value?.visible)
+    settingsRef.value?.close()
+  else
+    settingsRef.value?.open()
 }
 
 defineExpose({
-  isShowRainSettings,
   handleIsOpenSettingsPanel,
 })
 </script>
@@ -189,7 +191,7 @@ defineExpose({
     <input id="filePicker" type="file" accept=".jpg, .jpeg, .png, .mp4, .webm" style="visibility: hidden">
 
     <Settings
-      v-if="isShowRainSettings"
+      ref="settingsRef"
       :rain-settings="rainSettings"
       :background-settings="backgroundSettings"
       :render-settings="renderSettings"

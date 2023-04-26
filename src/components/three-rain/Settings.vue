@@ -143,12 +143,6 @@ function handleActiveTab(item: Setting, index: number) {
   })
 }
 
-onMounted(() => {
-  const animateDom = document.querySelector('.setting-modal') as HTMLElement
-  animateDom.classList.remove('animate-jello')
-  animateDom.classList.add('animate-jello')
-})
-
 const target = ref(null)
 onClickOutside(target, (event) => {
   currentItem.value = null;
@@ -156,12 +150,32 @@ onClickOutside(target, (event) => {
   (document.querySelector('.tab-panel') as HTMLElement).style.marginBottom = '0';
   (document.querySelector('.tab-panel') as HTMLElement).style.marginTop = '0'
 })
+
+const visible = ref(false)
+function close() {
+  const animateDom = document.querySelector('.setting-modal') as HTMLElement
+  animateDom.classList.add('scale-down-center')
+
+  setTimeout(() => {
+    visible.value = false
+  }, 600)
+}
+
+function open() {
+  visible.value = true
+}
+
+defineExpose({
+  visible,
+  close,
+  open,
+})
 </script>
 
 <template>
-  <div class=" absolute bottom-50px flex justify-center items-center w-full ">
+  <div v-if="visible" class=" absolute bottom-50px flex justify-center items-center w-full ">
     <!-- <Teleport to="#mainTest"> -->
-    <div ref="target" class="setting-modal flex flex-col ">
+    <div ref="target" class="setting-modal animate-jello flex flex-col ">
       <div
         class="
           tab-panel
@@ -299,6 +313,21 @@ onClickOutside(target, (event) => {
     transform: scale3d(1, 1, 1);
   }
 }
+
+.scale-down-center{
+  animation:scale-down-center 0.5s forwards;
+}
+@keyframes scale-down-center{
+  0%{
+    transform-origin: bottom center;
+    transform:scale(1);
+  }
+  100%{
+    transform-origin: bottom center;
+    transform:scale(0);
+  }
+}
+
 .slider-number{
   background-color: rgba(255,255,255,0.1);
   backdrop-filter: blur(20px);
