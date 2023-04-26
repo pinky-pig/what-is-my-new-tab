@@ -3,11 +3,12 @@ const props = defineProps({
   title: {
     type: String,
     default: 'Title',
+    required: false,
   },
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
+  // modelValue: {
+  //   type: Boolean,
+  //   default: false,
+  // },
 })
 
 // const emits = defineEmits(

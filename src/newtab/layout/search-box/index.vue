@@ -145,8 +145,8 @@ function handleSaveEngineModal() {
       </div>
     </section>
 
-    <GlassModal ref="engineModalRef" class="pointer-events-auto">
-      <div>
+    <GlassModal ref="engineModalRef" title="title">
+      <div class="pointer-events-auto">
         <div class=" flex flex-col mb-15px">
           <span class="h-36px text-16px flex justify-start items-center">名称</span>
           <input v-model="customSearchEngine.name" type="text" class=" border rounded-md h-40px px-2 outline-none">
