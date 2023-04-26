@@ -78,8 +78,9 @@ defineExpose({
   z-index: 99;
 }
 .glass-modal{
+  min-height: 300px;
   width: 500px;
-  height: 300px;
+  height: auto;
   border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(40px);
@@ -95,7 +96,6 @@ defineExpose({
   backdrop-filter: blur(2px);
   z-index: 100;
   padding-top: 10px;
-  padding-bottom: 10px;
 }
 .modal-header{
   @apply flex flex-row justify-between items-center;

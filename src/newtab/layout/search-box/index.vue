@@ -46,6 +46,24 @@ onClickOutside(target, (event: PointerEvent) => {
   // 否则，将其选择栏收起来
   isShowSearchEngine.value = false
 })
+
+const customSearchEngine = reactive({
+  name: '',
+  url: '',
+  icon() {
+    return this.name.slice(0, 1)
+  },
+})
+function handleCloseEngineModal() {
+  customSearchEngine.name = ''
+  customSearchEngine.url = ''
+  isShowEngineModal.value = false
+}
+function handleSaveEngineModal() {
+  customSearchEngine.name = ''
+  customSearchEngine.url = ''
+  isShowEngineModal.value = false
+}
 </script>
 
 <template>
@@ -129,17 +147,53 @@ onClickOutside(target, (event: PointerEvent) => {
 
     <GlassModal v-model="isShowEngineModal" class="pointer-events-auto">
       <div>
-        <div class=" flex flex-col">
-          <span>名称</span>
-          <input type="text" class=" border">
+        <div class=" flex flex-col mb-15px">
+          <span class="h-36px text-16px flex justify-start items-center">名称</span>
+          <input v-model="customSearchEngine.name" type="text" class=" border rounded-md h-40px px-2 outline-none">
         </div>
-        <div class=" flex flex-col">
-          <span>地址</span>
+        <div class=" flex flex-col mb-15px">
+          <span class="h-36px text-16px flex justify-start items-center relative z-999">地址</span>
           <div class=" flex flex-row">
-            <div class="w-30px h-20px border-white border bg-pink-200 flex-shrink-0 flex-grow-0">
+            <div
+              class="
+                tag-box
+                w-75px h-40px
+                px-2 mr-2
+                rounded-md border-white border
+                flex-shrink-0 flex-grow-0
+                flex justify-center items-center
+                font-semibold
+                text-blue-400
+               "
+            >
               https://
             </div>
-            <input type="text" class=" border w-full">
+            <input v-model="customSearchEngine.url" type="text" class=" border w-full rounded-md h-40px px-2 outline-none">
+          </div>
+        </div>
+        <div class=" flex flex-col ">
+          <span class="h-36px text-12px flex justify-start items-center">预览</span>
+          <div class=" flex flex-row justify-between">
+            <div class=" w-80px h-80px flex flex-col justify-center items-center rounded-[25%] tag-box">
+              <div class="w-36px h-36px text-blue-500 rounded-8px bg-white flex flex-col justify-center items-center">
+                {{ customSearchEngine.icon() }}
+              </div>
+              <span class="text-12px">{{ customSearchEngine.name.slice(0, 4) || '名称' }}</span>
+            </div>
+            <div class="flex gap-20px justify-center items-center">
+              <button
+                class="btn-box w-80px h-40px bg-blue-500 rounded-md text-white font-semibold "
+                @click="handleCloseEngineModal"
+              >
+                取消
+              </button>
+              <button
+                class="btn-box w-80px h-40px bg-blue-500 rounded-md text-white font-semibold "
+                @click="handleSaveEngineModal"
+              >
+                保存
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -168,5 +222,15 @@ onClickOutside(target, (event: PointerEvent) => {
 #search-icon:hover{
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(80px);
+}
+.tag-box{
+  border: 2px solid white;
+  background: #d6dbf9;
+  box-shadow:  20px 20px 60px #d5d4d4,
+             -20px -20px 60px #ffffff;
+}
+.btn-box{
+  box-shadow:  20px 20px 60px #d5d4d4,
+             -20px -20px 60px #ffffff;
 }
 </style>
