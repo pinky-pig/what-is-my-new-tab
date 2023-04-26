@@ -6,7 +6,7 @@ import { storeToRefs } from 'pinia'
 import type { ComputedRef } from 'vue'
 import { darkTheme } from 'naive-ui'
 import Main from './layout/Main.vue'
-import { darkThemeOverrides, lightThemeOverrides } from '~/styles/naive-ui.theme'
+import { darkThemeOverrides } from '~/styles/naive-ui.theme'
 import { useNewtabStore } from '~/store'
 import { DrawerSetting } from '~/types'
 import Rain from '~/components/three-rain/index.vue'
@@ -32,8 +32,8 @@ import Rain from '~/components/three-rain/index.vue'
 
 // naive-ui 暗色模式
 const isDark = useDark()
-const naiveUIDarkTheme: ComputedRef<BuiltInGlobalTheme | undefined> = computed(() => isDark.value ? darkTheme : undefined)
-const naiveUIThemeOverrides = computed(() => isDark.value ? darkThemeOverrides : lightThemeOverrides)
+const naiveUIDarkTheme: ComputedRef<BuiltInGlobalTheme | undefined> = computed(() => isDark.value ? darkTheme : darkTheme)
+const naiveUIThemeOverrides = computed(() => isDark.value ? darkThemeOverrides : darkThemeOverrides)
 
 const store = useNewtabStore()
 const { isOpenDrawer } = storeToRefs(store)
@@ -100,7 +100,7 @@ provide('rainRef', rainRef)
 
 <style scoped>
 .main-container {
-  --bg-color: #ede9e9;
+  --bg-color: #231f20;
   background-image: repeating-linear-gradient(to right,var(--bg-color),var(--bg-color) 1px,transparent 1px,transparent 30px),
   repeating-linear-gradient(to bottom,var(--bg-color),var(--bg-color) 1px,transparent 1px,transparent 30px);
 

@@ -213,7 +213,7 @@ async function handleSetInternetImage(imageUrl: string) {
         </n-card>
       </n-collapse-transition>
       <n-collapse-transition v-show="currentMode === 'linear-colors'" appear>
-        <div class="w-full h-300px bg-gray-100" />
+        <div class="w-full h-300px " />
       </n-collapse-transition>
     </div>
 

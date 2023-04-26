@@ -1,4 +1,4 @@
-html.dark{
+/* html.dark{
   background: black;
   --primary-bg-color                      :#202124;
   --primary-text-color                    :rgba(229, 231, 235, 0.8);
@@ -11,7 +11,7 @@ html.dark{
 }
 
 html{
-  background: white;
+  background: #090C10;
   --primary-bg-color                      :#EDEDED;
   --primary-text-color                    :rgba(55, 65, 81, 0.8);
 
@@ -20,4 +20,16 @@ html{
   --dockbar-bg              : #FFFEFE;
   --dockbar-placeholder-bg  : #EEEEEE;
   --dockbar-text            : #858585;
+} */
+
+html{
+  background: black;
+  --primary-bg-color                      :#202124;
+  --primary-text-color                    :rgba(229, 231, 235, 0.8);
+
+  --second-bg-color                       :#2c2c32;
+
+  --dockbar-bg              : #262626;
+  --dockbar-placeholder-bg  : #404040;
+  --dockbar-text            : #FAFAFA;
 }
