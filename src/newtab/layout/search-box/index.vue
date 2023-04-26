@@ -30,18 +30,22 @@ function isOpenSearchEngineList() {
   isShowSearchEngine.value = !isShowSearchEngine.value
 }
 
-const target = ref(null)
-onClickOutside(target, (event: PointerEvent) => {
-  if ((event.target as HTMLElement).id === 'search-icon')
-    return
-  isShowSearchEngine.value = false
-})
-
 const isShowEngineModal = ref(false)
-
 function handleShowEngineModal() {
   isShowEngineModal.value = !isShowEngineModal.value
 }
+
+const target = ref(null)
+onClickOutside(target, (event: PointerEvent) => {
+  // 1. 如果是点击 icon ，不对其进行操作
+  if ((event.target as HTMLElement).id === 'search-icon')
+    return
+  // 2. 如果当前正处于编辑状态，不对其进行操作
+  if (isShowEngineModal.value)
+    return
+  // 否则，将其选择栏收起来
+  isShowSearchEngine.value = false
+})
 </script>
 
 <template>
