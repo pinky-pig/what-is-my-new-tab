@@ -30,9 +30,9 @@ function isOpenSearchEngineList() {
   isShowSearchEngine.value = !isShowSearchEngine.value
 }
 
-const isShowEngineModal = ref(false)
+const engineModalRef = ref<typeof import('~/components/glass-modal/index.vue').default | null>(null)
 function handleShowEngineModal() {
-  isShowEngineModal.value = !isShowEngineModal.value
+  engineModalRef.value?.open()
 }
 
 const target = ref(null)
@@ -41,7 +41,7 @@ onClickOutside(target, (event: PointerEvent) => {
   if ((event.target as HTMLElement).id === 'search-icon')
     return
   // 2. 如果当前正处于编辑状态，不对其进行操作
-  if (isShowEngineModal.value)
+  if (engineModalRef.value?.visible)
     return
   // 否则，将其选择栏收起来
   isShowSearchEngine.value = false
@@ -57,12 +57,12 @@ const customSearchEngine = reactive({
 function handleCloseEngineModal() {
   customSearchEngine.name = ''
   customSearchEngine.url = ''
-  isShowEngineModal.value = false
+  engineModalRef.value?.close()
 }
 function handleSaveEngineModal() {
   customSearchEngine.name = ''
   customSearchEngine.url = ''
-  isShowEngineModal.value = false
+  engineModalRef.value?.close()
 }
 </script>
 
@@ -145,7 +145,7 @@ function handleSaveEngineModal() {
       </div>
     </section>
 
-    <GlassModal v-model="isShowEngineModal" class="pointer-events-auto">
+    <GlassModal ref="engineModalRef" class="pointer-events-auto">
       <div>
         <div class=" flex flex-col mb-15px">
           <span class="h-36px text-16px flex justify-start items-center">名称</span>

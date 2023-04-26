@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-
 const props = defineProps({
   title: {
     type: String,
@@ -12,32 +10,51 @@ const props = defineProps({
   },
 })
 
-const emits = defineEmits(
-  [
-    'update:modelValue',
-  ],
-)
+// const emits = defineEmits(
+//   [
+//     'update:modelValue',
+//   ],
+// )
 
-const visible = computed({
-  get() {
-    return props.modelValue
-  },
-  set(value) {
-    emits('update:modelValue', value)
-  },
-})
+// const visible = computed({
+//   get() {
+//     return props.modelValue
+//   },
+//   set(value) {
+//     emits('update:modelValue', value)
+//   },
+// })
+
+const visible = ref(false)
 function close() {
-  visible.value = false
+  const animateDom = document.querySelectorAll('.glass-modal-mask')[0] as HTMLElement
+  animateDom.classList.add('fade-out')
+
+  const animateOutDom1 = document.querySelectorAll('.glass-modal')[0] as HTMLElement
+  animateOutDom1.classList.remove('scale-up-center')
+  animateOutDom1.classList.add('scale-down-center')
+
+  setTimeout(() => {
+    visible.value = false
+  }, 300)
+
+  // visible.value = false
+}
+
+function open() {
+  visible.value = true
 }
 
 defineExpose({
+  visible,
   close,
+  open,
 })
 </script>
 
 <template>
   <Teleport to="body">
-    <div v-if="modelValue" class="glass-modal-mask">
+    <div v-if="visible" class="glass-modal-mask">
       <div class="glass-modal scale-up-center">
         <div class="modal-box">
           <div class="modal-header">
@@ -122,10 +139,28 @@ defineExpose({
 }
 
 .scale-down-center{
-  animation:scale-down-center 0.2s;
+  animation:scale-down-center 0.2s forwards;
 }
 @keyframes scale-down-center{
-  0%{transform:scale(1)}
-  100%{transform:scale(.5)}
+  0%{
+    transform:scale(1);
+  }
+  100%{
+    transform:scale(.5);
+  }
+}
+
+.fade-out{
+  animation-name: fade-out;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards; /* 动画结束后停留在最终状态 */
+}
+@keyframes fade-out{
+  0%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+  }
 }
 </style>
