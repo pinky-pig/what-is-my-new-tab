@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SearchBox from '../search-box/index.vue'
+import MyWebsit from '../my-website/index.vue'
 import Footer from './Footer.vue'
 </script>
 
@@ -11,6 +12,7 @@ import Footer from './Footer.vue'
     pt-24
   >
     <SearchBox />
+    <MyWebsit />
     <div
       class="
       fixed bottom-30px left-0
