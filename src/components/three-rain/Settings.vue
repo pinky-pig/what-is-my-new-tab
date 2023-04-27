@@ -73,6 +73,8 @@ function changeBackground() {
 
 interface Setting {
   label: string
+  icon: string
+  background: string
   children: {
     label: string
     value: string
@@ -85,6 +87,8 @@ interface Setting {
 const settingList = ref<Setting[]>([
   {
     label: '雨滴',
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32"><path fill="currentColor" d="M16 24v-2a3.296 3.296 0 0 0 3-3h2a5.267 5.267 0 0 1-5 5Z"/><path fill="currentColor" d="M16 28a9.011 9.011 0 0 1-9-9a9.984 9.984 0 0 1 1.494-4.955l6.659-10.608a1.04 1.04 0 0 1 1.694 0l6.63 10.556A10.063 10.063 0 0 1 25 19a9.011 9.011 0 0 1-9 9Zm0-22.152l-5.782 9.208A7.977 7.977 0 0 0 9 19a7 7 0 0 0 14 0a8.062 8.062 0 0 0-1.248-3.995Z"/></svg>',
+    background: '#5464931f',
     children: [
       { label: '强度', value: 'intensityValue', type: 'range', steps: 0.01, min: 0, max: 1 },
       { label: '速度', value: 'speedValue', type: 'range', steps: 0.01, min: 0, max: 1 },
@@ -96,6 +100,8 @@ const settingList = ref<Setting[]>([
   },
   {
     label: '背景',
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32"><path fill="currentColor" d="M19 14a3 3 0 1 0-3-3a3 3 0 0 0 3 3Zm0-4a1 1 0 1 1-1 1a1 1 0 0 1 1-1Z"/><path fill="currentColor" d="M26 4H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 22H6v-6l5-5l5.59 5.59a2 2 0 0 0 2.82 0L21 19l5 5Zm0-4.83l-3.59-3.59a2 2 0 0 0-2.82 0L18 19.17l-5.59-5.59a2 2 0 0 0-2.82 0L6 17.17V6h20Z"/></svg>',
+    background: '#3641561f',
     children: [
       { label: '模糊质量', value: 'blurQualityValue', type: 'range', steps: 1, min: 1, max: 64 },
       { label: '模糊程度', value: 'blurValue', type: 'range', steps: 0.2, min: 0, max: 10 },
@@ -109,6 +115,8 @@ const settingList = ref<Setting[]>([
   },
   {
     label: '渲染',
+    background: '#0B24471f',
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12.03 6.3h-.06l-1.02 2.89h2.1zM3 17h2v5H3z"/><path fill="currentColor" d="M12 15c3.31 0 6-2.69 6-6s-2.69-6-6-6s-6 2.69-6 6s2.69 6 6 6zm-.63-10h1.25l2.63 7h-1.21l-.63-1.79h-2.83L9.96 12H8.74l2.63-7zM7 17h2v5H7zm4 0h2v5h-2zm4 0h6v5h-6z"/></svg>',
     children: [
       { label: 'FPS', value: 'fps', type: 'range', steps: 15, min: 15, max: 120 },
     ],
@@ -175,7 +183,11 @@ defineExpose({
 <template>
   <div v-if="visible" class=" absolute bottom-50px flex justify-center items-center w-full ">
     <!-- <Teleport to="#mainTest"> -->
-    <div ref="target" class="setting-modal animate-jello flex flex-col ">
+    <div
+      ref="target"
+      :style="{ background: currentItem?.background }"
+      class="setting-modal animate-jello flex flex-col "
+    >
       <div
         class="
           tab-panel
@@ -198,9 +210,9 @@ defineExpose({
                 <input v-if="currentItem?.label === '渲染'" v-model="renderSettings[item.value] " class="slider-number w-45px h-25px text-center text-10px rounded-md" type="text">
               </div>
 
-              <input v-if="currentItem?.label === '雨滴'" v-model="rainSettings[item.value]" class="slider-bar rounded-md w-full my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
-              <input v-if="currentItem?.label === '背景'" v-model="backgroundSettings[item.value]" class="slider-bar rounded-md w-full my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
-              <input v-if="currentItem?.label === '渲染'" v-model="renderSettings[item.value]" class="slider-bar rounded-md w-full my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem?.label === '雨滴'" v-model="rainSettings[item.value]" style="width:calc(100% - 20px)" class="slider-bar rounded-md my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem?.label === '背景'" v-model="backgroundSettings[item.value]" style="width:calc(100% - 20px)" class="slider-bar rounded-md my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
+              <input v-if="currentItem?.label === '渲染'" v-model="renderSettings[item.value]" style="width:calc(100% - 20px)" class="slider-bar rounded-md my-10px " :type="item.type" :step="item.steps" :min="item.min" :max="item.max">
             </div>
             <div v-if="item.type === 'checkbox'" class=" flex flex-row justify-between px-2">
               <span>
@@ -231,10 +243,12 @@ defineExpose({
         <div
           v-for="item, index in settingList"
           :key="item.label"
-          class="tab-item w-60px h-45px grid place-items-center cursor-pointer relative z-1"
+          :style="{ color: currentItem?.label === item.label ? currentItem?.background.slice(0, 7) : 'white' }"
+          :class="currentItem?.label === item.label ? 'text-blue-400' : 'text-white'"
+          class="tab-item w-50px h-36px grid place-items-center cursor-pointer relative z-1"
           @click="handleActiveTab(item, index)"
         >
-          {{ item.label }}
+          <div v-html="item.icon" />
         </div>
 
         <!-- tab-bg -->
@@ -242,7 +256,7 @@ defineExpose({
           v-show="currentItem"
           ref="currentItemBgRef"
           class="
-              w-60px h-45px
+              w-50px h-36px
               absolute top-0 left-0 z-0
               pointer-events-none
               transition-transform
@@ -250,7 +264,7 @@ defineExpose({
               ease-in-out
             "
         >
-          <div class="animate-dom animate-jello  w-full h-full rounded-xl">
+          <div class="animate-dom animate-jello w-full h-full rounded-xl">
               &nbsp;
           </div>
         </div>
@@ -266,14 +280,15 @@ defineExpose({
   max-width: calc(100% - 200px);
   min-width: 100px;
   width: 400px;
-  border-radius: 20px;
-  background-color: rgba(255,255,255,0.1);
-  backdrop-filter: blur(20px);
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(40px);
   border: 2px solid transparent;
   transition: 0.2s ease-in-out all;
   z-index: 10;
-  padding: 10px 20px;
+  padding: 10px;
   color: white;
+  /* box-shadow: rgb(255, 255, 255) 0px 0px 1px 1px, rgb(255, 255, 255) 0px 1px 5px 0px; */
 }
 .tab-panel {
   border-radius: 10px;
@@ -281,11 +296,12 @@ defineExpose({
   backdrop-filter: blur(20px);
 }
 .tab-panel-dom{
-  padding: 10px;
+  padding: 5px;
 }
 .animate-dom{
-  background-color: rgba(255,255,255,0.1);
-  backdrop-filter: blur(20px);
+  background-color: white;
+  /* background-color: rgba(255,255,255,0.1);
+  backdrop-filter: blur(20px); */
 }
 .animate-jello {
   animation: jello-horizontal 0.9s both;

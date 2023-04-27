@@ -102,7 +102,7 @@ defineExpose({
   border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(40px);
-  box-shadow: 0 0 1px 1px #ffffff, 0 1px 5px 0px #ffffff;
+  /* box-shadow: 0 0 1px 1px #ffffff, 0 1px 5px 0px #ffffff; */
   padding: 12px;
   z-index: 100;
 }

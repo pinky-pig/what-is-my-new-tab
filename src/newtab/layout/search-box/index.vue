@@ -70,9 +70,13 @@ function handleSaveEngineModal() {
   <div class=" w-full flex flex-col justify-center items-center pointer-events-none top-[12vh]">
     <section
       class="w-[676px] max-w-[86vw] pointer-events-auto"
-      style="transition-property: top; transition-duration: 200ms; top: 50px;"
+      style="
+        transition-property: top;
+        transition-duration: 200ms;
+        border-radius: 12px;
+        "
     >
-      <div class="search-box overflow-hidden w-full h-[48px] flex items-center rounded-[12px] text-[var(--primary-text-color)] bg-opacity-60 transition-colors duration-100 focus-within:bg-opacity-80 dark:focus-within:bg-opacity-70 ">
+      <div class="search-box overflow-hidden w-full h-[48px] flex items-center rounded-[30px] text-[var(--primary-text-color)] bg-opacity-60 transition-colors duration-100 focus-within:bg-opacity-80 dark:focus-within:bg-opacity-70 ">
         <!-- icon -->
         <div id="search-icon" class="cursor-pointer flex h-full w-[48px] items-center justify-center" @click="isOpenSearchEngineList">
           <div
@@ -89,7 +93,7 @@ function handleSaveEngineModal() {
         <!-- 输入框 -->
         <input
           v-model="searchText"
-          class=" outline-none h-full grow bg-[transparent] py-[12px] pl-[4px] pr-[42px] placeholder:text-color-t1 placeholder:text-opacity-40"
+          class=" text-gray-700 outline-none h-full grow bg-[transparent] py-[12px] pl-[4px] pr-[42px] placeholder:text-gray-500"
           placeholder="输入搜索内容"
           autocomplete="off"
           @keydown.enter="handleSearch"
@@ -203,24 +207,24 @@ function handleSaveEngineModal() {
 
 <style scoped>
 .search-box {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(40px);
   border: 1px solid #ffffff1a;
   box-shadow: 0 4px 16px 0 #0000001a;
 }
 .search-engine{
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(40px);
 }
 .search-engine-item:hover{
   border-radius: 10px;
   overflow: hidden;
   height: 70px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(80px);
 }
 #search-icon:hover{
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(80px);
 }
 .tag-box{
