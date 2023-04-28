@@ -102,9 +102,10 @@ provide('rainRef', rainRef)
 .main-container {
   --bg-color: #ede9e9;
 
-  background-image: repeating-linear-gradient(to right,var(--bg-color),var(--bg-color) 1px,transparent 1px,transparent 30px),
-  repeating-linear-gradient(to bottom,var(--bg-color),var(--bg-color) 1px,transparent 1px,transparent 30px);
+  background-image: url(/assets/main_resource.png);
 
+  /* background-image: repeating-linear-gradient(to right,var(--bg-color),var(--bg-color) 1px,transparent 1px,transparent 30px),
+  repeating-linear-gradient(to bottom,var(--bg-color),var(--bg-color) 1px,transparent 1px,transparent 30px); */
   /* background-image: url(/assets/main_resource.jpg); */
   /* background: var(--primary-bg-color); */
   /* background-image: url(/assets/noise.png);
