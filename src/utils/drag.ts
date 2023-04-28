@@ -20,13 +20,23 @@ export function createDragInHorizontal(
   gap: number,
   maximumInLine: number,
 ) {
-  let placeholderElement: HTMLElement | null = null
   let isDragging = false
   let mouseFrom = { x: 0, y: 0 }
   let mouseTo = { x: 0, y: 0 }
-  const currentClickedBox = ref({ x: 0, y: 0 })
-  const placeholderBox = ref<ElemensBoxType | null>(null)
-  const elemensBox = ref<ElemensBoxType[]>([])
+
+  // 当前选中的元素对象
+  const currentClickedBox = ref<ElemensBoxType>({ id: '', x: 0, y: 0, width: size, height: size })
+  // 全部的元素对象
+  const elementsBox = ref<ElemensBoxType[]>([])
+
+  // 占位的元素对象
+  const placeholderElement = document.createElement('div')
+  placeholderElement.style.position = 'absolute'
+  placeholderElement.style.width = '0px'
+  placeholderElement.style.height = '0px'
+  placeholderElement.style.background = 'red'
+
+  const placeholderBox = ref({ id: '', x: 0, y: 0, width: 0, height: 0, ele: placeholderElement })
 
   main()
 
@@ -46,8 +56,11 @@ export function createDragInHorizontal(
       element.style.position = 'absolute'
       element.style.width = `${size}px`
       element.style.height = `${size}px`
+      element.style.userSelect = 'none'
+      element.style.transition = 'all 500ms ease 0s'
+      element.style.willChange = 'transform'
 
-      elemensBox.value.push({
+      elementsBox.value.push({
         id: element.id,
         x: column * (size + gap),
         y: row * (size + gap),
@@ -56,19 +69,21 @@ export function createDragInHorizontal(
         ele: element,
       })
     })
+
+    // 3. 创建 placeholderBox 占位元素
+    containerElement.appendChild(placeholderElement)
   }
 
-  // 监听设置当前的点击的占位元素的位置
-  watch(currentClickedBox, () => {
-    if (placeholderBox.value && isDragging) {
-      placeholderBox.value.x = currentClickedBox.value.x
-      placeholderBox.value.y = currentClickedBox.value.y
-    }
+  // 1. 监听占位元素的位置
+  watch(placeholderBox, () => {
+    placeholderBox.value.ele.style.width = `${placeholderBox.value.width}px`
+    placeholderBox.value.ele.style.height = `${placeholderBox.value.height}px`
+    placeholderBox.value.ele.style.transform = `translate3d(${placeholderBox.value.x}px, ${placeholderBox.value.y}px, 0)`
   }, { deep: true })
 
-  // 监听设置所有元素的位置
-  watch(elemensBox, () => {
-    elemensBox.value.forEach((item, index) => {
+  // 2. 监听设置所有元素的位置
+  watch(elementsBox, () => {
+    elementsBox.value.forEach((item, index) => {
       item.ele!.style.transform = `
         translate3d(
           ${item.x}px,
@@ -76,23 +91,6 @@ export function createDragInHorizontal(
         0)`
     })
   }, { deep: true, immediate: true })
-
-  watch(placeholderBox, () => {
-    // 1. 移除占位元素
-    if (!placeholderBox.value) {
-      containerElement.removeChild(placeholderElement!)
-      return
-    }
-
-    // 2. 添加占位元素
-    if (!document.querySelector(`#${placeholderBox.value.id}`) && placeholderElement) {
-      placeholderElement.style.background = 'red'
-      containerElement.appendChild(placeholderElement!)
-    }
-    // 3. 设置占位元素的位置
-    if (placeholderElement && isDragging)
-      placeholderElement.style.transform = `translate3d(${placeholderBox.value.x}px, ${placeholderBox.value.y}px, 0px)`
-  }, { deep: true })
 
   function handlePointerdown(e: PointerEvent) {
     // 1. 判断点击的元素是否是 item
@@ -105,20 +103,26 @@ export function createDragInHorizontal(
 
     mouseFrom = { x: e.clientX, y: e.clientY }
 
-    // 3. 添加克隆元素
-    placeholderElement = e.target && (e.target as HTMLElement).cloneNode(true) as HTMLElement
-    placeholderElement.id = `${placeholderElement.id}-placeholder`
-    placeholderBox.value = {
-      id: `${placeholderElement.id}-placeholder`,
-      x: Number(placeholderElement.style.transform.match(/translate3d\((?<x>-?\d+)px, (?<y>-?\d+)px, 0px\)/)?.groups?.x) || 0,
-      y: Number(placeholderElement.style.transform.match(/translate3d\((?<x>-?\d+)px, (?<y>-?\d+)px, 0px\)/)?.groups?.y) || 0,
-      width: Number(placeholderElement.style.width.replace('px', '')) || 0,
-      height: Number(placeholderElement.style.height.replace('px', '')) || 0,
+    // 3. 设置当前点击元素的位置。并且将当前点击元素的顺序放在最后
+    const index = elementsBox.value.findIndex(item => item.id === (e.target as HTMLElement)?.id)
+    if (index !== -1) {
+      // currentClickedBox.value = elementsBox.value.splice(index, 1)[0]
+      currentClickedBox.value = elementsBox.value[index]
+      currentClickedBox.value.ele!.style.zIndex = '999'
+      currentClickedBox.value.ele!.style.transition = 'unset'
     }
 
-    // 4. 设置当前点击元素的位置
-    currentClickedBox.value.x = placeholderBox.value.x || 0
-    currentClickedBox.value.y = placeholderBox.value.y || 0
+    // 4. 设置占位元素的位置
+    placeholderBox.value = {
+      ...placeholderBox.value,
+      ...{
+        id: `${currentClickedBox.value.id}-placeholder`,
+        x: currentClickedBox.value.x,
+        y: currentClickedBox.value.y,
+        width: currentClickedBox.value.width,
+        height: currentClickedBox.value.height,
+      },
+    }
 
     // 5. 设置拖拽状态
     isDragging = true
@@ -136,18 +140,93 @@ export function createDragInHorizontal(
     currentClickedBox.value.x += disX
     currentClickedBox.value.y += disY
 
+    placeholderBox.value!.x = Math.round(currentClickedBox.value.x / (size + gap)) * (size + gap)
+    placeholderBox.value!.y = Math.round(currentClickedBox.value.y / (size + gap)) * (size + gap)
+
+    hitAllEle(placeholderBox.value, elementsBox.value)
+
     // 赋值给鼠标初始位置
     mouseFrom = { x: e.clientX, y: e.clientY }
   }
   function handlePointerup(e: PointerEvent) {
     isDragging = false
-    placeholderBox.value = null
+
+    if (currentClickedBox.value.ele)
+      currentClickedBox.value.ele!.style.transition = 'all 500ms ease 0s'
+
+    currentClickedBox.value.x = placeholderBox.value.x
+    currentClickedBox.value.y = placeholderBox.value.y
+    currentClickedBox.value = { id: '', x: 0, y: 0, width: size, height: size }
+    placeholderBox.value = { id: '', x: 0, y: 0, width: 0, height: 0, ele: placeholderElement }
     mouseFrom = { x: 0, y: 0 }
     mouseTo = { x: 0, y: 0 }
   }
 
   // 检测碰撞
   function hitAllEle(node: ElemensBoxType, allNodes: ElemensBoxType[]) {
+    const hittedNodes: any = []
+
+    // 1. 遍历所有元素，检测是否碰撞。这里碰撞的只有一个，因为所有的大小一样
+    allNodes.forEach((n: ElemensBoxType, index: number) => {
+      if (!node.id.startsWith(n.id) && checkHit(node, n))
+        hittedNodes.push(n)
+    })
+
+    // 2.碰撞到了之后，一格一格移动
+    hittedNodes.forEach((n: ElemensBoxType) => {
+      // 比较当前点击的这个值 hitIndex ，跟碰撞到的元素的 nIndex
+      // 1. 要是小于 hitIndex < nIndex ，就插到碰撞的值的后面
+      // 2. 要是大于 hitIndex > nIndex ，就插到碰撞的值的前面
+      const hitIndex = allNodes.findIndex(item => item.id === currentClickedBox.value.id)
+      const nIndex = allNodes.findIndex(item => item.id === n.id)
+
+      if (hitIndex < nIndex) {
+        const origin = elementsBox.value.splice(hitIndex, 1)[0]
+        elementsBox.value.splice(nIndex, 0, origin)
+      }
+      else {
+        const origin = elementsBox.value.splice(hitIndex, 1)[0]
+        elementsBox.value.splice(nIndex - 1, 0, origin)
+      }
+
+      elementsBox.value.forEach((item: ElemensBoxType, index: number) => {
+        if (item.id !== currentClickedBox.value.id) {
+          const row = Math.floor(index / maximumInLine)
+          const column = index % maximumInLine
+          item.x = column * (size + gap)
+          item.y = row * (size + gap)
+        }
+      })
+    })
+
+    // 3.没有碰撞，但是在末尾最后一个情况
+    const row = Math.floor((elementsBox.value.length - 1) / maximumInLine)
+    const column = (elementsBox.value.length - 1) % maximumInLine
+
+    if (
+      (
+        placeholderBox.value.x > row * (size + gap)
+      && placeholderBox.value.y === column * (size + gap)
+      )
+      || (
+        placeholderBox.value.y > column * (size + gap)
+      )
+    ) {
+      placeholderBox.value.x = column * (size + gap)
+      placeholderBox.value.y = row * (size + gap)
+
+      const hitIndex = allNodes.findIndex(item => item.id === currentClickedBox.value.id)
+      const origin = elementsBox.value.splice(hitIndex, 1)[0]
+      elementsBox.value.push(origin)
+      elementsBox.value.forEach((item: ElemensBoxType, index: number) => {
+        if (item.id !== currentClickedBox.value.id) {
+          const row = Math.floor(index / maximumInLine)
+          const column = index % maximumInLine
+          item.x = column * (size + gap)
+          item.y = row * (size + gap)
+        }
+      })
+    }
   }
 
   function checkHit(a: ElemensBoxType, b: ElemensBoxType) {
