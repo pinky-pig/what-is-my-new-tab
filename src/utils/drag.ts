@@ -140,6 +140,7 @@ export function createDragInHorizontal(
     currentClickedBox.value.x += disX
     currentClickedBox.value.y += disY
 
+    placeholderBox.value.ele!.style.transition = 'all 500ms ease 0s'
     placeholderBox.value!.x = Math.round(currentClickedBox.value.x / (size + gap)) * (size + gap)
     placeholderBox.value!.y = Math.round(currentClickedBox.value.y / (size + gap)) * (size + gap)
 
@@ -160,12 +161,15 @@ export function createDragInHorizontal(
     isDragging = false
 
     if (currentClickedBox.value.ele)
-      currentClickedBox.value.ele!.style.transition = 'all 500ms ease 0s'
+      currentClickedBox.value.ele!.style.transition = 'all 200ms ease'
 
     currentClickedBox.value.x = placeholderBox.value.x
     currentClickedBox.value.y = placeholderBox.value.y
     currentClickedBox.value = { id: '', x: 0, y: 0, width: size, height: size }
+
     placeholderBox.value = { id: '', x: 0, y: 0, width: 0, height: 0, ele: placeholderElement }
+    placeholderBox.value.ele!.style.transition = 'unset'
+
     mouseFrom = { x: 0, y: 0 }
     mouseTo = { x: 0, y: 0 }
   }
