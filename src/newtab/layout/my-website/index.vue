@@ -1,18 +1,31 @@
 <script setup lang="ts">
-import { dragInHorizontal } from '~/utils/drag'
+import { createDragInHorizontal } from '~/utils/drag'
 
 const box = ref<HTMLElement | null>(null)
 const item = ref<HTMLElement[] | null>(null)
 
+const dragObj = ref<ReturnType<typeof createDragInHorizontal> | null>(null)
 onMounted(() => {
-  dragInHorizontal(box.value!, item.value!, 100)
+  dragObj.value = createDragInHorizontal(box.value!, item.value!, 100, 20)
 })
 </script>
 
 <template>
   <div class="my-website">
-    <div ref="box" class="my-website-container">
-      <div v-for="item in 10" ref="item" :key="item" class="my-website-item" />
+    <div
+      ref="box"
+      class="my-website-container"
+      :style="dragObj?.getContainerStyle()"
+    >
+      <div
+        v-for="item, index in 10"
+        ref="item"
+        :key="item"
+        :style="dragObj?.getElementsStyle(index)"
+        class="my-website-item"
+      >
+        {{ index }}
+      </div>
     </div>
   </div>
 </template>
