@@ -187,14 +187,13 @@ export function createDragInHorizontal(
       // 2. 要是大于 hitIndex > nIndex ，就插到碰撞的值的前面
       const hitIndex = allNodes.findIndex(item => item.id === currentClickedBox.value.id)
       const nIndex = allNodes.findIndex(item => item.id === n.id)
-
       if (hitIndex < nIndex) {
         const origin = elementsBox.value.splice(hitIndex, 1)[0]
         elementsBox.value.splice(nIndex, 0, origin)
       }
       else {
         const origin = elementsBox.value.splice(hitIndex, 1)[0]
-        elementsBox.value.splice(nIndex - 1, 0, origin)
+        elementsBox.value.splice(nIndex, 0, origin)
       }
 
       elementsBox.value.forEach((item: ElemensBoxType, index: number) => {
@@ -210,18 +209,17 @@ export function createDragInHorizontal(
     // 3.没有碰撞，但是在末尾最后一个情况
     const row = Math.floor((elementsBox.value.length - 1) / maximumInLine)
     const column = (elementsBox.value.length - 1) % maximumInLine
-
     if (
       (
-        placeholderBox.value.x > row * (size + gap)
-      && placeholderBox.value.y === column * (size + gap)
+        placeholderBox.value.x > column * (size + gap)
+      && placeholderBox.value.y === row * (size + gap)
       )
       || (
-        placeholderBox.value.y > column * (size + gap)
+        placeholderBox.value.y > row * (size + gap)
       )
     ) {
-      placeholderBox.value.x = column * (size + gap)
-      placeholderBox.value.y = row * (size + gap)
+      placeholderBox.value.x = (elementsBox.value.length - 1) % maximumInLine * (size + gap)
+      placeholderBox.value.y = Math.floor((elementsBox.value.length - 1) / maximumInLine) * (size + gap)
 
       const hitIndex = allNodes.findIndex(item => item.id === currentClickedBox.value.id)
       const origin = elementsBox.value.splice(hitIndex, 1)[0]
