@@ -143,6 +143,14 @@ export function createDragInHorizontal(
     placeholderBox.value!.x = Math.round(currentClickedBox.value.x / (size + gap)) * (size + gap)
     placeholderBox.value!.y = Math.round(currentClickedBox.value.y / (size + gap)) * (size + gap)
 
+    // 限制拖拽范围
+    if (placeholderBox.value!.x < 0)
+      placeholderBox.value.x = 0
+    if (currentClickedBox.value.y < 0)
+      placeholderBox.value.y = 0
+    if (currentClickedBox.value.x + currentClickedBox.value.width > maximumInLine * (size + gap))
+      placeholderBox.value.x = (maximumInLine - 1) * (size + gap)
+
     hitAllEle(placeholderBox.value, elementsBox.value)
 
     // 赋值给鼠标初始位置
