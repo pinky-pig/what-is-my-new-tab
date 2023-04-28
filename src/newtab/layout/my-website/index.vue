@@ -4,9 +4,8 @@ import { createDragInHorizontal } from '~/utils/drag'
 const box = ref<HTMLElement | null>(null)
 const item = ref<HTMLElement[] | null>(null)
 
-const dragObj = ref<ReturnType<typeof createDragInHorizontal> | null>(null)
 onMounted(() => {
-  dragObj.value = createDragInHorizontal(box.value!, item.value!, 100, 20)
+  createDragInHorizontal(box.value!, item.value!, 100, 20, 4)
 })
 </script>
 
@@ -15,13 +14,11 @@ onMounted(() => {
     <div
       ref="box"
       class="my-website-container"
-      :style="dragObj?.getContainerStyle()"
     >
       <div
         v-for="item, index in 10"
         ref="item"
         :key="item"
-        :style="dragObj?.getElementsStyle(index)"
         class="my-website-item"
       >
         {{ index }}
