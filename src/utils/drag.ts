@@ -274,15 +274,15 @@ export function createDragInHorizontal(
   }
 
   function bindEventListener() {
-    containerElement.addEventListener('pointerdown', handlePointerdown)
-    containerElement.addEventListener('pointermove', handlePointermove)
-    containerElement.addEventListener('pointerup', handlePointerup)
+    window.addEventListener('pointerdown', handlePointerdown)
+    window.addEventListener('pointermove', handlePointermove)
+    window.addEventListener('pointerup', handlePointerup)
   }
 
   function unbindEventListener() {
-    containerElement.removeEventListener('pointerdown', handlePointerdown)
-    containerElement.removeEventListener('pointermove', handlePointermove)
-    containerElement.removeEventListener('pointerup', handlePointerup)
+    window.removeEventListener('pointerdown', handlePointerdown)
+    window.removeEventListener('pointermove', handlePointermove)
+    window.removeEventListener('pointerup', handlePointerup)
   }
 
   return {
