@@ -94,7 +94,19 @@ export function createDragInHorizontal(
 
   function handlePointerdown(e: PointerEvent) {
     // 1. 判断点击的元素是否是 item
-    if (!e.target || !(e.target as HTMLElement).classList.contains('my-website-item'))
+    if (!e.target)
+      return
+    let clickedItem: Element | null = null
+    const clickedElement = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement
+    if (clickedElement.classList.contains('search-engine-item')) {
+      clickedItem = clickedElement
+    }
+    else {
+      const parentItem = clickedElement.closest('.search-engine-item')
+      if (parentItem)
+        clickedItem = parentItem
+    }
+    if (!clickedItem)
       return
 
     // 2. 判断是否已经在拖拽中
@@ -104,7 +116,7 @@ export function createDragInHorizontal(
     mouseFrom = { x: e.clientX, y: e.clientY }
 
     // 3. 设置当前点击元素的位置。并且将当前点击元素的顺序放在最后
-    const index = elementsBox.value.findIndex(item => item.id === (e.target as HTMLElement)?.id)
+    const index = elementsBox.value.findIndex(item => item.id === clickedItem?.id)
     if (index !== -1) {
       // currentClickedBox.value = elementsBox.value.splice(index, 1)[0]
       currentClickedBox.value = elementsBox.value[index]
