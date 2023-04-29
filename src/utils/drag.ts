@@ -20,7 +20,8 @@ export function createDragInHorizontal(
   gap: number,
   maximumInLine: number,
 ) {
-  let isDragging = false
+  let isDragging = false // 拖拽状态
+  const isDragged = ref(false) // 是否已经拖拽过
   let mouseFrom = { x: 0, y: 0 }
   let mouseTo = { x: 0, y: 0 }
 
@@ -164,6 +165,9 @@ export function createDragInHorizontal(
     placeholderBox.value!.x = Math.round(currentClickedBox.value.x / (size + gap)) * (size + gap)
     placeholderBox.value!.y = Math.round(currentClickedBox.value.y / (size + gap)) * (size + gap)
 
+    // 设置已经状态拖拽了
+    isDragged.value = true
+
     // 限制拖拽范围
     if (placeholderBox.value!.x < 0)
       placeholderBox.value.x = 0
@@ -179,6 +183,7 @@ export function createDragInHorizontal(
   }
   function handlePointerup(e: PointerEvent) {
     isDragging = false
+    isDragged.value = false
 
     if (currentClickedBox.value.ele)
       currentClickedBox.value.ele!.style.transition = 'transform 200ms ease'
@@ -281,6 +286,7 @@ export function createDragInHorizontal(
   }
 
   return {
+    isDragged,
     bindEventListener,
     unbindEventListener,
   }

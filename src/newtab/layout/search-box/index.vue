@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core'
 import { searchEngine } from './engine'
+import EngineList from './EngineList.vue'
 
 const searchConfig = ref(searchEngine)
 
@@ -19,20 +20,20 @@ function clearSearchText() {
   searchText.value = ''
 }
 
+const engineModalRef = ref<typeof import('~/components/glass-modal/index.vue').default | null>(null)
 const isShowSearchEngine = ref(false)
-
 function handleSelectedSearchEngine(item: typeof searchConfig.value[0]) {
-  currentSearchEngine.value = item
-  isShowSearchEngine.value = !isShowSearchEngine.value
+  if (item.label === '自定义') {
+    engineModalRef.value?.open()
+  }
+  else {
+    currentSearchEngine.value = item
+    isShowSearchEngine.value = !isShowSearchEngine.value
+  }
 }
 
 function isOpenSearchEngineList() {
   isShowSearchEngine.value = !isShowSearchEngine.value
-}
-
-const engineModalRef = ref<typeof import('~/components/glass-modal/index.vue').default | null>(null)
-function handleShowEngineModal() {
-  engineModalRef.value?.open()
 }
 
 const target = ref(null)
@@ -126,27 +127,9 @@ function handleSaveEngineModal() {
         transition-all ease-in duration-200
         "
     >
-      <div
-        v-for="item in searchConfig.slice(0, 9)"
-        :key="item.label"
-        class="search-engine-item w-70px h-64px flex flex-col justify-center items-center cursor-pointer gap-5px flex-shrink-0 flex-grow-0"
-        @click="handleSelectedSearchEngine(item)"
-      >
-        <div class="w-36px h-36px text-blue-500 rounded-8px bg-white flex flex-col justify-center items-center" v-html="item.icon" />
-
-        <span class="text-12px">{{ item.label }}</span>
-      </div>
-
-      <div
-        v-show="searchConfig.length < 10"
-        class="search-engine-item w-70px h-64px flex flex-col justify-center items-center cursor-pointer gap-5px flex-shrink-0 flex-grow-0"
-        @click="handleShowEngineModal"
-      >
-        <div class="w-36px h-36px text-blue-500 rounded-8px bg-white flex flex-col justify-center items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 11V7h2v4h4v2h-4v4h-2v-4H7v-2h4Zm1 11C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10Zm0-2a8 8 0 1 0 0-16a8 8 0 0 0 0 16Z" /></svg>
-        </div>
-        <span class="text-12px"> 更多 </span>
-      </div>
+      <EngineList
+        @handleSelectedSearchEngine="handleSelectedSearchEngine"
+      />
     </section>
 
     <GlassModal ref="engineModalRef" title="title">
@@ -215,13 +198,6 @@ function handleSaveEngineModal() {
 .search-engine{
   background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(40px);
-}
-.search-engine-item:hover{
-  border-radius: 10px;
-  overflow: hidden;
-  height: 70px;
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(80px);
 }
 #search-icon:hover{
   background-color: rgba(255, 255, 255, 0.1);
