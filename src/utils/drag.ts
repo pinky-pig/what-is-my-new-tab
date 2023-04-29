@@ -34,7 +34,15 @@ export function createDragInHorizontal(
   placeholderElement.style.position = 'absolute'
   placeholderElement.style.width = '0px'
   placeholderElement.style.height = '0px'
-  placeholderElement.style.background = 'red'
+  const computedStyle = getComputedStyle(elements[0] as HTMLElement)
+  placeholderElement.style.borderRadius = computedStyle.borderRadius
+  placeholderElement.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
+  placeholderElement.style.backdropFilter = 'blur(80px)'
+
+  // const knownDiv = document.querySelector('#known-div')
+  // const computedStyle = getComputedStyle(knownDiv as HTMLElement)
+  // const newDiv = document.createElement('div')
+  // newDiv.style.cssText = computedStyle.cssText
 
   const placeholderBox = ref({ id: '', x: 0, y: 0, width: 0, height: 0, ele: placeholderElement })
 
@@ -57,7 +65,7 @@ export function createDragInHorizontal(
       element.style.width = `${size}px`
       element.style.height = `${size}px`
       element.style.userSelect = 'none'
-      element.style.transition = 'all 500ms ease 0s'
+      element.style.transition = 'transform 200ms ease 0s'
       element.style.willChange = 'transform'
 
       elementsBox.value.push({
@@ -173,7 +181,7 @@ export function createDragInHorizontal(
     isDragging = false
 
     if (currentClickedBox.value.ele)
-      currentClickedBox.value.ele!.style.transition = 'all 200ms ease'
+      currentClickedBox.value.ele!.style.transition = 'transform 200ms ease'
 
     currentClickedBox.value.x = placeholderBox.value.x
     currentClickedBox.value.y = placeholderBox.value.y
