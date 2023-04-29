@@ -27,8 +27,15 @@ function handleSelectedSearchEngine(item: typeof searchConfig.value[0]) {
     engineModalRef.value?.open()
   }
   else {
+    const searchIconDom = document.querySelector('#search-icon') as HTMLElement
+    searchIconDom?.classList.remove('change-engine')
+
     currentSearchEngine.value = item
     isShowSearchEngine.value = !isShowSearchEngine.value
+
+    setTimeout(() => {
+      searchIconDom?.classList.add('change-engine')
+    })
   }
 }
 
@@ -70,16 +77,20 @@ function handleSaveEngineModal() {
 <template>
   <div class=" w-full flex flex-col justify-center items-center pointer-events-none top-[12vh]">
     <section
-      class="w-[676px] max-w-[86vw] pointer-events-auto"
-      style="
+      class="w-[676px] max-w-[86vw] pointer-events-auto" style="
         transition-property: top;
         transition-duration: 200ms;
         border-radius: 12px;
         "
     >
-      <div class="search-box overflow-hidden w-full h-[48px] flex items-center rounded-[30px] text-[var(--primary-text-color)] bg-opacity-60 transition-colors duration-100 focus-within:bg-opacity-80 dark:focus-within:bg-opacity-70 ">
+      <div
+        class="search-box overflow-hidden w-full h-[48px] flex items-center rounded-[30px] text-[var(--primary-text-color)] bg-opacity-60 transition-colors duration-100 focus-within:bg-opacity-80 dark:focus-within:bg-opacity-70 "
+      >
         <!-- icon -->
-        <div id="search-icon" class="cursor-pointer flex h-full w-[48px] items-center justify-center" @click="isOpenSearchEngineList">
+        <div
+          id="search-icon" class="cursor-pointer flex h-full w-[48px] items-center justify-center"
+          @click="isOpenSearchEngineList"
+        >
           <div
             class="pointer-events-none flex h-[28px] w-[28px] cursor-pointer items-center justify-center rounded-[8px] bg-opacity-80 hover:bg-color-white hover:bg-opacity-80"
           >
@@ -95,9 +106,7 @@ function handleSaveEngineModal() {
         <input
           v-model="searchText"
           class=" text-gray-700 outline-none h-full grow bg-[transparent] py-[12px] pl-[4px] pr-[42px] placeholder:text-gray-500"
-          placeholder="输入搜索内容"
-          autocomplete="off"
-          @keydown.enter="handleSearch"
+          placeholder="输入搜索内容" autocomplete="off" @keydown.enter="handleSearch"
         >
 
         <!-- 清除 icon -->
@@ -111,12 +120,10 @@ function handleSaveEngineModal() {
 
     <!-- 搜索引擎 ，最多 9 个 -->
     <section
-      ref="target"
-      :style="{
+      ref="target" :style="{
         height: isShowSearchEngine ? '90px' : '0px',
         padding: isShowSearchEngine ? '1rem 1.4rem' : '0 1.4rem',
-      }"
-      class="
+      }" class="
         search-engine
         w-[676px] max-w-[86vw] overflow-hidden
         pointer-events-auto
@@ -127,9 +134,7 @@ function handleSaveEngineModal() {
         transition-all ease-in duration-200
         "
     >
-      <EngineList
-        @handleSelectedSearchEngine="handleSelectedSearchEngine"
-      />
+      <EngineList @handleSelectedSearchEngine="handleSelectedSearchEngine" />
     </section>
 
     <GlassModal ref="engineModalRef" title="title">
@@ -155,7 +160,10 @@ function handleSaveEngineModal() {
             >
               https://
             </div>
-            <input v-model="customSearchEngine.url" type="text" class=" border w-full rounded-md h-40px px-2 outline-none">
+            <input
+              v-model="customSearchEngine.url" type="text"
+              class=" border w-full rounded-md h-40px px-2 outline-none"
+            >
           </div>
         </div>
         <div class=" flex flex-col ">
@@ -195,22 +203,40 @@ function handleSaveEngineModal() {
   border: 1px solid #ffffff1a;
   box-shadow: 0 4px 16px 0 #0000001a;
 }
-.search-engine{
+
+.search-engine {
   background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(40px);
 }
-#search-icon:hover{
+
+#search-icon:hover {
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(80px);
 }
-.tag-box{
+
+.tag-box {
   border: 2px solid white;
   background: #d6dbf9;
-  box-shadow:  20px 20px 60px #d5d4d4,
-             -20px -20px 60px #ffffff;
+  box-shadow: 20px 20px 60px #d5d4d4,
+    -20px -20px 60px #ffffff;
 }
-.btn-box{
-  box-shadow:  20px 20px 60px #d5d4d4,
-             -20px -20px 60px #ffffff;
+
+.btn-box {
+  box-shadow: 20px 20px 60px #d5d4d4,
+    -20px -20px 60px #ffffff;
+}
+
+.change-engine {
+  animation: riseAnimation .3s both;
+}
+@keyframes riseAnimation {
+  0% {
+    opacity: 0;
+    transform: translateY(50%)
+  }
+  100% {
+    opacity: 1;
+    transform: none
+  }
 }
 </style>
