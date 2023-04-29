@@ -113,6 +113,8 @@ vec2 Drops(vec2 uv, float t, float l0, float l1, float l2) {
     return vec2(c, max(m1.y*l0, m2.y*l1));
 }
 
+#iChannel0 "https://raw.githubusercontent.com/rocksdanister/rain/b4bd5be1ea5da0784f9740e850194ea74dd5e1b0/media/image.webp"
+
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
 	vec2 uv = (fragCoord.xy-.5*iResolution.xy) / iResolution.y;
