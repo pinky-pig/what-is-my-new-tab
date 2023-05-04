@@ -125,7 +125,7 @@ function handleSaveEngineModal() {
         padding: isShowSearchEngine ? '1rem 1.4rem' : '0 1.4rem',
       }" class="
         search-engine
-        w-[676px] max-w-[86vw] overflow-hidden
+        w-[676px] max-w-[86vw] overflow-hidden z-9999
         pointer-events-auto
         rounded-[12px]
         mt-10px p-4
