@@ -35,14 +35,15 @@ const SelectBoxElement = defineCustomElement({
     const getStyle = computed(() => {
       return {
         position: 'fixed',
+        transition: 'all 0.05s linear',
         left: `${selectBoxBounds.value.x}px`,
         top: `${selectBoxBounds.value.y}px`,
         width: `${selectBoxBounds.value.width}px`,
         height: `${selectBoxBounds.value.height}px`,
         background: 'rgba(59, 130, 246, 0.3)',
         outline: '1px solid rgba(59, 130, 246, 0.6)',
-        borderRadius: '3px',
         pointerEvents: 'none',
+        zIndex: 9999,
       } as StyleValue
     })
     return () => {
@@ -50,11 +51,12 @@ const SelectBoxElement = defineCustomElement({
         key: 'selectBoxElement',
         style: getStyle.value,
         id: 'selectBoxElement',
+        class: 'pointer-events-none',
       })
     }
   },
 })
-// 放置重复多次创建
+// 防止重复多次创建
 if (!customElements.get('select-box-element'))
   customElements.define('select-box-element', SelectBoxElement)
 
@@ -67,9 +69,12 @@ function createBoxComponent() {
 }
 
 function addMouseEvent() {
+  document.querySelector('select-box-element')?.remove()
+
   const boxElement = createBoxComponent()
 
   function mousedown(_e: MouseEvent) {
+    removeMouseEvent([mousedown, mouseup, mousemove, mouseover, wheel, click], boxElement)
   }
   function mouseup(_e: MouseEvent) {
   }

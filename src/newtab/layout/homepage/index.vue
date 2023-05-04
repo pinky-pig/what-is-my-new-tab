@@ -2,7 +2,6 @@
 import ContentDropMenu from './ContentDropMenu.vue'
 import { addPinedWebsite, deletePinedWebsite, editPinedWebsite, getPinedWebsite } from './websiteData'
 import { getBrowserTopSites } from '~/chrome-api'
-import { watchContextMenuEvent } from '~/context-menu/littleWindow'
 
 const pinedWebsiteList = ref<{ webName: string; type: number; url: string; property: { color: string } }[]>([])
 onMounted(async () => {
@@ -141,8 +140,6 @@ getBrowserTopSites().then((res: any) => {
 function jumpMostUsedAppWebsite(item: topSite) {
   window.open(item.url)
 }
-
-watchContextMenuEvent()
 
 // 打开独立窗口
 function openAnotherWindow() {
