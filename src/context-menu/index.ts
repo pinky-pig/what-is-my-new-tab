@@ -44,7 +44,7 @@ export function contextMenu() {
       return
     // 1.选择
     if (info.menuItemId === 'startSelectBox') {
-      browser.tabs.sendMessage(tab?.id || 0, { cmd: 'start' })
+      browser.tabs.sendMessage(tab?.id || 0, { cmd: 'openWindow', tabId: tab?.id || 0 })
     }
     // 2.复制
     else if (info.menuItemId === 'openDuplicateWindow') {

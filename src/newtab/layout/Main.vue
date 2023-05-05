@@ -3,9 +3,6 @@
 // import Homepage from './homepage/index.vue'
 // import StickyNotes from './sticky-notes/index.vue'
 import HomepageSimple from './homepage-simple/index.vue'
-import { watchContextMenuEvent } from '~/context-menu/littleWindow'
-
-watchContextMenuEvent()
 </script>
 
 <template>

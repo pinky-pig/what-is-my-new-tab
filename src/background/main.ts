@@ -66,3 +66,13 @@ onMessage('get-current-tab', async () => {
     }
   }
 })
+
+onMessage('createWindow', async (e) => {
+  browser.windows.create({
+    url: browser.runtime.getURL('./dist/popup/index.html'),
+    width: 400,
+    height: 800,
+    left: 600,
+    type: 'popup',
+  })
+})

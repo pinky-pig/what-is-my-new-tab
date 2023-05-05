@@ -1,6 +1,8 @@
 <script setup lang="ts">
 // import { useToggle } from '@vueuse/core'
+
 import 'uno.css'
+import OpenLittleWindow from './OpenLittleWindow.vue'
 
 // const [show, toggle] = useToggle(false)
 </script>
@@ -27,4 +29,5 @@ import 'uno.css'
       <pixelarticons-power class="block m-auto text-white text-lg" />
     </div> -->
   </div>
+  <OpenLittleWindow />
 </template>
