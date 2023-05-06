@@ -4,8 +4,6 @@ export const useContentScriptStore = defineStore({
   id: 'newtabStore',
   state: () => {
     return {
-
-      browserNewTab: browser,
     }
   },
   getters: {
