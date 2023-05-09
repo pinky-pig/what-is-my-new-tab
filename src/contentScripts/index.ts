@@ -24,6 +24,5 @@ import { setupApp } from '~/logic/common-setup'
   document.body.appendChild(container)
   const app = createApp(App)
   setupApp(app)
-  console.log(browser)
   app.mount(root)
 })()

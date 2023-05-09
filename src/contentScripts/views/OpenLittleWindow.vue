@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, reactive } from 'vue'
 import { useElementBounding, useElementByPoint, useEventListener, useMouse } from '@vueuse/core'
-import { sendMessage } from 'webext-bridge'
+import { onMessage, sendMessage } from 'webext-bridge'
 
 const { x, y } = useMouse({ type: 'client' })
 const { element } = useElementByPoint({ x, y })
@@ -46,17 +46,29 @@ browser.runtime.onMessage.addListener(async (msg, sender) => {
     isShow.value = true
     openWindowTabId.value = tabId
     const cleanup = useEventListener('click', (e) => {
-      isShow.value = false
+      isShow.value = false;
 
-      // (e.target as HTMLElement).classList.add('__targer__')
+      (e.target as HTMLElement).classList.add('__target__')
       setTimeout(() => {
-        sendMessage('createWindow', { tabId })
+        sendMessage('createWindow', {
+          tabId,
+          width: bounding.width,
+          height: bounding.height,
+          left: bounding.left,
+          top: bounding.top,
+          className: '__target__',
+        })
+
         cleanup()
       })
       // browser.runtime.sendMessage({ url: '1111' })
       // openWindow(e, openWindowTabId.value)
     })
   }
+})
+onMessage('open-tab-prev', ({ data }) => {
+  const { className } = data as { className: string }
+  (document.querySelector(`.${className}`) as HTMLElement).style.border = '3px solid blue'
 })
 </script>
 

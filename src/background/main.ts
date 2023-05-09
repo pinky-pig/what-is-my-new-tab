@@ -68,18 +68,18 @@ onMessage('get-current-tab', async () => {
 })
 
 onMessage('createWindow', async ({ data }) => {
-  const { tabId } = data as { tabId: number }
+  const { tabId, width, height, className } = data as { tabId: number; width: number; height: number; left: number; top: number;className: string }
 
-  tabId && browser.tabs.duplicate(tabId).then((res) => {
-    if (res.id) {
-      browser.windows.create({
-        width: 400,
-        height: 800,
-        tabId: res.id,
-        type: 'popup',
-        focused: true,
-        incognito: false,
-      })
-    }
+  // 将当前窗口弹出，并赋值
+  tabId && browser.tabs.duplicate(tabId)
+  browser.windows.create({
+    width: width > 1920 ? 1920 : width,
+    height: height > 1080 ? 1080 : height,
+    tabId,
+    type: 'popup',
+    focused: true,
+    incognito: false,
+  }).then((response) => {
+    sendMessage('open-tab-prev', { className }, { context: 'content-script', tabId })
   })
 })
