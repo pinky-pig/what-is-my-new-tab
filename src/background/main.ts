@@ -67,12 +67,19 @@ onMessage('get-current-tab', async () => {
   }
 })
 
-onMessage('createWindow', async (e) => {
-  browser.windows.create({
-    url: browser.runtime.getURL('./dist/popup/index.html'),
-    width: 400,
-    height: 800,
-    left: 600,
-    type: 'popup',
+onMessage('createWindow', async ({ data }) => {
+  const { tabId } = data as { tabId: number }
+
+  tabId && browser.tabs.duplicate(tabId).then((res) => {
+    if (res.id) {
+      browser.windows.create({
+        width: 400,
+        height: 800,
+        tabId: res.id,
+        type: 'popup',
+        focused: true,
+        incognito: false,
+      })
+    }
   })
 })

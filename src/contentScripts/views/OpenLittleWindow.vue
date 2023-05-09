@@ -45,14 +45,18 @@ browser.runtime.onMessage.addListener(async (msg, sender) => {
   if (cmd === 'openWindow') {
     isShow.value = true
     openWindowTabId.value = tabId
-  }
-})
+    const cleanup = useEventListener('click', (e) => {
+      isShow.value = false
 
-useEventListener('click', (e) => {
-  isShow.value = false
-  sendMessage('createWindow', { url: '1111' })
-  // browser.runtime.sendMessage({ url: '1111' })
-  // openWindow(e, openWindowTabId.value)
+      // (e.target as HTMLElement).classList.add('__targer__')
+      setTimeout(() => {
+        sendMessage('createWindow', { tabId })
+        cleanup()
+      })
+      // browser.runtime.sendMessage({ url: '1111' })
+      // openWindow(e, openWindowTabId.value)
+    })
+  }
 })
 </script>
 
