@@ -18,7 +18,7 @@ const boxStyles = computed(() => {
       height: `${bounding.height}px`,
       left: `${bounding.left}px`,
       top: `${bounding.top}px`,
-      backgroundColor: '#3eaf7c44',
+      backgroundColor: '#6C98E360',
       transition: 'all 0.05s linear',
       outline: 'none',
     } as Record<string, string | number>
@@ -91,12 +91,8 @@ onMessage('open-tab-prev', ({ data }) => {
     w-10px
     h-10px
     rounded-full
-    bg-green-400
+    bg-blue-400
     shadow
     z-999
   />
 </template>
-
-<style>
-@import url(./windows.css);
-</style>
