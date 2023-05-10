@@ -73,8 +73,8 @@ onMessage('createWindow', async ({ data }) => {
   // 将当前窗口弹出，并赋值
   tabId && browser.tabs.duplicate(tabId)
   browser.windows.create({
-    width: width > 1920 ? 1920 : width,
-    height: height > 1080 ? 1080 : height,
+    width: width > 1920 ? 1920 : width < 200 ? 200 : width,
+    height: height > 1080 ? 1080 : height < 200 ? 200 : height,
     tabId,
     type: 'popup',
     focused: true,
