@@ -2,6 +2,7 @@
 import { computed, reactive } from 'vue'
 import { useElementBounding, useElementByPoint, useEventListener, useMouse } from '@vueuse/core'
 import { onMessage, sendMessage } from 'webext-bridge'
+import { openWindow } from './OpenLittleWindow.module'
 
 const { x, y } = useMouse({ type: 'client' })
 const { element } = useElementByPoint({ x, y })
@@ -62,13 +63,12 @@ browser.runtime.onMessage.addListener(async (msg, sender) => {
         cleanup()
       })
       // browser.runtime.sendMessage({ url: '1111' })
-      // openWindow(e, openWindowTabId.value)
     })
   }
 })
 onMessage('open-tab-prev', ({ data }) => {
   const { className } = data as { className: string }
-  (document.querySelector(`.${className}`) as HTMLElement).style.border = '3px solid blue'
+  openWindow((document.querySelector(`.${className}`) as HTMLElement), openWindowTabId.value)
 })
 </script>
 
@@ -96,3 +96,7 @@ onMessage('open-tab-prev', ({ data }) => {
     z-999
   />
 </template>
+
+<style>
+@import url(./windows.css);
+</style>
