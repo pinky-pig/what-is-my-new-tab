@@ -2,7 +2,7 @@
 import { computed, reactive } from 'vue'
 import { useElementBounding, useElementByPoint, useEventListener, useMouse } from '@vueuse/core'
 import { onMessage, sendMessage } from 'webext-bridge'
-import { openWindow } from './OpenLittleWindow.module'
+import { openWindow } from './newWindow'
 
 const { x, y } = useMouse({ type: 'client' })
 const { element } = useElementByPoint({ x, y })
