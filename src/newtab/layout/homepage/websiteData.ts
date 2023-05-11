@@ -1,5 +1,14 @@
 import { storageWebsiteDB } from '~/logic'
 
+export interface WebsiteParams {
+  id?: number
+  url: string
+  type: number
+  webName: string
+  icon: string
+  index: number
+  property: { color: string }
+}
 export async function getPinedWebsite() {
   const queryResult = await storageWebsiteDB.getItemBySQL(
     { key: 'where', value: 'type' },
@@ -9,12 +18,12 @@ export async function getPinedWebsite() {
 
   return queryResult
 }
-export async function addPinedWebsite(params: { url: string; type: number; webName: string; property: { color: string } }) {
+export async function addPinedWebsite(params: WebsiteParams) {
   return await storageWebsiteDB.addItem(params)
 }
 export async function deletePinedWebsite(params: number) {
   return await storageWebsiteDB.removeItem(params)
 }
-export async function editPinedWebsite(params: { id: number; url: string; type: number; webName: string; property: { color: string } }) {
+export async function editPinedWebsite(params: WebsiteParams) {
   return await storageWebsiteDB.editItem(params)
 }
