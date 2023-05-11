@@ -12,7 +12,7 @@ const item = ref<HTMLElement[] | null>(null)
 let isDraggedEngineList = false
 
 onMounted(() => {
-  const { isDragged } = createDragInHorizontal(box.value!, item.value!, 70, 0, 9)
+  const { isDragged } = createDragInHorizontal(box.value!, item.value!, 'search-engine-item', { width: 70, height: 70 }, 0, 9)
   watch(isDragged, (val) => {
     isDraggedEngineList = true
   })

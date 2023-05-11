@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SearchBox from '../search-box/index.vue'
-// import MyWebsit from '../my-website/index.vue'
+import MyWebsit from '../my-website/index.vue'
 import Footer from './Footer.vue'
 </script>
 
@@ -14,8 +14,8 @@ import Footer from './Footer.vue'
   >
     <SearchBox />
 
-    <div class="absolute top-200px left-0 ">
-      <!-- <MyWebsit /> -->
+    <div class="absolute top-200px left-0 w-full flex justify-center items-center">
+      <MyWebsit />
     </div>
 
     <div class=" fixed bottom-30px left-0 w-full flex justify-center items-center">

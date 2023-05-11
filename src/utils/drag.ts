@@ -16,9 +16,11 @@ interface ElemensBoxType {
 export function createDragInHorizontal(
   containerElement: HTMLElement,
   elements: HTMLElement[],
-  size: number,
+  elementsClassName: string,
+  size: { width: number; height: number },
   gap: number,
   maximumInLine: number,
+  duration = 200,
 ) {
   let isDragging = false // 拖拽状态
   const isDragged = ref(false) // 是否已经拖拽过
@@ -26,7 +28,7 @@ export function createDragInHorizontal(
   let mouseTo = { x: 0, y: 0 }
 
   // 当前选中的元素对象
-  const currentClickedBox = ref<ElemensBoxType>({ id: '', x: 0, y: 0, width: size, height: size })
+  const currentClickedBox = ref<ElemensBoxType>({ id: '', x: 0, y: 0, width: size.width, height: size.height })
   // 全部的元素对象
   const elementsBox = ref<ElemensBoxType[]>([])
 
@@ -39,6 +41,7 @@ export function createDragInHorizontal(
   placeholderElement.style.borderRadius = computedStyle.borderRadius
   placeholderElement.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
   placeholderElement.style.backdropFilter = 'blur(80px)'
+  placeholderElement.style.zIndex = '997'
 
   // const knownDiv = document.querySelector('#known-div')
   // const computedStyle = getComputedStyle(knownDiv as HTMLElement)
@@ -63,18 +66,19 @@ export function createDragInHorizontal(
       const row = Math.floor(index / maximumInLine)
       const column = index % maximumInLine
       element.style.position = 'absolute'
-      element.style.width = `${size}px`
-      element.style.height = `${size}px`
+      element.style.width = `${size.width}px`
+      element.style.height = `${size.height}px`
       element.style.userSelect = 'none'
-      element.style.transition = 'transform 200ms ease 0s'
+      element.style.transition = `transform ${duration}ms ease 0s`
       element.style.willChange = 'transform'
+      element.style.zIndex = '998'
 
       elementsBox.value.push({
         id: element.id,
-        x: column * (size + gap),
-        y: row * (size + gap),
-        width: size,
-        height: size,
+        x: column * (size.width + gap),
+        y: row * (size.height + gap),
+        width: size.width,
+        height: size.height,
         ele: element,
       })
     })
@@ -107,11 +111,11 @@ export function createDragInHorizontal(
       return
     let clickedItem: Element | null = null
     const clickedElement = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement
-    if (clickedElement.classList.contains('search-engine-item')) {
+    if (clickedElement.classList.contains(elementsClassName)) {
       clickedItem = clickedElement
     }
     else {
-      const parentItem = clickedElement.closest('.search-engine-item')
+      const parentItem = clickedElement.closest(`.${elementsClassName}`)
       if (parentItem)
         clickedItem = parentItem
     }
@@ -162,8 +166,8 @@ export function createDragInHorizontal(
     currentClickedBox.value.y += disY
 
     placeholderBox.value.ele!.style.transition = 'all 500ms ease 0s'
-    placeholderBox.value!.x = Math.round(currentClickedBox.value.x / (size + gap)) * (size + gap)
-    placeholderBox.value!.y = Math.round(currentClickedBox.value.y / (size + gap)) * (size + gap)
+    placeholderBox.value!.x = Math.round(currentClickedBox.value.x / (size.width + gap)) * (size.width + gap)
+    placeholderBox.value!.y = Math.round(currentClickedBox.value.y / (size.height + gap)) * (size.height + gap)
 
     // 设置已经状态拖拽了
     isDragged.value = true
@@ -173,8 +177,8 @@ export function createDragInHorizontal(
       placeholderBox.value.x = 0
     if (currentClickedBox.value.y < 0)
       placeholderBox.value.y = 0
-    if (currentClickedBox.value.x + currentClickedBox.value.width > maximumInLine * (size + gap))
-      placeholderBox.value.x = (maximumInLine - 1) * (size + gap)
+    if (currentClickedBox.value.x + currentClickedBox.value.width > maximumInLine * (size.width + gap))
+      placeholderBox.value.x = (maximumInLine - 1) * (size.width + gap)
 
     hitAllEle(placeholderBox.value, elementsBox.value)
 
@@ -190,7 +194,7 @@ export function createDragInHorizontal(
 
     currentClickedBox.value.x = placeholderBox.value.x
     currentClickedBox.value.y = placeholderBox.value.y
-    currentClickedBox.value = { id: '', x: 0, y: 0, width: size, height: size }
+    currentClickedBox.value = { id: '', x: 0, y: 0, width: size.width, height: size.height }
 
     placeholderBox.value = { id: '', x: 0, y: 0, width: 0, height: 0, ele: placeholderElement }
     placeholderBox.value.ele!.style.transition = 'unset'
@@ -229,8 +233,8 @@ export function createDragInHorizontal(
         if (item.id !== currentClickedBox.value.id) {
           const row = Math.floor(index / maximumInLine)
           const column = index % maximumInLine
-          item.x = column * (size + gap)
-          item.y = row * (size + gap)
+          item.x = column * (size.width + gap)
+          item.y = row * (size.height + gap)
         }
       })
     })
@@ -240,15 +244,15 @@ export function createDragInHorizontal(
     const column = (elementsBox.value.length - 1) % maximumInLine
     if (
       (
-        placeholderBox.value.x > column * (size + gap)
-      && placeholderBox.value.y === row * (size + gap)
+        placeholderBox.value.x > column * (size.width + gap)
+      && placeholderBox.value.y === row * (size.height + gap)
       )
       || (
-        placeholderBox.value.y > row * (size + gap)
+        placeholderBox.value.y > row * (size.height + gap)
       )
     ) {
-      placeholderBox.value.x = (elementsBox.value.length - 1) % maximumInLine * (size + gap)
-      placeholderBox.value.y = Math.floor((elementsBox.value.length - 1) / maximumInLine) * (size + gap)
+      placeholderBox.value.x = (elementsBox.value.length - 1) % maximumInLine * (size.width + gap)
+      placeholderBox.value.y = Math.floor((elementsBox.value.length - 1) / maximumInLine) * (size.height + gap)
 
       const hitIndex = allNodes.findIndex(item => item.id === currentClickedBox.value.id)
       const origin = elementsBox.value.splice(hitIndex, 1)[0]
@@ -257,8 +261,8 @@ export function createDragInHorizontal(
         if (item.id !== currentClickedBox.value.id) {
           const row = Math.floor(index / maximumInLine)
           const column = index % maximumInLine
-          item.x = column * (size + gap)
-          item.y = row * (size + gap)
+          item.x = column * (size.width + gap)
+          item.y = row * (size.height + gap)
         }
       })
     }
